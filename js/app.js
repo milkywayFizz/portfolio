@@ -131,3 +131,40 @@ anchorLinks.forEach(link => {
         body.classList.remove('menu-open');
     });
 }); 
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Selezioniamo gli attori del carosello
+    const track = document.querySelector('.carousel-track');
+    if (!track) return; // Se non c'è il carosello, ferma lo script
+    
+    const slides = Array.from(track.querySelectorAll('.carousel-slide'));
+    const buttons = document.querySelectorAll('.carousel-button');
+    
+    // Assumiamo che il primo bottone sia Indietro e il secondo sia Avanti
+    const prevButton = buttons[0];
+    const nextButton = buttons[1];
+    
+    let currentSlideIndex = 0; // Partiamo dalla prima slide
+
+    // 2. La funzione che sposta letteralmente le classi
+    const updateCarousel = (newIndex) => {
+        // Spegne la slide vecchia
+        slides[currentSlideIndex].classList.remove('current-slide');
+        // Aggiorna l'indice
+        currentSlideIndex = newIndex;
+        // Accende la slide nuova
+        slides[currentSlideIndex].classList.add('current-slide');
+    };
+
+    // 3. Logica AVANTI (Loop: se supero l'ultima, torno a 0)
+    nextButton.addEventListener('click', () => {
+        const newIndex = (currentSlideIndex + 1) % slides.length;
+        updateCarousel(newIndex);
+    });
+
+    // 4. Logica INDIETRO (Loop: se vado sotto lo 0, vado all'ultima)
+    prevButton.addEventListener('click', () => {
+        const newIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+        updateCarousel(newIndex);
+    });
+});

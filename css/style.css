@@ -357,7 +357,7 @@ li:hover::before {
 }
 
 /* -----------------------------------------
-   9. CAROUSEL CONTROLS (Water Buttons)
+   9. CAROUSEL CONTROLS (Minimalist Tech)
    ----------------------------------------- */
 .carousel-nav {
     position: absolute;
@@ -367,37 +367,28 @@ li:hover::before {
 }
 
 .carousel-button {
-    position: relative; 
     background: transparent;
     border: 1px solid #333333;
     color: var(--text-main);
     width: 42px; height: 42px;
     border-radius: 50%;
-    cursor: pointer; font-family: monospace; font-size: 1.3rem;
-    overflow: hidden; z-index: 1; 
-    transition: border-color 0.3s ease, color 0.1s ease, transform 0.2s ease;
+    cursor: pointer; 
+    font-family: monospace; 
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
 
-.carousel-button::before {
-    content: ""; position: absolute;
-    width: 250%; height: 250%;
-    left: -75%; top: 250%; 
-    background: var(--accent-color);
-    border-radius: 38% 42% 40% 45%; 
-    z-index: -1;
-    transition: top 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
-    animation: wave-spin 3s linear infinite;
+/* HOVER: Look affilato. Bordo e icona si accendono, leggero bagliore esterno */
+.carousel-button:hover, 
+.carousel-button:focus-visible {
+    border-color: var(--accent-color); 
+    color: var(--accent-color); 
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(1, 212, 212, 0.15); 
 }
-
-@keyframes wave-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.carousel-button:hover, .carousel-button:focus-visible {
-    border-color: var(--accent-color); color: #000000; transform: scale(1.05); 
-}
-.carousel-button:hover::before, .carousel-button:focus-visible::before { top: -50%; }
 
 /* -----------------------------------------
    10. OFF-CANVAS PUSH MENU & HAMBURGER
