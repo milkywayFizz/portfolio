@@ -99,14 +99,26 @@ header, main, footer {
     
     -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
     mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+
+    /* NUOVE RIGHE: Ingresso fluido sincronizzato col resto del sito */
+    opacity: 0; 
+    animation: fadeUpEnter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s forwards;
 }
 
 .logo-carousel-track {
     display: flex;
     width: max-content; 
+    /* ANIMAZIONE CSS RIMOSSA: Ora comanda JavaScript */
     
-    /* L'animazione ora muove l'intero nastro trasportatore */
-    animation: scroll-infinite 30s linear infinite; 
+    /* Aggiungiamo un tocco visivo per indicare che è interagibile */
+    cursor: grab;
+    /* Evita che l'utente evidenzi per sbaglio i loghi trascinando */
+    user-select: none; 
+}
+
+/* Quando l'utente sta cliccando, il cursore si chiude a pugno */
+.logo-carousel-track:active {
+    cursor: grabbing;
 }
 
 /* Gestione dei singoli gruppi (Layout Compatto Originale) */
@@ -132,28 +144,29 @@ header, main, footer {
     flex-shrink: 0; 
     border-radius: 0; 
     
+    -webkit-user-drag: none; 
+    user-select: none;
+    
+    /* FIX: Accelerazione hardware sulle singole immagini per migliorare l'Hit-Testing del mouse */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0); 
+    
     filter: grayscale(100%) opacity(0.6); 
-    transition: filter 0.3s ease, transform 0.3s ease;
+    /* Velocizzata la transizione (da 0.3s a 0.2s) per un feedback più immediato */
+    transition: filter 0.2s ease, transform 0.2s ease;
 }
 
-.logo-group img:hover {
+/* Il logo reagisce sia al mouse nativo che al nostro radar JS */
+.logo-group img:hover,
+.logo-group img.is-hovered {
     filter: grayscale(0%) opacity(1); 
-    transform: scale(1.1); 
+    transform: scale(1.1) translateZ(0); 
 }
 
-/* Il Motore di Scorrimento */
-@keyframes scroll-infinite {
-    0% { 
-        transform: translateX(0); 
-    }
-    100% { 
-        /* LA MAGIA MATEMATICA: Abbiamo 3 gruppi. 
-           Spostiamo il nastro esattamente di un terzo (1/3). 
-           Questo fa sovrapporre perfettamente il Gruppo 2 alla posizione originaria 
-           del Gruppo 1. Essendoci il Gruppo 3 a fare da "coda", lo schermo sarà 
-           sempre pieno. Zero buchi, zero scatti. */
-        transform: translateX(calc(-100% / 3)); 
-    }
+/* LA MAGIA ANTI-INCASTRO: Quando stiamo trascinando, i loghi diventano invisibili al mouse */
+.logo-carousel-track.is-dragging img {
+    pointer-events: none; 
 }
 
 section { padding: 2.5rem 0; }

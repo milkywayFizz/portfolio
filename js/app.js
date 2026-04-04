@@ -68,49 +68,6 @@ document.querySelectorAll('.reveal').forEach(section => {
 }); 
 
 /* =========================================
-   MOTORE DEL CAROSELLO (STATE MANAGEMENT)
-   ========================================= */
-
-// 1. Mappatura del DOM: Diciamo a JS chi sono gli attori in gioco
-const track = document.querySelector('.carousel-track');
-const slides = Array.from(track.children);
-const nextButton = document.querySelector('.next-btn');
-const prevButton = document.querySelector('.prev-btn');
-
-// 2. La funzione "Core" (Pura): Cambia lo stato delle classi
-const moveToSlide = (currentSlide, targetSlide) => {
-    // Sicurezza: se la slide di destinazione non esiste, blocca l'esecuzione
-    if (!targetSlide) return;
-
-    // Rimuove il "testimone" dalla slide vecchia (il CSS la farà cadere)
-    currentSlide.classList.remove('current-slide');
-    
-    // Passa il "testimone" alla slide nuova (il CSS la farà salire)
-    targetSlide.classList.add('current-slide');
-};
-// 3. Azione: Clicca a Destra (Avanti)
-nextButton.addEventListener('click', () => {
-    // JS cerca nel momento esatto del click quale slide ha la classe attiva
-    const currentSlide = track.querySelector('.current-slide');
-    
-    // Trova l'elemento "fratello" successivo nel DOM
-    const nextSlide = currentSlide.nextElementSibling;
-    
-    // Invoca la funzione di prima passandole i due elementi
-    moveToSlide(currentSlide, nextSlide);
-});
-
-// 4. Azione: Clicca a Sinistra (Indietro)
-prevButton.addEventListener('click', () => {
-    const currentSlide = track.querySelector('.current-slide');
-    
-    // Trova l'elemento "fratello" precedente nel DOM
-    const prevSlide = currentSlide.previousElementSibling;
-    
-    moveToSlide(currentSlide, prevSlide);
-});
-
-/* =========================================
    GESTIONE MENU LATERALE (Off-Canvas Push)
    ========================================= */
 
@@ -167,4 +124,161 @@ document.addEventListener('DOMContentLoaded', () => {
         const newIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
         updateCarousel(newIndex);
     });
+});
+
+/* =========================================
+   MOTORE FISICO: CAROSELLO LOGHI INTERATTIVO (V2 - Fluido & Bilanciato)
+   ========================================= */
+
+window.addEventListener('load', () => {
+    const track = document.querySelector('.logo-carousel-track');
+    if (!track) return;
+
+    let singleGroupWidth = track.querySelector('.logo-group').offsetWidth;
+    let currentX = 0;        
+    let velocity = 0;        
+    let isDragging = false;  
+    let startX = 0;          
+    let lastX = 0;           
+    
+// Parametri Fisici Calibrati (Alta Fluidità)
+    const autoScrollSpeed = -0.5; 
+    const dragSensitivity = 0.85; // Aumentato dal 35% all'85%. Il nastro ora segue quasi 1:1 il tuo mouse.
+    const maxVelocity = 18;       // Alzato da 12 a 18. Permette uno slancio iniziale più appagante, ma lo blocca prima che diventi invisibile.
+    const friction = 0.975;       // LA MAGIA: Ora perde solo il 2.5% di energia a frame. Scivolerà a luuuungo prima di fermarsi.
+    
+    let isAutoScrolling = true;
+    let resumeTimeout;
+    // --- RADAR LASER: Tracciamento Mouse ---
+    let mouseX = -1;
+    let mouseY = -1;
+
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    window.addEventListener('mouseleave', () => {
+        mouseX = -1;
+        mouseY = -1;
+    });      
+
+    window.addEventListener('resize', () => {
+        singleGroupWidth = track.querySelector('.logo-group').offsetWidth;
+    });
+
+    const startDrag = (e) => {
+        isDragging = true;
+        isAutoScrolling = false;
+        clearTimeout(resumeTimeout); 
+
+        track.classList.add('is-dragging');
+        
+        startX = e.pageX || e.touches[0].pageX;
+        lastX = startX;
+        velocity = 0; 
+    };
+
+    const onDrag = (e) => {
+        if (!isDragging) return;
+        
+        // 🚨 IL FAIL-SAFE (ANTI-STICKY DRAG) 🚨
+        // Controlliamo fisicamente a livello hardware se il tasto del mouse è premuto.
+        // e.buttons restituisce 0 se nessun tasto è premuto.
+        // Se ci stiamo muovendo col mouse e nessun tasto è giù, ma isDragging è true,
+        // significa che abbiamo perso il segnale. Sganciamo il carosello forzatamente!
+        if (e.type === 'mousemove' && e.buttons === 0) {
+            stopDrag();
+            return;
+        }
+
+        e.preventDefault(); 
+        
+        const currentPosition = e.pageX || e.touches[0].pageX;
+        
+        // 1. Calcoliamo lo spostamento grezzo
+        const rawDelta = currentPosition - lastX;
+        
+        // 2. Applichiamo lo smorzamento per renderlo meno schizofrenico
+        const smoothedDelta = rawDelta * dragSensitivity;
+        
+        currentX += smoothedDelta;
+        
+        // 3. CLAMP (Limite): Impediamo alla velocità di superare i +/- 12 pixel per frame
+        velocity = Math.max(-maxVelocity, Math.min(maxVelocity, smoothedDelta)); 
+        
+        lastX = currentPosition;
+    };
+
+    const stopDrag = () => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        track.classList.remove('is-dragging');
+
+        resumeTimeout = setTimeout(() => {
+            isAutoScrolling = true;
+        }, 2000); // Abbassato a 2 secondi per una ripresa più reattiva
+    };
+
+    track.addEventListener('mousedown', startDrag);
+    // FIX NATIVE DRAG: Uccide l'evento di "drag & drop" nativo del sistema operativo
+    track.addEventListener('dragstart', (e) => e.preventDefault());
+    window.addEventListener('mousemove', onDrag);
+    window.addEventListener('mouseup', stopDrag);
+    window.addEventListener('mouseleave', stopDrag);
+
+    track.addEventListener('touchstart', startDrag, { passive: true });
+    window.addEventListener('touchmove', onDrag, { passive: false });
+    window.addEventListener('touchend', stopDrag);
+
+    let frameCounter = 0;
+    
+// CACHING: Salviamo in memoria la lista di tutti i loghi una volta sola
+    const allCarouselLogos = track.querySelectorAll('img');
+
+    const renderEngine = () => {
+        if (isAutoScrolling) {
+            velocity += (autoScrollSpeed - velocity) * 0.05;
+        } else if (!isDragging) {
+            // Frizione per rallentare dolcemente
+            velocity *= friction;
+        }
+
+        currentX += velocity;
+
+        // Teletrasporto matematico per il loop infinito
+        if (currentX <= -singleGroupWidth) {
+            currentX += singleGroupWidth; 
+        } else if (currentX >= 0) {
+            currentX -= singleGroupWidth; 
+        }
+
+        // LA MAGIA DELLA FLUIDITÀ: usiamo translate3d invece di translateX.
+        // Questo obbliga la Scheda Video (GPU) ad elaborare l'animazione, 
+        // annullando totalmente la "macchinosità" (jittering) della CPU.
+        track.style.transform = `translate3d(${currentX}px, 0, 0)`;
+
+        frameCounter++;
+
+       // LA MAGIA: Eseguiamo il raggio laser solo 1 volta ogni 5 frame!
+        // (Riduciamo il carico del processore dell'80%)
+        if (frameCounter % 5 === 0) {
+            if (!isDragging && mouseX !== -1) {
+                const elementUnderMouse = document.elementFromPoint(mouseX, mouseY);
+                // USA LA VARIABILE SALVATA (Più veloce del 1000%)
+                allCarouselLogos.forEach(img => img.classList.remove('is-hovered'));
+                
+                if (elementUnderMouse && elementUnderMouse.tagName === 'IMG' && elementUnderMouse.closest('.logo-group')) {
+                    elementUnderMouse.classList.add('is-hovered');
+                }
+            } else {
+                allCarouselLogos.forEach(img => img.classList.remove('is-hovered'));
+            }
+        }
+
+        requestAnimationFrame(renderEngine);
+    };
+
+    renderEngine();
 });
