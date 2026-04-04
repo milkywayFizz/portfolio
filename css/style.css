@@ -1,0 +1,462 @@
+/* ==========================================================================
+   FLAVIUS IT PORTFOLIO - CORE STYLESHEET
+   Architettura: Modulare / Premium Minimalist / GPU Accelerated
+   ========================================================================== */
+
+/* -----------------------------------------
+   1. RESET & VARIABILI GLOBALI
+   ----------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-color: #0a0a0a;
+    --text-main: #ededed;
+    --accent-color: #01d4d4;
+}
+
+/* Blocchiamo lo scroll orizzontale per prevenire jank nello slide del menu */
+html, body {
+    overflow-x: hidden; 
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* -----------------------------------------
+   2. SCROLLBAR & SELECTION (UI di Sistema)
+   ----------------------------------------- */
+::selection {
+    background-color: var(--accent-color);
+    color: #000000; 
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #333333 var(--bg-color);
+}
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-color); }
+::-webkit-scrollbar-thumb { background: #333333; border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
+
+:focus-visible {
+    outline: 1px solid var(--accent-color);
+    outline-offset: 5px;
+}
+a:focus:not(:focus-visible) { outline: none; }
+
+/* -----------------------------------------
+   3. LAYOUT GLOBALE E TIPOGRAFIA
+   ----------------------------------------- */
+header, main, footer {
+    width: 100%;
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+section { padding: 2.5rem 0; }
+
+hr {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #333333, transparent);
+    margin: 1.5rem 0; 
+}
+
+h1, h2, h3 { margin-top: 0; line-height: 1.2; }
+h1 { font-size: 2.5rem; letter-spacing: -0.05em; margin-bottom: 0.5rem; }
+h2 { font-size: 1.1rem; color: #888888; font-weight: 400; margin-bottom: 2rem; }
+p, li { line-height: 1.6; color: #b0b0b0; font-size: 1rem; }
+
+a {
+    color: var(--text-main);
+    text-decoration: none;
+    border-bottom: 1px solid #333333;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+a:hover {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+img {
+    border-radius: 50%;
+    filter: grayscale(100%);
+    transition: filter 0.4s ease, transform 0.4s ease;
+}
+img:hover {
+    filter: grayscale(0%);
+    transform: scale(1.02);
+}
+
+/* -----------------------------------------
+   4. HEADER E ANIMAZIONI GLOBALI
+   ----------------------------------------- */
+header {
+    text-align: center; 
+    padding-top: 6rem;
+    padding-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+header img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    margin-bottom: 1.5rem;
+}
+
+@keyframes fadeUpEnter {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+header { animation: fadeUpEnter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+main { opacity: 0; animation: fadeUpEnter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
+footer { opacity: 0; animation: fadeUpEnter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards; }
+
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+/* -----------------------------------------
+   5. TITOLI INTERATTIVI E LISTE TERMINALE
+   ----------------------------------------- */
+h3 .section-link {
+    border-bottom: none; 
+    color: var(--text-main);
+    display: inline-flex;
+    align-items: center; 
+}
+/* LA MAGIA: Creiamo la freccia virtualmente nel CSS */
+h3 .section-link::after {
+    content: "→"; 
+    margin-left: 0.6rem;
+    
+    /* FIX VISIBILITÀ: Schiariamo leggermente il grigio per superare la soglia di contrasto minima */
+    color: #666666; 
+    
+    font-family: monospace; 
+    
+    /* FIX GRANDEZZA: Forziamo la freccia ad essere il 30% più grande del testo che la precede */
+    font-size: 1.3em; 
+    
+    /* Compensazione ottica per mantenerla perfettamente allineata al centro del testo dopo averla ingrandita */
+    vertical-align: middle; 
+    line-height: 0;
+    
+    /* Transizione fluida */
+    transition: color 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+h3 .section-link:hover { color: var(--text-main); border-bottom: none; }
+h3 .section-link:hover::after {
+    color: var(--accent-color); 
+    transform: translateX(6px); 
+}
+
+@keyframes cursorBlink {
+    0%, 100% { content: ">_"; }
+    50% { content: "> "; }
+}
+
+ul { list-style-type: none; padding-left: 0; }
+
+li {
+    margin-bottom: 0.8rem;
+    position: relative;
+    color: #b0b0b0; 
+    transition: color 0.15s ease-out; 
+}
+li:hover { color: var(--text-main); transition: color 0s; }
+
+li::before {
+    content: ">_"; 
+    color: var(--accent-color);
+    margin-right: 0.8rem;
+    font-family: 'Courier New', Courier, monospace; 
+    font-weight: bold;
+    display: inline-block; 
+    filter: drop-shadow(0 0 1px var(--accent-color));
+    transition: filter 0.15s ease-out; 
+}
+li:hover::before {
+    filter: drop-shadow(0 0 4px var(--accent-color));
+    transition: filter 0s;
+    animation: cursorBlink 1s infinite steps(1);
+}
+
+/* -----------------------------------------
+   6. CSS GRID CARDS (Focus, Skills)
+   ----------------------------------------- */
+#focus ul, #skills ul, #projects ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+}
+
+#focus li, #skills li, #projects li {
+    margin-bottom: 0; 
+    background: #111111; 
+    padding: 1.2rem;
+    border-radius: 8px;
+    border: 1px solid #1f1f1f;
+    transition: transform 0.3s ease, border-color 0.3s ease, background-color 0.3s ease, color 0.15s ease-out;
+}
+
+#focus li:hover, #skills li:hover, #projects li:hover {
+    transform: translateY(-3px); 
+    border-color: #333333; 
+    background: #141414;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
+}
+
+#focus li:last-child:nth-child(odd), 
+#skills li:last-child:nth-child(odd), 
+#projects li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+/* -----------------------------------------
+   7. CAROUSEL ENGINE (Layout & Text Physics)
+   ----------------------------------------- */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    min-height: 450px; 
+    background: #111111;
+    border: 1px solid #1f1f1f;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.carousel-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 450px; 
+}
+
+.carousel-slide {
+    position: absolute; 
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0; 
+    pointer-events: none; 
+    transition: opacity 0.5s ease-in-out; 
+    display: grid;
+    grid-template-columns: 55% 1fr; 
+    align-items: center; 
+    padding: 0; 
+}
+
+.carousel-slide.current-slide { opacity: 1; pointer-events: auto; z-index: 2; }
+
+.carousel-slide .slide-content {
+    display: block;
+    padding: 2.5rem 1rem 2.5rem 2.5rem; 
+}
+
+.slide-title { font-size: 1.5rem; margin-top: 0; margin-bottom: 0.5rem; color: var(--text-main); }
+.slide-description { font-size: 1rem; color: #888888; margin-bottom: 1.5rem; max-width: 85%; }
+
+@keyframes legoFallIn {
+    0% { opacity: 0; transform: translateY(calc(-10px - (var(--random-delay) * 15px))); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.stagger-word {
+    display: inline-block; 
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.2s ease-in, opacity 0.2s ease-in;
+}
+
+.carousel-slide.current-slide .stagger-word {
+    transition: none; 
+    animation-name: legoFallIn;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); 
+    animation-fill-mode: forwards;
+    animation-duration: calc(0.4s + (var(--random-delay) * 0.3s));
+    animation-delay: calc(var(--random-delay) * 0.15s + 0.05s);
+}
+
+/* -----------------------------------------
+   8. CAROUSEL IMAGE PHYSICS
+   ----------------------------------------- */
+.slide-image-container {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    padding-right: 2.5rem; 
+    padding-bottom: 4rem; 
+    overflow: hidden; 
+    opacity: 0;
+    transform: translateX(50px);
+    transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+}
+
+.slide-image-container img {
+    max-width: 100%; 
+    max-height: 280px; 
+    width: auto; 
+    object-fit: contain; 
+    border-radius: 6px; 
+    border: 1px solid #2a2a2a; 
+    filter: grayscale(80%) contrast(110%); 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.slide-image-container img:hover { filter: grayscale(0%) contrast(100%); transform: scale(1.02); }
+
+.carousel-slide.current-slide .slide-image-container {
+    opacity: 1; transform: translateX(0);
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s ease-out;
+    transition-delay: 0.4s; 
+}
+
+/* -----------------------------------------
+   9. CAROUSEL CONTROLS (Water Buttons)
+   ----------------------------------------- */
+.carousel-nav {
+    position: absolute;
+    bottom: 2.5rem; 
+    right: 2.5rem;
+    display: flex; gap: 15px; z-index: 10;
+}
+
+.carousel-button {
+    position: relative; 
+    background: transparent;
+    border: 1px solid #333333;
+    color: var(--text-main);
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    cursor: pointer; font-family: monospace; font-size: 1.3rem;
+    overflow: hidden; z-index: 1; 
+    transition: border-color 0.3s ease, color 0.1s ease, transform 0.2s ease;
+}
+
+.carousel-button::before {
+    content: ""; position: absolute;
+    width: 250%; height: 250%;
+    left: -75%; top: 250%; 
+    background: var(--accent-color);
+    border-radius: 38% 42% 40% 45%; 
+    z-index: -1;
+    transition: top 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: wave-spin 3s linear infinite;
+}
+
+@keyframes wave-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.carousel-button:hover, .carousel-button:focus-visible {
+    border-color: var(--accent-color); color: #000000; transform: scale(1.05); 
+}
+.carousel-button:hover::before, .carousel-button:focus-visible::before { top: -50%; }
+
+/* -----------------------------------------
+   10. OFF-CANVAS PUSH MENU & HAMBURGER
+   ----------------------------------------- */
+.site-wrapper {
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    width: 100%;
+    will-change: transform;
+}
+
+.menu-btn {
+    position: fixed;
+    top: 2rem; right: 2.5rem; z-index: 100; 
+    background: transparent; border: none; cursor: pointer;
+    width: 45px; height: 45px;
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-end; 
+    gap: 8px; 
+}
+
+.hamburger-line {
+    height: 2px; background: var(--text-main);
+    transition: transform 0.4s ease, opacity 0.4s ease, background-color 0.3s ease, width 0.3s ease;
+}
+
+.hamburger-line:nth-child(1) { width: 35px; }
+.hamburger-line:nth-child(2) { width: 25px; }
+.hamburger-line:nth-child(3) { width: 35px; }
+
+.menu-btn:hover .hamburger-line { background: var(--accent-color); width: 35px; }
+
+.side-menu {
+    position: fixed;
+    top: 0; right: 0; width: 350px; height: 100vh;
+    background: var(--bg-color); border-left: 1px solid #1f1f1f; 
+    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.9); 
+    z-index: 90; padding: 8rem 3rem; 
+    transform: translateX(100%); 
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+}
+
+.side-menu-links { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2.5rem; }
+
+/* FIX: Spegniamo il cursore terminale globale per queste liste */
+.side-menu-links li::before { content: none !important; display: none !important; }
+.side-menu-links li { margin-bottom: 0; }
+
+/* LA NUOVA CAPSULA TIPOGRAFICA: Background-Clip Text */
+.side-menu-links a {
+   font-size: 1.5rem; /* Ridotto da 1.8rem per un look più misurato */
+    font-weight: 500; /* Passato da 800 a 500 (Medium). Molto più slanciato. */
+    letter-spacing: 0.05em; /* Aggiunge un tocco di "respiro" tipico dei menu luxury */
+    text-decoration: none;
+    display: inline-block;
+    
+    /* Il gradiente simula il liquido. Metà turchese, metà bianco */
+    background-image: linear-gradient(to top, var(--accent-color) 50%, var(--text-main) 50%);
+    background-size: 100% 200%; /* Il doppio dell'altezza per nascondere il turchese all'inizio */
+    background-position: top; /* Partiamo mostrando solo il bianco (la metà superiore) */
+    
+    /* LA MAGIA: Il background viene "ritagliato" per esistere SOLO dentro le lettere */
+    -webkit-background-clip: text;
+    background-clip: text; /* Aggiungi questa riga per zittire l'avviso! */
+    -webkit-text-fill-color: transparent; 
+    color: transparent;
+    
+    /* Transizione sia del liquido che dello spostamento fisico */
+    transition: background-position 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.side-menu-links a:hover, 
+.side-menu-links a.active {
+    /* Scivolando la posizione in basso, il liquido turchese riempie il testo */
+    background-position: bottom; 
+    transform: translateX(15px) scale(1.05); 
+}
+
+/* LOGICA STATO APERTO (JavaScript innesca questa classe) */
+body.menu-open .site-wrapper { transform: translateX(-350px); pointer-events: none; }
+body.menu-open .side-menu { transform: translateX(0); }
+body.menu-open .hamburger-line:nth-child(1) { transform: translateY(10px) rotate(45deg); background: var(--accent-color); width: 35px;}
+body.menu-open .hamburger-line:nth-child(2) { opacity: 0; }
+body.menu-open .hamburger-line:nth-child(3) { transform: translateY(-10px) rotate(-45deg); background: var(--accent-color); width: 35px;}

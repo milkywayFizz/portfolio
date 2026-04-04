@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flavius | IT Portfolio</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <button id="menu-btn" class="menu-btn" aria-label="Toggle Navigation">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+    </button>
+
+    <nav id="side-menu" class="side-menu">
+        <ul class="side-menu-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="about.html">About Me</a></li>
+            <li><a href="focus.html">Core Focus</a></li>
+            <li><a href="skills.html">Skills</a></li>
+            <li><a href="#projects" class="anchor-link">Projects</a></li> 
+        </ul>
+    </nav>
+
+    <div class="site-wrapper">
+
+    <header>
+        <img src="img/avatar.png" alt="Flavius Profile Picture" width="150" loading="lazy">
+        <h1>Flavius</h1>
+        <h2>Computer Science Student @ UnivAQ | Privacy Advocate & System Hardening Enthusiast</h2>
+    </header>
+
+    <main>
+        <section id="about" class="reveal">
+            <h3><a href="about.html" class="section-link">About Me</a></h3>
+            <p>I am a second-year Computer Science student at the <a href="https://www.univaq.it" target="_blank" rel="noopener noreferrer">University of L'Aquila (UnivAQ)</a>.</p>
+            <p>My journey in Information Technology began with a fundamental goal: achieving <strong>Digital Sovereignty</strong>. What started as a practical effort to optimize personal devices and mitigate corporate telemetry has evolved into a rigorous academic and professional pursuit. I am deeply interested in system architecture, data privacy, and building secure infrastructures from the ground up.</p>
+        </section>
+
+        <hr>
+
+        <section id="focus" class="reveal">
+            <h3><a href="focus.html" class="section-link">Core Focus & Career Goals</a></h3>
+            <p>My objective is to specialize in areas where system performance and proactive security intersect:</p>
+            <ul>
+                <li><strong>Blue Teaming & Network Defense:</strong> Traffic analysis and infrastructure monitoring.</li>
+                <li><strong>Device Optimization & Hardening:</strong> Attack surface reduction and bare-metal OS tuning.</li>
+                <li><strong>DevSecOps & Cloud Security:</strong> Designing sovereign and automated cloud environments.</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section id="skills" class="reveal">
+            <h3><a href="skills.html" class="section-link">Technical Competencies</a></h3>
+            <p class="section-context">
+                Driven by a need for <strong>digital autonomy</strong>, I have built this technical stack through rigorous self-directed study and hands-on experimentation. I view these tools not as static endpoints, but as a foundation for a constantly evolving horizon in systems security and architecture.
+            </p>
+            
+            <ul>
+                <li><strong>Operating Systems:</strong> Linux (Arch), Windows (AtlasOS), Android System Hardening</li>
+                <li><strong>Networking:</strong> TCP/IP, Wireguard, DNS Filtering</li>
+                <li><strong>Tools & Workflow:</strong> Git, Docker, Markdown, Obsidian</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section id="projects" class="reveal">
+            <h3>Projects & Portfolio</h3>
+            <p>This space will be regularly updated with technical write-ups and code repositories as my projects reach completion. I am currently focusing on:</p>
+            
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    
+                    <div class="carousel-slide current-slide">
+                        <div class="slide-content">
+                            <h4 class="slide-title">Web Portfolio (Static)</h4>
+                            <p class="slide-description">Developing a privacy-respecting static personal website. Built locally, zero external trackers, semantic HTML & Vanilla JS.</p>
+                            <a href="#" class="slide-link">View Architecture >_</a>
+                        </div>
+                        <div class="slide-image-container">
+                            <img src="img\Javascript_Logo.png" alt="Screenshot mockup of the Web Portfolio project" loading="lazy" width="500" height="300">
+                        </div>
+                    </div>
+
+                    <div class="carousel-slide">
+                        <div class="slide-content">
+                            <h4 class="slide-title">Home Server Infrastructure</h4>
+                            <p class="slide-description">Designing a bare-metal local server (Raspberry Pi). Focused on network-wide DNS filtering (Pi-hole) and private VPN routing.</p>
+                            <a href="#" class="slide-link">View Setup >_</a>
+                        </div>
+                        <div class="slide-image-container">
+                            <img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22500%22%20height%3D%22300%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20500%20300%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_2bc%20text%20%7B%20fill%3A%23222%3Bfont-weight%3Abold%3Bfont-family%3Amonospace%3Bfont-size%3A25pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Crect%20width%3D%22500%22%20height%3D%22300%22%20fill%3A%231a1a1a%22%3E%3C%2Frect%20%3E%3Cg%20id%3D%22holder_2bc%22%3E%3Ctext%20x%3D%22130%22%20y%3D%22160%22%3E[H_SERVER_MOCK]%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Diagram mockup of the Home Server network setup" loading="lazy" width="500" height="300">
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-slide">
+                        <div class="slide-content">
+                            <h4 class="slide-title">Docker Containerization</h4>
+                            <p class="slide-description">Microservices architecture blueprint. Isolating local services to maintain the host OS clean, secure, and fully portable.</p>
+                            <a href="#" class="slide-link">View Blueprint >_</a>
+                        </div>
+                        <div class="slide-image-container">
+                            <img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22500%22%20height%3D%22300%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20500%20300%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_3bc%20text%20%7B%20fill%3A%23222%3Bfont-weight%3Abold%3Bfont-family%3Amonospace%3Bfont-size%3A25pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Crect%20width%3D%22500%22%20height%3D%22300%22%20fill%3A%231a1a1a%22%3E%3C%2Frect%20%3E%3Cg%20id%22holder_3bc%22%3E%3Ctext%20x%3D%22140%22%20y%3D%22160%22%3E[DOCKER_MOCK]%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Code snippet mockup of a Dockerfile configuration" loading="lazy" width="500" height="300">
+                        </div>
+                    </div>
+
+                </div> <div class="carousel-nav">
+                    <button class="carousel-button prev-btn" aria-label="Previous project">&lt;</button>
+                    <button class="carousel-button next-btn" aria-label="Next project">&gt;</button>
+                </div>
+
+            </div> </section>
+
+    </main>
+
+    <footer>
+        <hr>
+        <h3>Contact & Links</h3>
+        <ul>
+            <li><a href="mailto:tua.email@univaq.it">Email Me</a></li>
+            <li><a href="https://github.com/TuoUsername" target="_blank" rel="noopener noreferrer">GitHub Profile</a></li>
+        </ul>
+        <p><small>© 2026 Flavius. Built locally with a strict focus on privacy.</small></p>
+    </footer>
+
+    </div><script src="js/app.js" defer></script>
+</body>
+</html>
