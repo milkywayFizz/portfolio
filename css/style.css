@@ -42,15 +42,31 @@ body {
     color: #000000; 
 }
 
-* {
-    scrollbar-width: thin;
-    scrollbar-color: #333333 var(--bg-color);
+html {
+    background-color: var(--bg-color); 
 }
 
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: var(--bg-color); }
-::-webkit-scrollbar-thumb { background: #333333; border-radius: 5px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
+/* Scrollbar "Bare-Metal": Più spessa, squadrata e impenetrabile */
+html::-webkit-scrollbar { 
+    width: 16px; /* Più spessa e solida per allontanare la zona di pericolo */
+}
+
+html::-webkit-scrollbar-track { 
+    background: #050505; /* Un nero ancora più profondo del body per farla staccare */
+    border-left: 1px solid #1f1f1f; /* Taglio laterale nettissimo, come i bordi del carosello */
+}
+
+html::-webkit-scrollbar-thumb { 
+    background-color: #333333; 
+    /* LA MAGIA CASERECCIA: Zero border-radius. 
+       Un blocco squadrato annulla i calcoli di trasparenza sui bordi. */
+    border-radius: 0; 
+}
+
+html::-webkit-scrollbar-thumb:hover,
+html::-webkit-scrollbar-thumb:active { 
+    background-color: var(--accent-color); 
+}
 
 :focus-visible {
     outline: 1px solid var(--accent-color);
@@ -79,7 +95,12 @@ hr {
 
 h1, h2, h3 { margin-top: 0; line-height: 1.2; }
 h1 { font-size: 2.5rem; letter-spacing: -0.05em; margin-bottom: 0.5rem; }
-h2 { font-size: 1.1rem; color: #888888; font-weight: 400; margin-bottom: 2rem; }
+h2 {
+    font-size: 1.1rem;
+    color: #b0b0b0; /* Un grigio più chiaro per una leggibilità ottimale */
+    font-weight: 400;
+    margin-bottom: 2rem;
+}
 p, li { line-height: 1.6; color: #b0b0b0; font-size: 1rem; }
 
 a {
@@ -384,7 +405,23 @@ li:hover::before {
 .site-wrapper {
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     width: 100%;
-    will-change: transform;
+    /* Il fix per l'artefatto visivo: rendiamo il layer GPU solido e opaco */
+    background-color: var(--bg-color); 
+    min-height: 100vh; /* Assicura che lo sfondo copra sempre tutto lo schermo */
+
+    /* ==========================================
+       IL RECINTO (Anti-Bleeding GPU)
+       ========================================== */
+    /* 1. Crea un universo chiuso: niente di ciò che è qui dentro può influenzare la scrollbar esterna */
+    isolation: isolate; 
+    
+    /* 2. Il laser: taglia via fisicamente ogni singolo pixel che tocca l'ultimo millimetro del bordo destro */
+    clip-path: inset(0);
+    
+    /* 1. ELIMINA will-change: transform; */
+    /* 2. AGGIUNGI queste due righe per un'accelerazione hardware "pulita" senza bug: */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .menu-btn {
@@ -415,7 +452,10 @@ li:hover::before {
     z-index: 90; padding: 8rem 3rem; 
     transform: translateX(100%); 
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    will-change: transform;
+    /* 1. ELIMINA will-change: transform; */
+    /* 2. AGGIUNGI queste due righe: */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .side-menu-links { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2.5rem; }
