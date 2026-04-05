@@ -1265,17 +1265,16 @@ body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
    11. SPA MODAL ENGINE (Popups)
    ========================================= */
 
+/* --- 11.1 OVERLAY E CONTENITORE PRINCIPALE --- */
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; 
     width: 100vw; height: 100vh;
-    background-color: rgba(5, 5, 5, 0.9); /* Sfondo quasi nero, niente blur per performance */
+    background-color: rgba(5, 5, 5, 0.9);
     z-index: 2000;
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    /* Stato base: Inattivo */
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s ease;
@@ -1283,72 +1282,25 @@ body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
 
 .modal-overlay.is-active {
     opacity: 1;
-    pointer-events: auto; /* Riattiva il click */
+    pointer-events: auto;
 }
 
-/* --- IL CONTENITORE DEL POPUP (AGGIORNATO) --- */
 .sys-modal {
     position: absolute;
     background: var(--bg-color);
     border: 1px solid #1f1f1f;
-    
-    /* 1. ESPANSIONE DIMENSIONALE */
-    width: 95%; /* Leggermente più largo */
-    max-width: 1100px; /* Aumentato da 850px per ospitare le due colonne */
+    width: 95%;
+    max-width: 1100px;
     max-height: 85vh; 
     overflow-y: auto;
+    border-radius: 12px;
+    padding: 3.5rem 4rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(1, 212, 212, 0.05);
     
-    /* 2. ANGOLI AMMORBIDITI */
-    border-radius: 12px; /* Un look più premium e meno "alert-box" */
-    
-    padding: 3.5rem 4rem; /* Leggermente più respiro interno */
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(1, 212, 212, 0.05); /* Aggiunto un bagliore infinitesimale ai bordi */
-
     opacity: 0;
     transform: scale(0.95) translateZ(0);
     pointer-events: none;
     transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-/* --- ARCHITETTURA GRID (Testo VS Immagine) --- */
-.modal-content-grid {
-    display: grid;
-    /* La colonna di sinistra prende tutto lo spazio possibile (1fr), 
-       quella di destra ha una larghezza fissa (es. 400px) per l'immagine */
-    grid-template-columns: 1fr 400px; 
-    gap: 4rem; /* Spaziatura generosa tra testo e immagine */
-    align-items: start; /* Allinea i blocchi in alto */
-    margin-top: 2rem;
-}
-
-/* Stile per l'immagine all'interno del popup */
-.modal-side-img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px; /* Coerente con l'esterno */
-    border: 1px solid #1f1f1f;
-    filter: grayscale(80%) contrast(110%); /* Stile bare-metal */
-    transition: filter 0.3s ease, transform 0.3s ease;
-}
-
-.modal-side-img:hover {
-    filter: grayscale(0%) contrast(100%);
-    transform: scale(1.02);
-}
-
-/* RESPONSIVE DESIGN: Se lo schermo è stretto (tablet/smartphone), 
-   le due colonne si fondono in una sola, mettendo il testo sopra e l'immagine sotto */
-@media (max-width: 900px) {
-    .modal-content-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    /* L'immagine prende una larghezza massima su mobile per non esplodere */
-    .modal-side-img {
-        max-width: 500px;
-        margin: 0 auto;
-        display: block;
-    }
 }
 
 .sys-modal.is-open {
@@ -1357,13 +1309,74 @@ body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
     pointer-events: auto;
 }
 
-/* Replicazione della scrollbar brutale per l'interno dei popup */
+/* Scrollbar interna brutale */
 .sys-modal::-webkit-scrollbar { width: 12px; }
 .sys-modal::-webkit-scrollbar-track { background: #050505; border-left: 1px solid #1f1f1f; }
 .sys-modal::-webkit-scrollbar-thumb { background-color: #333333; border-radius: 0; }
 .sys-modal::-webkit-scrollbar-thumb:hover { background-color: var(--accent-color); }
 
-/* IL BOTTONE DI CHIUSURA (X) */
+
+/* --- 11.2 ARCHITETTURA GRID --- */
+.modal-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 400px; 
+    gap: 4rem;
+    align-items: start;
+    margin-top: 2rem;
+}
+
+
+/* --- 11.3 MOTORE IMMAGINI (Separation of Concerns) --- */
+/* A. La colonna genitore gestisce l'animazione di INGRESSO/USCITA ritardata */
+.sys-modal .modal-image-column {
+    opacity: 0;
+    transform: translate3d(40px, 0, 0);
+    transition: opacity 0.3s ease, transform 0.3s ease; 
+}
+
+.sys-modal.is-open .modal-image-column {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s, 
+                transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s;
+}
+
+/* B. L'immagine in sé gestisce SOLO lo stile visivo e l'HOVER istantaneo */
+.modal-side-img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #1f1f1f;
+    filter: grayscale(80%) contrast(110%);
+    transform: scale(1);
+    
+    transition: filter 0.3s ease, transform 0.3s ease;
+    will-change: transform, filter; /* Ottimizzazione GPU */
+}
+
+.modal-side-img:hover { 
+    filter: grayscale(0%) contrast(100%); 
+    transform: scale(1.02); 
+}
+
+
+/* --- 11.4 MOTORE DI TESTO (Lego Effect) --- */
+.sys-modal .stagger-word {
+    display: inline-block;
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+.sys-modal.is-open .stagger-word {
+    animation-name: legoFallIn;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation-fill-mode: forwards;
+    animation-duration: calc(0.4s + (var(--random-delay) * 0.3s));
+    animation-delay: calc(0.5s + (var(--random-delay) * 0.2s));
+}
+
+
+/* --- 11.5 ELEMENTI DI CONTROLLO & UTILITIES --- */
 .modal-close-btn {
     position: absolute;
     top: 2rem; right: 2rem;
@@ -1378,34 +1391,24 @@ body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
 
 .modal-close-btn:hover {
     color: var(--accent-color);
-    /* Rotazione secca da hardware */
     transform: scale(1.1) rotate(90deg);
 }
 
-/* BLOCCO SCROLL DELLA PAGINA SOTTOSTANTE */
 body.modal-open {
     overflow: hidden; 
 }
 
-/* --- INIEZIONE ANIMAZIONE TESTO NEI POPUP --- */
 
-/* 1. STATO DI RIPOSO: Le parole dentro il popup sono invisibili e sollevate di 20px */
-.sys-modal .stagger-word {
-    display: inline-block;
-    transform: translateY(20px);
-    opacity: 0;
+/* --- 11.6 RESPONSIVE DESIGN --- */
+@media (max-width: 900px) {
+    .modal-content-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .modal-side-img {
+        max-width: 500px;
+        margin: 0 auto;
+        display: block;
+    }
 }
 
-/* 2. STATO ATTIVO: Coreografia Sequenziale */
-.sys-modal.is-open .stagger-word {
-    animation-name: legoFallIn;
-    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
-    animation-fill-mode: forwards;
-    
-    animation-duration: calc(0.4s + (var(--random-delay) * 0.3s));
-    
-    /* LA FIX MATEMATICA: 0.5s di ritardo fisso. 
-       Il popup finisce di allargarsi a 0.4s. 
-       A 0.5s esatti inizia la pioggia di testo. Hardware salvo. */
-    animation-delay: calc(0.5s + (var(--random-delay) * 0.2s));
-}

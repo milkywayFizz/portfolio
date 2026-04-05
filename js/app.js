@@ -294,10 +294,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtns = document.querySelectorAll('.modal-close-btn');
     const modalTriggers = document.querySelectorAll('[data-modal]');
 
-    // 1. INNESCO: Ascoltiamo i click sui link abilitati ai popup
+    // 1. INNESCO (Spatial-Aware Engine)
     modalTriggers.forEach(trigger => {
         trigger.addEventListener('click', (e) => {
-            e.preventDefault(); // Blocca il comportamento standard del link HTML
+            e.preventDefault(); 
 
             const targetModalId = trigger.getAttribute('data-modal');
             const targetSectionId = trigger.getAttribute('href');
@@ -307,17 +307,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!targetModal || !targetSection) return;
 
-            // FASE A: Chiusura immediata del menu (se aperto)
-            document.body.classList.remove('menu-open');
+            // --- LA MAGIA: Calcolo Matematico della Distanza ---
+            const rect = targetSection.getBoundingClientRect();
+            // Troviamo il centro esatto della sezione bersaglio
+            const sectionCenter = rect.top + (rect.height / 2); 
+            // Troviamo il centro esatto del monitor dell'utente
+            const viewportCenter = window.innerHeight / 2; 
+            // Calcoliamo la distanza assoluta in pixel tra i due centri
+            const distanceFromCenter = Math.abs(sectionCenter - viewportCenter);
 
-            // FASE B: Scroll fluido hardware verso la sezione bersaglio
-            targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Definiamo una "Tolleranza": se lo scarto è minore di 150px, lo consideriamo "già centrato"
+            const isAlreadyCentered = distanceFromCenter < 150; 
 
-            // FASE C: Timer asincrono. Aspettiamo 800ms per dare il tempo allo scroll 
-            // di arrivare a destinazione, poi spariamo l'apertura del popup.
-            setTimeout(() => {
-                openModal(targetModal);
-            }, 800); 
+            const isMenuOpen = document.body.classList.contains('menu-open');
+
+            if (isMenuOpen) {
+                // SCENARIO 1: L'utente ha cliccato dal Menu Laterale
+                document.body.classList.remove('menu-open');
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Il menu scuro ci mette 0.6s fisici a chiudersi. 
+                // Se la sezione è già lì, aspettiamo solo il tempo che il menu si tolga di mezzo (600ms).
+                // Se la sezione è lontana, diamo il tempo del viaggio allo scroll (850ms).
+                const delay = isAlreadyCentered ? 600 : 850;
+                
+                setTimeout(() => {
+                    openModal(targetModal);
+                }, delay); 
+
+            } else {
+                // SCENARIO 2: L'utente ha cliccato da un link direttamente sulla pagina
+                if (isAlreadyCentered) {
+                    // ZERO LAG: Il bersaglio è sotto tiro, innesco immediato (Nessuno scroll, nessuna attesa)
+                    openModal(targetModal);
+                } else {
+                    // Bersaglio lontano: Inizia lo scroll e calcola il tempo di viaggio
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => {
+                        openModal(targetModal);
+                    }, 850);
+                }
+            }
         });
     });
 
