@@ -15,13 +15,13 @@
     </button>
 
     <nav id="side-menu" class="side-menu">
-        <ul class="side-menu-links">
-            <li><a href="index.html" class="active">Home</a></li>
-            <li><a href="about.html">About Me</a></li>
-            <li><a href="focus.html">Core Focus</a></li>
-            <li><a href="skills.html">Skills</a></li>
-            <li><a href="#projects" class="anchor-link">Projects</a></li> 
-        </ul>
+    <ul class="side-menu-links">
+        <li><a href="#header" class="active">Home</a></li>
+        <li><a href="#about" data-modal="modal-about">About Me</a></li>
+        <li><a href="#focus" data-modal="modal-focus">Core Focus</a></li>
+        <li><a href="#skills" data-modal="modal-skills">Skills</a></li>
+        <li><a href="#projects" class="anchor-link">Projects</a></li> 
+    </ul>
 
         <div class="menu-social-terminal">
             <a href="https://github.com/milkywayFizz" target="_blank" rel="noopener noreferrer" class="social-term-link">
@@ -77,7 +77,7 @@
 
         <main>
         <section id="about" class="reveal">
-            <h3><a href="about.html" class="section-link">About Me</a></h3>
+            <h3><a href="#about" class="section-link" data-modal="modal-about">About Me</a></h3>
             <p>I am a second-year Computer Science student at the <a href="https://www.univaq.it" target="_blank" rel="noopener noreferrer">University of L'Aquila (UnivAQ)</a>.</p>
             <p>My journey in Information Technology began with a fundamental goal: achieving <strong>Digital Sovereignty</strong>. What started as a practical effort to optimize personal devices and mitigate corporate telemetry has evolved into a rigorous academic and professional pursuit. I am deeply interested in system architecture, data privacy, and building secure infrastructures from the ground up.</p>
         </section>
@@ -85,7 +85,7 @@
         <hr>
 
         <section id="focus" class="reveal">
-            <h3><a href="focus.html" class="section-link">Core Focus & Career Goals</a></h3>
+            <h3><a href="#focus" class="section-link" data-modal="modal-focus">Core Focus & Career Goals</a></h3>
             <p>My objective is to specialize in areas where system performance and proactive security intersect:</p>
             <ul>
                 <li><strong>Blue Teaming & Network Defense:</strong> Traffic analysis and infrastructure monitoring.</li>
@@ -97,7 +97,7 @@
         <hr>
 
         <section id="skills" class="reveal">
-            <h3><a href="skills.html" class="section-link">Technical Competencies</a></h3>
+            <h3><a href="#skills" class="section-link" data-modal="modal-skills">Technical Competencies</a></h3>
             <p class="section-context">
                 Driven by a need for <strong>digital autonomy</strong>, I have built this technical stack through rigorous self-directed study and hands-on experimentation. I view these tools not as static endpoints, but as a foundation for a constantly evolving horizon in systems security and architecture.
             </p>
@@ -171,5 +171,82 @@
     </footer>
 
     </div><script src="js/app.js" defer></script>
+
+<div id="sys-modal-overlay" class="modal-overlay">
+
+<div id="modal-about" class="sys-modal">
+        <button class="modal-close-btn" aria-label="Terminate Module">✕</button>
+        <div class="modal-content">
+            
+            <h3><span class="modal-animate-text">About Me</span></h3>
+            
+            <div class="modal-content-grid">
+                
+                <div class="modal-text-column">
+                    <p class="modal-animate-text">I am a second-year Computer Science student at the University of L'Aquila (UnivAQ).</p>
+                    <p class="modal-animate-text">My journey in Information Technology began with a fundamental goal: achieving Digital Sovereignty. What started as a practical effort to optimize personal devices and mitigate corporate telemetry has evolved into a rigorous academic and professional pursuit.</p>
+                    <p class="modal-animate-text">I am deeply interested in system architecture, data privacy, and building secure infrastructures from the ground up. (Aggiungi tutto il testo che vuoi, hai spazio da vendere ora!)</p>
+                </div>
+                
+                <div class="modal-image-column">
+                    <img src="img/avatar.png" alt="Hardware o Codice" class="modal-side-img" loading="lazy">
+                </div>
+
+            </div> </div>
+    </div>
+
+    <div id="modal-focus" class="sys-modal">
+        <button class="modal-close-btn" aria-label="Terminate Module">✕</button>
+        <div class="modal-content">
+            
+            <h3><span class="modal-animate-text">Core Focus & Career Goals</span></h3>
+            
+            <div class="modal-content-grid">
+                
+                <div class="modal-text-column">
+                    <p class="modal-animate-text">My primary objective is to specialize in the exact intersection between extreme system performance and proactive cyber defense.</p>
+                    
+                    <p class="modal-animate-text">I am currently dedicating my academic and personal research to Blue Teaming and Network Defense. I analyze traffic patterns, monitor infrastructure anomalies, and build resilient systems that anticipate attack vectors rather than just reacting to them.</p>
+                    
+                    <p class="modal-animate-text">Furthermore, my focus extends to Device Optimization and DevSecOps. I believe in attack surface reduction at the bare-metal level and in designing sovereign, automated cloud environments where privacy is integrated by design, not as an afterthought.</p>
+                </div>
+                
+                <div class="modal-image-column">
+                    <img src="img/linux.png" alt="Network and Infrastructure Security" class="modal-side-img" loading="lazy">
+                </div>
+
+            </div> </div>
+    </div>
+
+    <div id="modal-skills" class="sys-modal">
+        <button class="modal-close-btn" aria-label="Terminate Module">✕</button>
+        <div class="modal-content">
+            
+            <h3><span class="modal-animate-text">Technical Competencies</span></h3>
+            
+            <div class="modal-content-grid">
+                
+                <div class="modal-text-column">
+                    <p class="modal-animate-text">Driven by a need for digital autonomy, I have built this technical stack through rigorous self-directed study and hands-on experimentation. I view these tools not as static endpoints, but as a foundation for a constantly evolving horizon in systems security.</p>
+                    
+                    <p class="modal-animate-text">My primary operating environments include Arch Linux for bare-metal control, AtlasOS for Windows attack-surface reduction, and custom Android system hardening.</p>
+                    
+                    <p class="modal-animate-text">On the networking side, I focus on TCP/IP protocol manipulation, Wireguard VPN tunneling, and network-wide DNS filtering via Pi-hole.</p>
+                </div>
+                
+                <div class="modal-image-column">
+                    <img src="img/docker_logo.png" alt="Docker Containerization" class="modal-side-img" loading="lazy">
+                </div>
+
+            </div> 
+            
+        </div>
+    </div>
+
+            </div> </div>
+    </div>
+
+</div>
+
 </body>
 </html>

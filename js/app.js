@@ -32,6 +32,7 @@ const splitTextIntoSpans = (selector) => {
 // Eseguiamo l'operazione sui titoli e sulle descrizioni del nostro carosello
 splitTextIntoSpans('.slide-title');
 splitTextIntoSpans('.slide-description');
+splitTextIntoSpans('.modal-animate-text');
 
 
 /* --- Architettura Scroll Reveal (Intersection Observer) --- */
@@ -282,3 +283,82 @@ window.addEventListener('load', () => {
 
     renderEngine();
 });
+
+/* =========================================
+   SPA MODAL ENGINE (Orchestrazione Eventi)
+   ========================================= */
+
+document.addEventListener('DOMContentLoaded', () => {
+    const modalOverlay = document.getElementById('sys-modal-overlay');
+    const modals = document.querySelectorAll('.sys-modal');
+    const closeBtns = document.querySelectorAll('.modal-close-btn');
+    const modalTriggers = document.querySelectorAll('[data-modal]');
+
+    // 1. INNESCO: Ascoltiamo i click sui link abilitati ai popup
+    modalTriggers.forEach(trigger => {
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault(); // Blocca il comportamento standard del link HTML
+
+            const targetModalId = trigger.getAttribute('data-modal');
+            const targetSectionId = trigger.getAttribute('href');
+            
+            const targetSection = document.querySelector(targetSectionId);
+            const targetModal = document.getElementById(targetModalId);
+
+            if (!targetModal || !targetSection) return;
+
+            // FASE A: Chiusura immediata del menu (se aperto)
+            document.body.classList.remove('menu-open');
+
+            // FASE B: Scroll fluido hardware verso la sezione bersaglio
+            targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // FASE C: Timer asincrono. Aspettiamo 800ms per dare il tempo allo scroll 
+            // di arrivare a destinazione, poi spariamo l'apertura del popup.
+            setTimeout(() => {
+                openModal(targetModal);
+            }, 800); 
+        });
+    });
+
+    // 2. FUNZIONE DI DEPLOY (Apertura)
+    const openModal = (modalNode) => {
+        // Blocchiamo fisicamente lo scroll della pagina in background
+        document.body.classList.add('modal-open'); 
+        
+        // Accendiamo lo strato oscuro
+        modalOverlay.classList.add('is-active');
+
+        // requestAnimationFrame forza il browser a dipingere l'overlay nero 
+        // PRIMA di sparare l'animazione di espansione (elimina scatti grafici)
+        requestAnimationFrame(() => {
+            modalNode.classList.add('is-open');
+        });
+    };
+
+    // 3. FUNZIONE DI TERMINAZIONE (Chiusura)
+    const closeModal = () => {
+        // Sblocchiamo la pagina
+        document.body.classList.remove('modal-open');
+        // Spegniamo lo strato oscuro
+        modalOverlay.classList.remove('is-active');
+        // Ripristiniamo la geometria di tutti i popup
+        modals.forEach(m => m.classList.remove('is-open'));
+    };
+
+    // 4. EVENTI DI CHIUSURA FAIL-SAFE
+    // Clic sulla 'X'
+    closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
+    
+    // Clic in un punto morto dello schermo (overlay nero)
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+    });
+
+    // Pressione del tasto ESC sulla tastiera (Accessibilità Terminale)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && document.body.classList.contains('modal-open')) {
+            closeModal();
+        }
+    });
+}); 
