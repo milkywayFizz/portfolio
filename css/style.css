@@ -1327,11 +1327,18 @@ body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
 
 
 /* --- 11.3 MOTORE IMMAGINI (Separation of Concerns) --- */
-/* A. La colonna genitore gestisce l'animazione di INGRESSO/USCITA ritardata */
+/* --- MOTORE DI INGRESSO E STICKY POSITION --- */
 .sys-modal .modal-image-column {
+    /* L'animazione di scivolamento da destra che avevi già */
     opacity: 0;
     transform: translate3d(40px, 0, 0);
     transition: opacity 0.3s ease, transform 0.3s ease; 
+    
+    /* --- LA MAGIA HARDWARE --- */
+    position: -webkit-sticky; /* Supporto vitale per Safari */
+    position: sticky;
+    /* top: 3rem dice al browser "quando l'utente scorre giù, blocca questa colonna a 3rem di distanza dal soffitto" */
+    top: 3rem; 
 }
 
 .sys-modal.is-open .modal-image-column {
