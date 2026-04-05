@@ -942,7 +942,17 @@ li:hover::before {
     backface-visibility: hidden;
 }
 
-.side-menu-links { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2.5rem; }
+.side-menu-links li { 
+    margin-bottom: 0; 
+    
+    /* STATO SPENTO (Menu Chiuso): Invisibili e arretrati di 20px */
+    opacity: 0;
+    transform: translateX(-20px);
+    
+    /* FISICA DI CHIUSURA: Veloce, secca, senza ritardi. 
+       Svaniscono prima che il pannello sia andato via. */
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
 
 /* FIX: Spegniamo il cursore terminale globale per queste liste */
 .side-menu-links li::before { content: none !important; display: none !important; }
@@ -969,6 +979,26 @@ li:hover::before {
     
     /* Transizione sia del liquido che dello spostamento fisico */
     transition: background-position 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    position: relative; /* Necessario per ancorare la nostra nuova linea */
+    border-bottom: none !important; /* Disattiviamo la linea buggata del browser */
+}
+
+/* 2. CREIAMO LA NOSTRA LINEA VETTORIALE (Pseudo-elemento GPU-Accelerated) */
+.side-menu-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; /* Distanza matematica dal testo */
+    left: 0;
+    width: 100%;
+    height: 1px; /* Spessore fisso */
+    background-color: #333333; /* Grigio scuro solido */
+    
+    /* LA MAGIA: Forziamo la GPU a bloccare la linea su coordinate intere, annullando l'anti-aliasing sbavato */
+    transform: translateZ(0); 
+    
+    /* Prepariamo l'animazione per quando diventa turchese */
+    transition: background-color 0.3s ease;
 }
 
 .side-menu-links a:hover, 
@@ -981,6 +1011,25 @@ li:hover::before {
 /* LOGICA STATO APERTO (JavaScript innesca questa classe) */
 body.menu-open .site-wrapper { transform: translateX(-350px); }
 body.menu-open .side-menu { transform: translateX(0); }
+
+/* STATO ACCESO (Quando il body riceve .menu-open dal JS) */
+body.menu-open .side-menu-links li {
+    /* Scattano in posizione con opacità 100% */
+    opacity: 1;
+    transform: translateX(0);
+    
+    /* FISICA DI APERTURA: Curva di Bezier per uno scatto "meccanico" ma fluido */
+    transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* LA CASCATA MATEMATICA: Ritardi progressivi solo in fase di apertura */
+/* Partiamo da 0.2s in modo che il pannello nero sia già visibile prima che inizino ad apparire */
+body.menu-open .side-menu-links li:nth-child(1) { transition-delay: 0.15s; }
+body.menu-open .side-menu-links li:nth-child(2) { transition-delay: 0.22s; }
+body.menu-open .side-menu-links li:nth-child(3) { transition-delay: 0.29s; }
+body.menu-open .side-menu-links li:nth-child(4) { transition-delay: 0.36s; }
+body.menu-open .side-menu-links li:nth-child(5) { transition-delay: 0.43s; }
+
 /* LA X: Diventa bianca di base */
 body.menu-open .hamburger-line:nth-child(1) { 
     transform: translateY(10px) rotate(45deg); 
@@ -1026,6 +1075,7 @@ body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) {
     backface-visibility: hidden;
 }
 
+
 .menu-btn {
     position: fixed;
     top: 2rem; right: 2.5rem; z-index: 100; 
@@ -1060,40 +1110,62 @@ body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) {
     backface-visibility: hidden;
 }
 
-.side-menu-links { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2.5rem; }
+.side-menu-links { 
+    list-style: none; 
+    padding: 0; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1.5rem; /* Ridotto da 2.5rem a 1.5rem */
+}
 
 /* FIX: Spegniamo il cursore terminale globale per queste liste */
 .side-menu-links li::before { content: none !important; display: none !important; }
 .side-menu-links li { margin-bottom: 0; }
 
-/* LA NUOVA CAPSULA TIPOGRAFICA: Background-Clip Text */
 .side-menu-links a {
-   font-size: 1.5rem; /* Ridotto da 1.8rem per un look più misurato */
-    font-weight: 500; /* Passato da 800 a 500 (Medium). Molto più slanciato. */
-    letter-spacing: 0.05em; /* Aggiunge un tocco di "respiro" tipico dei menu luxury */
+    font-size: 1.2rem; /* Ridotto da 1.5rem a 1.2rem */
+    font-weight: 500; 
+    letter-spacing: 0.05em; 
     text-decoration: none;
     display: inline-block;
     
-    /* Il gradiente simula il liquido. Metà turchese, metà bianco */
     background-image: linear-gradient(to top, var(--accent-color) 50%, var(--text-main) 50%);
-    background-size: 100% 200%; /* Il doppio dell'altezza per nascondere il turchese all'inizio */
-    background-position: top; /* Partiamo mostrando solo il bianco (la metà superiore) */
-    
-    /* LA MAGIA: Il background viene "ritagliato" per esistere SOLO dentro le lettere */
+    background-size: 100% 200%; 
+    background-position: top; 
     -webkit-background-clip: text;
-    background-clip: text; /* Aggiungi questa riga per zittire l'avviso! */
+    background-clip: text; 
     -webkit-text-fill-color: transparent; 
     color: transparent;
     
-    /* Transizione sia del liquido che dello spostamento fisico */
+    /* Ridotto lo spostamento fisico sull'hover (da 15px a 8px) per meno invadenza */
     transition: background-position 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .side-menu-links a:hover, 
 .side-menu-links a.active {
-    /* Scivolando la posizione in basso, il liquido turchese riempie il testo */
     background-position: bottom; 
-    transform: translateX(15px) scale(1.05); 
+    transform: translateX(8px); /* Più discreto */
+}
+
+/* NUOVO: Stile per il blocco di telemetria a fondo pagina */
+.menu-sys-info {
+    position: absolute;
+    bottom: 3rem; /* Lo ancoriamo al fondo del menu */
+    left: 3rem;
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #444444; /* Un grigio molto scuro, deve stare in sottofondo */
+    pointer-events: none; /* Impediamo che il mouse ci interagisca per sbaglio */
+}
+
+.menu-sys-info p {
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+    color: #555555;
+}
+
+.menu-sys-info span {
+    color: #333333; /* Il cursore è ancora più scuro */
 }
 
 /* LOGICA STATO APERTO (JavaScript innesca questa classe) */
@@ -1118,4 +1190,73 @@ body.menu-open .hamburger-line:nth-child(3) {
 body.menu-open .menu-btn:hover .hamburger-line:nth-child(1),
 body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) {
     background: var(--accent-color);
+}
+
+/* --- 10.6 CONNESSIONI DI RETE (SOCIAL TERMINAL) --- */
+
+.menu-social-terminal {
+    position: absolute;
+    bottom: 3rem;
+    left: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem; /* Spaziatura matematica tra le linee di comando */
+}
+
+.social-term-link {
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #666666; /* Grigio terminale inattivo */
+    text-decoration: none;
+    
+    /* FIX: Uccidiamo ogni possibile sottolineatura ereditata dalle regole globali */
+    border-bottom: none !important; 
+    
+    /* Transizione secca, da hardware */
+    transition: color 0.15s ease, transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    opacity: 0;
+}
+
+/* --- IL MOTORE DEL BOOT-UP GLITCH --- */
+@keyframes terminalGlitchBoot {
+    0%   { opacity: 0; transform: translateX(-5px); }
+    15%  { opacity: 1; transform: translateX(2px); }
+    30%  { opacity: 0; transform: translateX(-2px); }
+    45%  { opacity: 1; transform: translateX(0); }
+    60%  { opacity: 0.4; }
+    80%  { opacity: 1; }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Innesco dell'energia quando il body riceve la classe .menu-open dal JS */
+body.menu-open .social-term-link {
+    /* Forwards fa sì che l'elemento resti opaco alla fine dell'animazione */
+    animation: terminalGlitchBoot 0.35s forwards;
+}
+
+/* LA MAGIA TERMINALE: Accensione a cascata (Staggering) */
+/* Il menu impiega 0.6s per aprirsi. Li accendiamo uno dopo l'altro mentre finisce lo slide */
+body.menu-open .social-term-link:nth-child(1) { animation-delay: 0.45s; }
+body.menu-open .social-term-link:nth-child(2) { animation-delay: 0.55s; }
+body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
+
+/* FIX: Disattiviamo la linea vettoriale che avevamo creato per i link principali */
+.social-term-link::after {
+    display: none !important;
+}
+
+.social-term-link span {
+    color: #333333; /* Cursore scuro per staccare dal nome del social */
+    margin-right: 0.4rem;
+    transition: color 0.15s ease;
+}
+
+/* HOVER: Feedback tattile e visivo immediato */
+.social-term-link:hover {
+    color: var(--text-main); /* Il testo si accende di bianco ghiaccio */
+    transform: translateX(4px); /* Leggero scatto in avanti */
+}
+
+.social-term-link:hover span {
+    color: var(--accent-color); /* Il cursore diventa Turchese Cyber */
 }
