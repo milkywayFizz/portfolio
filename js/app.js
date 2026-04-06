@@ -454,6 +454,28 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* =========================================
+   GHOST BRANDING SENSOR (Menu-Freeze Fix)
+   ========================================= */
+document.addEventListener('DOMContentLoaded', () => {
+    const body = document.body;
+    const scrollThreshold = 350; 
+
+    window.addEventListener('scroll', () => {
+        // IL FRENO A MANO: Se il menu è aperto, il radar si congela e ignora i falsi valori di scroll.
+        // SOSTITUISCI 'menu-open' con la classe reale che usa il tuo menu!
+        if (body.classList.contains('menu-open')) return;
+
+        window.requestAnimationFrame(() => {
+            if (window.scrollY > scrollThreshold) {
+                body.classList.add('is-scrolled');
+            } else {
+                body.classList.remove('is-scrolled');
+            }
+        });
+    }, { passive: true });
+});
+
+/* =========================================
    IDE FOLDER TOGGLE ENGINE (Collapse/Expand)
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {

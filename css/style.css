@@ -85,6 +85,51 @@ header, main, footer {
 }
 
 /* =========================================
+   GHOST BRANDING (Sticky Header)
+   ========================================= */
+.ghost-brand {
+    position: fixed;
+    top: 1.5rem;
+    left: 2.5rem; /* Posizionato a sinistra, bilancia l'hamburger a destra */
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 800; /* Sotto i popup, ma sopra il sito */
+    
+    /* Stato Iniziale: Invisibile, rimpicciolito e spostato verso l'alto */
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-20px, -20px) scale(0.8);
+    pointer-events: none; /* Impedisce interazioni fantasma */
+    
+    /* Transizione morbidissima */
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.4s;
+    will-change: opacity, transform, visibility;
+}
+
+.ghost-avatar {
+    width: 45px; /* Molto più piccolo dell'originale */
+    height: 45px;
+    border-radius: 50%; /* Lo rende perfettamente circolare */
+    object-fit: cover;
+}
+
+.ghost-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.05em;
+}
+
+/* Quando il body riceve la classe 'is-scrolled', il Ghost Header entra in scena */
+body.is-scrolled .ghost-brand {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, 0) scale(1);
+    pointer-events: auto;
+}
+
+/* =========================================
    CAROSELLO DI LOGHI ANIMATO (Compatto & Infallibile)
    ========================================= */
 
@@ -889,174 +934,6 @@ li:hover::before {
 .site-wrapper {
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     width: 100%;
-    /* Il fix per l'artefatto visivo: rendiamo il layer GPU solido e opaco */
-    background-color: var(--bg-color); 
-    min-height: 100vh; /* Assicura che lo sfondo copra sempre tutto lo schermo */
-
-    /* ==========================================
-       IL RECINTO (Anti-Bleeding GPU)
-       ========================================== */
-    /* 1. Crea un universo chiuso: niente di ciò che è qui dentro può influenzare la scrollbar esterna */
-    isolation: isolate; 
-    
-    /* 2. Il laser: taglia via fisicamente ogni singolo pixel che tocca l'ultimo millimetro del bordo destro */
-    clip-path: inset(0);
-    
-    /* 1. ELIMINA will-change: transform; */
-    /* 2. AGGIUNGI queste due righe per un'accelerazione hardware "pulita" senza bug: */
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-
-.menu-btn {
-    position: fixed;
-    top: 2rem; right: 2.5rem; z-index: 100; 
-    background: transparent; border: none; cursor: pointer;
-    width: 45px; height: 45px;
-    display: flex; flex-direction: column; justify-content: center; align-items: flex-end; 
-    gap: 8px; 
-}
-
-.hamburger-line {
-    height: 2px; background: var(--text-main);
-    transition: transform 0.4s ease, opacity 0.4s ease, background-color 0.3s ease, width 0.3s ease;
-}
-
-.hamburger-line:nth-child(1) { width: 35px; }
-.hamburger-line:nth-child(2) { width: 25px; }
-.hamburger-line:nth-child(3) { width: 35px; }
-
-.menu-btn:hover .hamburger-line { background: var(--accent-color); width: 35px; }
-
-.side-menu {
-    position: fixed;
-    top: 0; right: 0; width: 350px; height: 100vh;
-    background: var(--bg-color); border-left: 1px solid #1f1f1f; 
-    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.9); 
-    z-index: 90; padding: 8rem 3rem; 
-    transform: translateX(100%); 
-    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    /* 1. ELIMINA will-change: transform; */
-    /* 2. AGGIUNGI queste due righe: */
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-
-.side-menu-links li { 
-    margin-bottom: 0; 
-    
-    /* STATO SPENTO (Menu Chiuso): Invisibili e arretrati di 20px */
-    opacity: 0;
-    transform: translateX(-20px);
-    
-    /* FISICA DI CHIUSURA: Veloce, secca, senza ritardi. 
-       Svaniscono prima che il pannello sia andato via. */
-    transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-/* FIX: Spegniamo il cursore terminale globale per queste liste */
-.side-menu-links li::before { content: none !important; display: none !important; }
-.side-menu-links li { margin-bottom: 0; }
-
-/* LA NUOVA CAPSULA TIPOGRAFICA: Background-Clip Text */
-.side-menu-links a {
-   font-size: 1.5rem; /* Ridotto da 1.8rem per un look più misurato */
-    font-weight: 500; /* Passato da 800 a 500 (Medium). Molto più slanciato. */
-    letter-spacing: 0.05em; /* Aggiunge un tocco di "respiro" tipico dei menu luxury */
-    text-decoration: none;
-    display: inline-block;
-    
-    /* Il gradiente simula il liquido. Metà turchese, metà bianco */
-    background-image: linear-gradient(to top, var(--accent-color) 50%, var(--text-main) 50%);
-    background-size: 100% 200%; /* Il doppio dell'altezza per nascondere il turchese all'inizio */
-    background-position: top; /* Partiamo mostrando solo il bianco (la metà superiore) */
-    
-    /* LA MAGIA: Il background viene "ritagliato" per esistere SOLO dentro le lettere */
-    -webkit-background-clip: text;
-    background-clip: text; /* Aggiungi questa riga per zittire l'avviso! */
-    -webkit-text-fill-color: transparent; 
-    color: transparent;
-    
-    /* Transizione sia del liquido che dello spostamento fisico */
-    transition: background-position 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-
-    position: relative; /* Necessario per ancorare la nostra nuova linea */
-    border-bottom: none !important; /* Disattiviamo la linea buggata del browser */
-}
-
-/* 2. CREIAMO LA NOSTRA LINEA VETTORIALE (Pseudo-elemento GPU-Accelerated) */
-.side-menu-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px; /* Distanza matematica dal testo */
-    left: 0;
-    width: 100%;
-    height: 1px; /* Spessore fisso */
-    background-color: #333333; /* Grigio scuro solido */
-    
-    /* LA MAGIA: Forziamo la GPU a bloccare la linea su coordinate intere, annullando l'anti-aliasing sbavato */
-    transform: translateZ(0); 
-    
-    /* Prepariamo l'animazione per quando diventa turchese */
-    transition: background-color 0.3s ease;
-}
-
-.side-menu-links a:hover, 
-.side-menu-links a.active {
-    /* Scivolando la posizione in basso, il liquido turchese riempie il testo */
-    background-position: bottom; 
-    transform: translateX(15px) scale(1.05); 
-}
-
-/* LOGICA STATO APERTO (JavaScript innesca questa classe) */
-body.menu-open .site-wrapper { transform: translateX(-350px); }
-body.menu-open .side-menu { transform: translateX(0); }
-
-/* STATO ACCESO (Quando il body riceve .menu-open dal JS) */
-body.menu-open .side-menu-links li {
-    /* Scattano in posizione con opacità 100% */
-    opacity: 1;
-    transform: translateX(0);
-    
-    /* FISICA DI APERTURA: Curva di Bezier per uno scatto "meccanico" ma fluido */
-    transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-/* LA CASCATA MATEMATICA: Ritardi progressivi solo in fase di apertura */
-/* Partiamo da 0.2s in modo che il pannello nero sia già visibile prima che inizino ad apparire */
-body.menu-open .side-menu-links li:nth-child(1) { transition-delay: 0.15s; }
-body.menu-open .side-menu-links li:nth-child(2) { transition-delay: 0.22s; }
-body.menu-open .side-menu-links li:nth-child(3) { transition-delay: 0.29s; }
-body.menu-open .side-menu-links li:nth-child(4) { transition-delay: 0.36s; }
-body.menu-open .side-menu-links li:nth-child(5) { transition-delay: 0.43s; }
-
-/* LA X: Diventa bianca di base */
-body.menu-open .hamburger-line:nth-child(1) { 
-    transform: translateY(10px) rotate(45deg); 
-    background: var(--text-main); /* Bianco */
-    width: 35px;
-}
-body.menu-open .hamburger-line:nth-child(2) { 
-    opacity: 0; 
-}
-body.menu-open .hamburger-line:nth-child(3) { 
-    transform: translateY(-10px) rotate(-45deg); 
-    background: var(--text-main); /* Bianco */
-    width: 35px;
-}
-
-/* L'HOVER SULLA X: Diventa turchese solo al passaggio del mouse */
-body.menu-open .menu-btn:hover .hamburger-line:nth-child(1),
-body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) {
-    background: var(--accent-color);
-}
-
-/* -----------------------------------------
-   10. OFF-CANVAS PUSH MENU & HAMBURGER
-   ----------------------------------------- */
-.site-wrapper {
-    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    width: 100%;
     background-color: var(--bg-color); 
     min-height: 100vh; 
     isolation: isolate; 
@@ -1114,6 +991,8 @@ body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) {
     letter-spacing: 0.05em; 
     text-decoration: none;
     display: inline-block;
+    
+    /* Il gradiente per il testo che si riempie dal basso */
     background-image: linear-gradient(to top, var(--accent-color) 50%, var(--text-main) 50%);
     background-size: 100% 200%; 
     background-position: top; 
@@ -1121,13 +1000,21 @@ body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) {
     background-clip: text; 
     -webkit-text-fill-color: transparent; 
     color: transparent;
-    transition: background-position 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    
+    /* FIX: Aggiungiamo esplicitamente il bordo grigio scuro */
+    border-bottom: 1px solid #333333; 
+    
+    /* FIX: Aggiungiamo border-color alla transizione */
+    transition: background-position 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease;
 }
 
 .side-menu-links a:hover, 
 .side-menu-links a.active {
     background-position: bottom; 
     transform: translateX(8px); 
+    
+    /* FIX: Facciamo diventare il bordo turchese allo stato attivo/hover */
+    border-bottom-color: var(--accent-color); 
 }
 
 /* --- TELEMETRIA E SOCIAL TERMINAL --- */
@@ -1182,6 +1069,16 @@ body.menu-open .social-term-link { animation: terminalGlitchBoot 0.35s forwards;
 body.menu-open .social-term-link:nth-child(1) { animation-delay: 0.45s; }
 body.menu-open .social-term-link:nth-child(2) { animation-delay: 0.55s; }
 body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
+
+/* --- GHOST BRANDING MENU OVERRIDE --- */
+/* Selettore combinato: Applica lo spostamento SOLO se il menu è aperto E se sei scrollato verso il basso */
+body.menu-open.is-scrolled .ghost-brand {
+    /* Si muove di 350px a sinistra in totale armonia col .site-wrapper */
+    transform: translateX(-350px) scale(1); 
+    
+    /* Stessa fisica del menu, niente glitch */
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
 
 /* =========================================
    11. SPA MODAL ENGINE (Popups)
