@@ -1426,16 +1426,68 @@ body.modal-open {
     margin-bottom: 0.5rem;
 }
 
+/* Liste File (Reset globale) */
+.ide-file-tree, .ide-sub-tree { list-style: none; padding: 0; margin: 0; }
+
+/* --- MOTORE ANIMAZIONE CARTELLE (Cascade Effect) --- */
+
+/* La Freccia */
 .ide-chevron {
     font-size: 0.7rem;
     margin-right: 0.5rem;
-    transform: scaleY(0.6); /* Schiaccia la V per farla sembrare una freccia vettoriale */
+    transform: scaleY(0.6) rotate(0deg); 
     display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Liste File */
-.ide-file-tree, .ide-sub-tree { list-style: none; padding: 0; margin: 0; }
-.ide-sub-tree { padding-left: 2.2rem; }
+.ide-folder.is-collapsed .ide-chevron {
+    transform: scaleY(0.6) rotate(-90deg);
+}
+
+/* 1. IL CONTENITORE (La scatola che si apre/chiude) */
+.ide-sub-tree { 
+    padding-left: 2.2rem; 
+    max-height: 400px; 
+    overflow: hidden;
+    /* In Apertura: si allarga SUBITO (0s delay) */
+    transition: max-height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0s;
+}
+
+.ide-folder.is-collapsed + .ide-sub-tree {
+    max-height: 0;
+    /* In Chiusura: ASPETTA 0.2s prima di stringersi, per dare tempo ai file di sparire */
+    transition: max-height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s;
+    pointer-events: none; /* Impedisce di cliccare i file invisibili */
+}
+
+/* 2. I SINGOLI FILE (Fisica del movimento) */
+.ide-sub-tree li {
+    opacity: 1;
+    /* Il file è al suo posto */
+    transform: translateY(0); 
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ide-folder.is-collapsed + .ide-sub-tree li {
+    opacity: 0;
+    /* Il file scivola leggermente verso l'alto mentre scompare */
+    transform: translateY(-10px); 
+}
+
+/* 3. LA MAGIA: I RITARDI MATEMATICI (Staggering) */
+/* CASCATA IN INGRESSO (Apertura): Dall'alto verso il basso */
+.ide-sub-tree li:nth-child(1) { transition-delay: 0.05s; }
+.ide-sub-tree li:nth-child(2) { transition-delay: 0.10s; }
+.ide-sub-tree li:nth-child(3) { transition-delay: 0.15s; }
+.ide-sub-tree li:nth-child(4) { transition-delay: 0.20s; }
+.ide-sub-tree li:nth-child(5) { transition-delay: 0.25s; }
+
+/* CASCATA IN USCITA (Chiusura): Dal basso verso l'alto */
+/* Ribaltiamo i ritardi: l'ultimo scompare subito (0s), il primo ci mette di più */
+.ide-folder.is-collapsed + .ide-sub-tree li:nth-child(1) { transition-delay: 0.15s; }
+.ide-folder.is-collapsed + .ide-sub-tree li:nth-child(2) { transition-delay: 0.10s; }
+.ide-folder.is-collapsed + .ide-sub-tree li:nth-child(3) { transition-delay: 0.05s; }
+.ide-folder.is-collapsed + .ide-sub-tree li:nth-child(4) { transition-delay: 0.00s; }
 
 /* --- FIX CRITICO: QUARANTENA EREDITARIETÀ --- */
 /* 1. Uccidiamo il cursore ">_" globale per tutte le liste dentro la sidebar dell'IDE */
@@ -1466,11 +1518,11 @@ body.modal-open {
     color: #e0e0e0; 
 }
 
-/* Evidenziazione file attivo (Stile VS Code Dark) */
+/* Evidenziazione file attivo (Stile Terminale Puro) */
 .ide-file.active {
-    background: #112233; /* Blu scuro desaturato */
+    background: #1c1c1c; /* Un grigio neutro e solido che stacca dal fondo */
     color: #ffffff;
-    border: 1px solid #1c3b5a;
+    border: 1px solid #2a2a2a; /* Bordo grigio tono su tono, niente blu */
 }
 
 /* Icone Estensione File (Zero Dependencies, usando i colori del tuo IDE di riferimento) */
@@ -1485,7 +1537,7 @@ body.modal-open {
 .icon-md { color: #69b4d5; } /* Blu per Markdown */
 .icon-yml { color: #cb3837; } /* Rosso scuro per YAML */
 .icon-log { color: #888888; } /* Grigio per i LOG */
-.icon-sh { color: #4af626; }  /* Verde hacker per Bash/Shell */
+.icon-sh { color: #f6e826; }  /* Verde hacker per Bash/Shell */
 
 .file-name { flex-grow: 1; }
 

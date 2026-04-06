@@ -392,3 +392,78 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 }); 
+
+/* =========================================
+   IDE SCROLLSPY ENGINE (Active File Tracker)
+   ========================================= */
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Cerchiamo tutti i moduli IDE (così funzionerà anche per i progetti futuri)
+    const ideModals = document.querySelectorAll('.sys-modal-ide');
+    
+    ideModals.forEach(modal => {
+        const scrollContainer = modal.querySelector('.ide-content');
+        const sections = modal.querySelectorAll('.ide-section');
+        const links = modal.querySelectorAll('.ide-file');
+        
+        // Se manca uno degli elementi, fermiamo lo script per evitare errori
+        if (!scrollContainer || sections.length === 0 || links.length === 0) return;
+
+        // Configurazione del Radar: 
+        // Guarda dentro il pannello che scorre. Quando una sezione entra 
+        // nella metà superiore dello schermo, innesca il cambio.
+        const observerOptions = {
+            root: scrollContainer,
+            rootMargin: '-10% 0px -60% 0px', 
+            threshold: 0
+        };
+
+        const observerCallback = (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 1. Troviamo l'ID della sezione attualmente in lettura (es: "proj-arch")
+                    const currentId = entry.target.id;
+                    
+                    // 2. Spegniamo tutti i file nell'Explorer
+                    links.forEach(l => l.classList.remove('active'));
+                    
+                    // 3. Troviamo il file con l'href corrispondente e lo accendiamo
+                    const activeLink = modal.querySelector(`.ide-file[href="#${currentId}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                    }
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        
+        // Diciamo al radar di osservare ogni singola sezione del report
+        sections.forEach(sec => observer.observe(sec));
+        
+        // --- UX Iistantanea (Fallback) ---
+        // Se l'utente clicca, diamo un feedback visivo immediato senza aspettare lo scorrimento
+        links.forEach(link => {
+            link.addEventListener('click', function() {
+                links.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    });
+
+});
+
+/* =========================================
+   IDE FOLDER TOGGLE ENGINE (Collapse/Expand)
+   ========================================= */
+document.addEventListener('DOMContentLoaded', () => {
+    // Selezioniamo tutte le cartelle cliccabili, escludendo la Root principale
+    const ideFolders = document.querySelectorAll('.ide-folder:not(.root-folder)');
+    
+    ideFolders.forEach(folder => {
+        folder.addEventListener('click', () => {
+            // Aggiunge o toglie la classe che fa scattare l'animazione CSS
+            folder.classList.toggle('is-collapsed');
+        });
+    });
+});
