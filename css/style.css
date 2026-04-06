@@ -1050,31 +1050,20 @@ body.menu-open .menu-btn:hover .hamburger-line:nth-child(1),
 body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) {
     background: var(--accent-color);
 }
+
 /* -----------------------------------------
    10. OFF-CANVAS PUSH MENU & HAMBURGER
    ----------------------------------------- */
 .site-wrapper {
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     width: 100%;
-    /* Il fix per l'artefatto visivo: rendiamo il layer GPU solido e opaco */
     background-color: var(--bg-color); 
-    min-height: 100vh; /* Assicura che lo sfondo copra sempre tutto lo schermo */
-
-    /* ==========================================
-       IL RECINTO (Anti-Bleeding GPU)
-       ========================================== */
-    /* 1. Crea un universo chiuso: niente di ciò che è qui dentro può influenzare la scrollbar esterna */
+    min-height: 100vh; 
     isolation: isolate; 
-    
-    /* 2. Il laser: taglia via fisicamente ogni singolo pixel che tocca l'ultimo millimetro del bordo destro */
     clip-path: inset(0);
-    
-    /* 1. ELIMINA will-change: transform; */
-    /* 2. AGGIUNGI queste due righe per un'accelerazione hardware "pulita" senza bug: */
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
-
 
 .menu-btn {
     position: fixed;
@@ -1104,8 +1093,6 @@ body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) {
     z-index: 90; padding: 8rem 3rem; 
     transform: translateX(100%); 
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    /* 1. ELIMINA will-change: transform; */
-    /* 2. AGGIUNGI queste due righe: */
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
@@ -1115,20 +1102,18 @@ body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) {
     padding: 0; 
     display: flex; 
     flex-direction: column; 
-    gap: 1.5rem; /* Ridotto da 2.5rem a 1.5rem */
+    gap: 1.5rem; 
 }
 
-/* FIX: Spegniamo il cursore terminale globale per queste liste */
 .side-menu-links li::before { content: none !important; display: none !important; }
 .side-menu-links li { margin-bottom: 0; }
 
 .side-menu-links a {
-    font-size: 1.2rem; /* Ridotto da 1.5rem a 1.2rem */
+    font-size: 1.2rem; 
     font-weight: 500; 
     letter-spacing: 0.05em; 
     text-decoration: none;
     display: inline-block;
-    
     background-image: linear-gradient(to top, var(--accent-color) 50%, var(--text-main) 50%);
     background-size: 100% 200%; 
     background-position: top; 
@@ -1136,88 +1121,40 @@ body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) {
     background-clip: text; 
     -webkit-text-fill-color: transparent; 
     color: transparent;
-    
-    /* Ridotto lo spostamento fisico sull'hover (da 15px a 8px) per meno invadenza */
     transition: background-position 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .side-menu-links a:hover, 
 .side-menu-links a.active {
     background-position: bottom; 
-    transform: translateX(8px); /* Più discreto */
+    transform: translateX(8px); 
 }
 
-/* NUOVO: Stile per il blocco di telemetria a fondo pagina */
+/* --- TELEMETRIA E SOCIAL TERMINAL --- */
 .menu-sys-info {
     position: absolute;
-    bottom: 3rem; /* Lo ancoriamo al fondo del menu */
-    left: 3rem;
+    bottom: 3rem; left: 3rem;
     font-family: monospace;
     font-size: 0.8rem;
-    color: #444444; /* Un grigio molto scuro, deve stare in sottofondo */
-    pointer-events: none; /* Impediamo che il mouse ci interagisca per sbaglio */
+    color: #444444; 
+    pointer-events: none; 
 }
 
-.menu-sys-info p {
-    margin: 0 0 0.5rem 0;
-    line-height: 1.2;
-    color: #555555;
-}
-
-.menu-sys-info span {
-    color: #333333; /* Il cursore è ancora più scuro */
-}
-
-/* LOGICA STATO APERTO (JavaScript innesca questa classe) */
-body.menu-open .site-wrapper { transform: translateX(-350px); }
-body.menu-open .side-menu { transform: translateX(0); }
-/* LA X: Diventa bianca di base */
-body.menu-open .hamburger-line:nth-child(1) { 
-    transform: translateY(10px) rotate(45deg); 
-    background: var(--text-main); /* Bianco */
-    width: 35px;
-}
-body.menu-open .hamburger-line:nth-child(2) { 
-    opacity: 0; 
-}
-body.menu-open .hamburger-line:nth-child(3) { 
-    transform: translateY(-10px) rotate(-45deg); 
-    background: var(--text-main); /* Bianco */
-    width: 35px;
-}
-
-/* L'HOVER SULLA X: Diventa turchese solo al passaggio del mouse */
-body.menu-open .menu-btn:hover .hamburger-line:nth-child(1),
-body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) {
-    background: var(--accent-color);
-}
-
-/* --- 10.6 CONNESSIONI DI RETE (SOCIAL TERMINAL) --- */
+.menu-sys-info p { margin: 0 0 0.5rem 0; line-height: 1.2; color: #555555; }
+.menu-sys-info span { color: #333333; }
 
 .menu-social-terminal {
-    position: absolute;
-    bottom: 3rem;
-    left: 3rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem; /* Spaziatura matematica tra le linee di comando */
+    position: absolute; bottom: 3rem; left: 3rem;
+    display: flex; flex-direction: column; gap: 0.6rem; 
 }
 
 .social-term-link {
-    font-family: monospace;
-    font-size: 0.85rem;
-    color: #666666; /* Grigio terminale inattivo */
-    text-decoration: none;
-    
-    /* FIX: Uccidiamo ogni possibile sottolineatura ereditata dalle regole globali */
-    border-bottom: none !important; 
-    
-    /* Transizione secca, da hardware */
+    font-family: monospace; font-size: 0.85rem; color: #666666; 
+    text-decoration: none; border-bottom: none !important; 
     transition: color 0.15s ease, transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
     opacity: 0;
 }
 
-/* --- IL MOTORE DEL BOOT-UP GLITCH --- */
 @keyframes terminalGlitchBoot {
     0%   { opacity: 0; transform: translateX(-5px); }
     15%  { opacity: 1; transform: translateX(2px); }
@@ -1228,38 +1165,23 @@ body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) {
     100% { opacity: 1; transform: translateX(0); }
 }
 
-/* Innesco dell'energia quando il body riceve la classe .menu-open dal JS */
-body.menu-open .social-term-link {
-    /* Forwards fa sì che l'elemento resti opaco alla fine dell'animazione */
-    animation: terminalGlitchBoot 0.35s forwards;
-}
+.social-term-link::after { display: none !important; }
+.social-term-link span { color: #333333; margin-right: 0.4rem; transition: color 0.15s ease; }
+.social-term-link:hover { color: var(--text-main); transform: translateX(4px); }
+.social-term-link:hover span { color: var(--accent-color); }
 
-/* LA MAGIA TERMINALE: Accensione a cascata (Staggering) */
-/* Il menu impiega 0.6s per aprirsi. Li accendiamo uno dopo l'altro mentre finisce lo slide */
+/* --- LOGICA STATO APERTO --- */
+body.menu-open .site-wrapper { transform: translateX(-350px); }
+body.menu-open .side-menu { transform: translateX(0); }
+body.menu-open .hamburger-line:nth-child(1) { transform: translateY(10px) rotate(45deg); background: var(--text-main); width: 35px; }
+body.menu-open .hamburger-line:nth-child(2) { opacity: 0; }
+body.menu-open .hamburger-line:nth-child(3) { transform: translateY(-10px) rotate(-45deg); background: var(--text-main); width: 35px; }
+body.menu-open .menu-btn:hover .hamburger-line:nth-child(1),
+body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) { background: var(--accent-color); }
+body.menu-open .social-term-link { animation: terminalGlitchBoot 0.35s forwards; }
 body.menu-open .social-term-link:nth-child(1) { animation-delay: 0.45s; }
 body.menu-open .social-term-link:nth-child(2) { animation-delay: 0.55s; }
 body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
-
-/* FIX: Disattiviamo la linea vettoriale che avevamo creato per i link principali */
-.social-term-link::after {
-    display: none !important;
-}
-
-.social-term-link span {
-    color: #333333; /* Cursore scuro per staccare dal nome del social */
-    margin-right: 0.4rem;
-    transition: color 0.15s ease;
-}
-
-/* HOVER: Feedback tattile e visivo immediato */
-.social-term-link:hover {
-    color: var(--text-main); /* Il testo si accende di bianco ghiaccio */
-    transform: translateX(4px); /* Leggero scatto in avanti */
-}
-
-.social-term-link:hover span {
-    color: var(--accent-color); /* Il cursore diventa Turchese Cyber */
-}
 
 /* =========================================
    11. SPA MODAL ENGINE (Popups)
@@ -1285,6 +1207,7 @@ body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
     pointer-events: auto;
 }
 
+/* --- 1. IL CONTENITORE PRINCIPALE (Guscio Rigido) --- */
 .sys-modal {
     position: absolute;
     background: var(--bg-color);
@@ -1292,11 +1215,13 @@ body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
     width: 95%;
     max-width: 1100px;
     max-height: 85vh; 
-    overflow-y: auto;
     border-radius: 12px;
-    padding: 3.5rem 4rem;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(1, 212, 212, 0.05);
-    
+
+    /* LA CHIAVE: Niente padding e niente scroll sul guscio */
+    padding: 0;
+    overflow: hidden;
+
     opacity: 0;
     transform: scale(0.95) translateZ(0);
     pointer-events: none;
@@ -1309,13 +1234,6 @@ body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
     pointer-events: auto;
 }
 
-/* Scrollbar interna brutale */
-.sys-modal::-webkit-scrollbar { width: 12px; }
-.sys-modal::-webkit-scrollbar-track { background: #050505; border-left: 1px solid #1f1f1f; }
-.sys-modal::-webkit-scrollbar-thumb { background-color: #333333; border-radius: 0; }
-.sys-modal::-webkit-scrollbar-thumb:hover { background-color: var(--accent-color); }
-
-
 /* --- 11.2 ARCHITETTURA GRID --- */
 .modal-content-grid {
     display: grid;
@@ -1325,28 +1243,36 @@ body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
     margin-top: 2rem;
 }
 
+/* --- 2. IL CONTENUTO INTERNO (Nucleo Scorrevole) --- */
+.modal-content {
+    /* Spostiamo qui l'altezza massima, il padding e lo scroll */
+    max-height: 85vh;
+    overflow-y: auto; 
+    padding: 3.5rem 4rem; 
+}
+
+/* IMPORTANTE: Dobbiamo dire alla scrollbar di applicarsi a .modal-content, non più a .sys-modal */
+.modal-content::-webkit-scrollbar { width: 12px; }
+.modal-content::-webkit-scrollbar-track { background: #050505; border-left: 1px solid #1f1f1f; }
+.modal-content::-webkit-scrollbar-thumb { background-color: #333333; border-radius: 0; }
+.modal-content::-webkit-scrollbar-thumb:hover { background-color: var(--accent-color); }
+
 
 /* --- 11.3 MOTORE IMMAGINI (Separation of Concerns) --- */
-/* --- MOTORE DI INGRESSO E STICKY POSITION --- */
+/* --- COMPORTAMENTO COLONNA IMMAGINE (Sticky, Zero Animazioni) --- */
 .sys-modal .modal-image-column {
-    /* L'animazione di scivolamento da destra che avevi già */
-    opacity: 0;
-    transform: translate3d(40px, 0, 0);
-    transition: opacity 0.3s ease, transform 0.3s ease; 
-    
-    /* --- LA MAGIA HARDWARE --- */
-    position: -webkit-sticky; /* Supporto vitale per Safari */
+    /* La magia dell'ancoraggio durante lo scroll (Mantenuta) */
+    position: -webkit-sticky; 
     position: sticky;
-    /* top: 3rem dice al browser "quando l'utente scorre giù, blocca questa colonna a 3rem di distanza dal soffitto" */
     top: 3rem; 
+    
+    /* Nota Ingegneristica: 
+       Abbiamo rimosso opacity, transform e transition. 
+       L'immagine ora appare istantaneamente non appena il popup si apre, 
+       senza scivolamenti o ritardi. */
 }
 
-.sys-modal.is-open .modal-image-column {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-    transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s, 
-                transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s;
-}
+/* ELIMINA COMPLETAMENTE la regola .sys-modal.is-open .modal-image-column */
 
 /* B. L'immagine in sé gestisce SOLO lo stile visivo e l'HOVER istantaneo */
 .modal-side-img {
@@ -1383,10 +1309,19 @@ body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
 }
 
 
-/* --- 11.5 ELEMENTI DI CONTROLLO & UTILITIES --- */
+/* --- 3. IL BOTTONE DI CHIUSURA (Indipendente e Immobile) --- */
 .modal-close-btn {
-    position: absolute;
-    top: 2rem; right: 2rem;
+    /* Ancoraggio assoluto: ignora il testo, lo scorrimento e i padding */
+    position: absolute; 
+    top: 2rem; 
+    right: 2rem; 
+    
+    /* Pulizia totale degli hack precedenti */
+    float: none;
+    margin: 0;
+    
+    z-index: 1000; /* Lo mantiene sopra tutto il resto */
+    
     background: transparent;
     border: none;
     color: #666666;
@@ -1401,8 +1336,12 @@ body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
     transform: scale(1.1) rotate(90deg);
 }
 
+/* --- BLOCCO TOTALE DELLO SCROLL IN BACKGROUND --- */
 body.modal-open {
-    overflow: hidden; 
+    overflow: hidden !important; 
+    height: 100vh !important; 
+    /* Uccide il rimbalzo elastico su Mac e iOS */
+    overscroll-behavior: none !important; 
 }
 
 
