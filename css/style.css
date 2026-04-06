@@ -1338,8 +1338,7 @@ body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
 
 /* --- BLOCCO TOTALE DELLO SCROLL IN BACKGROUND --- */
 body.modal-open {
-    overflow: hidden !important; 
-    height: 100vh !important; 
+    overflow: hidden !important;  
     /* Uccide il rimbalzo elastico su Mac e iOS */
     overscroll-behavior: none !important; 
 }
@@ -1356,5 +1355,262 @@ body.modal-open {
         margin: 0 auto;
         display: block;
     }
+}
+
+/* =========================================
+   12. IDE LAYOUT ENGINE (Project Modals)
+   ========================================= */
+
+/* Ridefiniamo il guscio per ospitare l'IDE a tutto schermo */
+.sys-modal-ide {
+    padding: 0; 
+    max-height: 90vh; /* Leggermente più alto per avere più respiro */
+    width: 98%;
+    max-width: 1400px; /* Molto largo, stile monitor ultrawide */
+    background: #0d0d0d; /* Sfondo appena più scuro per staccare dal body */
+}
+
+/* Griglia a due colonne (Sidebar 250px, Contenuto tutto il resto) */
+.ide-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: 90vh; 
+}
+
+/* --- SIDEBAR EXPLORER (VS Code Style) --- */
+.ide-sidebar {
+    background: #080808; /* Leggermente più scuro per staccare dal codice */
+    border-right: 1px solid #1f1f1f;
+    display: flex;
+    flex-direction: column;
+    /* FIX CRITICO: Torniamo al font di sistema come nei veri IDE, non monospace */
+    font-family: system-ui, -apple-system, sans-serif; 
+    user-select: none; /* Impedisce di evidenziare il testo per sbaglio */
+}
+
+/* Header superiore */
+.ide-sidebar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+    font-size: 0.7rem;
+    color: #888888;
+    letter-spacing: 0.05em;
+}
+
+.ide-dots { font-weight: bold; letter-spacing: 2px; cursor: pointer; }
+
+/* Contenitore Albero */
+.ide-tree-container { padding: 0.5rem 0; }
+
+/* Cartelle */
+.ide-folder {
+    display: flex;
+    align-items: center;
+    padding: 0.2rem 1.5rem;
+    cursor: pointer;
+    color: #cccccc;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.ide-folder:hover { background: #111111; color: #ffffff; }
+
+.root-folder { 
+    font-size: 0.75rem; 
+    letter-spacing: 0.05em; 
+    text-transform: uppercase; 
+    color: #ffffff; 
+    margin-bottom: 0.5rem;
+}
+
+.ide-chevron {
+    font-size: 0.7rem;
+    margin-right: 0.5rem;
+    transform: scaleY(0.6); /* Schiaccia la V per farla sembrare una freccia vettoriale */
+    display: inline-block;
+}
+
+/* Liste File */
+.ide-file-tree, .ide-sub-tree { list-style: none; padding: 0; margin: 0; }
+.ide-sub-tree { padding-left: 2.2rem; }
+
+/* --- FIX CRITICO: QUARANTENA EREDITARIETÀ --- */
+/* 1. Uccidiamo il cursore ">_" globale per tutte le liste dentro la sidebar dell'IDE */
+.ide-sidebar li::before {
+    content: none !important;
+    display: none !important;
+}
+
+/* 2. Resettiamo la spaziatura verticale ereditata dalle liste base del sito */
+.ide-sidebar li {
+    margin-bottom: 0 !important;
+}
+
+/* Singolo File */
+.ide-file {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+    color: #999999;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.1s ease;
+    border: 1px solid transparent; /* Previene scatti di layout */
+}
+
+.ide-file:hover { 
+    background: #141414; 
+    color: #e0e0e0; 
+}
+
+/* Evidenziazione file attivo (Stile VS Code Dark) */
+.ide-file.active {
+    background: #112233; /* Blu scuro desaturato */
+    color: #ffffff;
+    border: 1px solid #1c3b5a;
+}
+
+/* Icone Estensione File (Zero Dependencies, usando i colori del tuo IDE di riferimento) */
+.file-icon { 
+    width: 18px; 
+    font-family: monospace; 
+    font-size: 0.75rem; 
+    font-weight: bold; 
+    margin-right: 6px; 
+    text-align: center; 
+}
+.icon-md { color: #69b4d5; } /* Blu per Markdown */
+.icon-yml { color: #cb3837; } /* Rosso scuro per YAML */
+.icon-log { color: #888888; } /* Grigio per i LOG */
+.icon-sh { color: #4af626; }  /* Verde hacker per Bash/Shell */
+
+.file-name { flex-grow: 1; }
+
+/* Git Status Indicators */
+.git-status { 
+    font-size: 0.7rem; 
+    font-weight: 600; 
+    margin-left: auto; /* Li spinge tutto a destra */
+    font-family: monospace; 
+}
+.status-m { color: #e3b341; } /* Giallo per Modified (M) */
+.status-u { color: #4af626; } /* Verde per Untracked (U) */
+
+/* --- PANNELLO DI LETTURA --- */
+.ide-content {
+    padding: 4rem 6rem;
+    overflow-y: auto;
+    scroll-behavior: smooth; /* Per far scorrere morbidamente la pagina cliccando la sidebar */
+}
+
+/* Scrollbar stile editor di codice per il pannello destro */
+.ide-content::-webkit-scrollbar { width: 10px; }
+.ide-content::-webkit-scrollbar-track { background: transparent; }
+.ide-content::-webkit-scrollbar-thumb { background-color: #222; border-radius: 5px; }
+.ide-content::-webkit-scrollbar-thumb:hover { background-color: #444; }
+
+.ide-section { margin-bottom: 4rem; }
+.ide-divider { margin: 4rem 0; opacity: 0.3; }
+
+/* Posizionamento chirurgico della X sopra il pannello di lettura */
+.sys-modal-ide .modal-close-btn {
+    top: 1.5rem;
+    right: 2.5rem;
+}
+
+/* --- GEMINI-STYLE CODE BLOCKS --- */
+.code-block-wrapper {
+    margin: 2rem 0;
+    background: #050505;
+    border: 1px solid #222222;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.code-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111111;
+    padding: 0.6rem 1.2rem;
+    border-bottom: 1px solid #222222;
+}
+
+.code-lang {
+    font-family: monospace;
+    color: #888888;
+    font-size: 0.85rem;
+    text-transform: lowercase;
+}
+
+.code-copy-btn {
+    background: transparent;
+    border: none;
+    color: #666666;
+    font-family: monospace;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.code-copy-btn:hover { color: var(--text-main); }
+
+.code-block-wrapper pre {
+    margin: 0;
+    padding: 1.5rem;
+    overflow-x: auto; /* Se il codice è lungo, scrolla orizzontalmente */
+}
+
+.code-block-wrapper code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #e6e6e6; /* Colore testo base */
+}
+
+/* COLORI SINTASSI (Stile Dark Moderno) */
+.syntax-keyword { color: #ff7b72; } /* Rosso per const, let, if, return */
+.syntax-func { color: #d2a8ff; }    /* Viola per i nomi delle funzioni */
+.syntax-string { color: #a5d6ff; }  /* Azzurro per le stringhe */
+.syntax-number { color: #79c0ff; }  /* Blu chiaro per i numeri */
+.syntax-comment { color: #8b949e; font-style: italic; } /* Grigio per i commenti */
+
+/* --- L'IMMAGINE PROGETTO FISSA (Sticky/Static) --- */
+.ide-fixed-project-img {
+    position: absolute; /* Ancorata matematicamente al guscio del popup */
+    
+    /* Posizionamento nel quadrato rosso disegnato */
+    top: 3.5rem; /* Allineata al padding top del contenuto */
+    left: calc(280px + 2rem); /* Larghezza Sidebar (280px) + un gap di respiro */
+    
+    /* Dimensioni */
+    width: 80px; /* Dimensioni ottimali per un logo in un IDE */
+    height: 80px;
+    object-fit: contain; /* Non sforma l'immagine */
+    
+    /* Estetica Rigida */
+    border-radius: 4px; /* Un leggero accenno di curvatura, molto tecnico */
+    z-index: 900; /* Sotto la X (z-index 1000) ma sopra il testo scorrevole */
+    
+    /* --- REQUISITO: NIENTE GRIGIO, NIENTE HOVER --- */
+    filter: none !important; /* Rimuove forzatamente qualsiasi filtro grigio */
+    opacity: 1 !important;    /* Sempre visibile al 100% */
+    transform: none !important; /* Disattiva le micro-scale ereditate */
+}
+
+/* --- CORREZIONE LAYOUT TESTO PER FAR SPAZIO --- */
+/* Dobbiamo dire al titolo <h3> del report di spostarsi a destra per non sovrapporsi all'immagine */
+.sys-modal-ide .ide-content h3 {
+    margin-left: 100px; /* Space for the 80px image + 20px gap */
+    margin-bottom: 2rem; /* Più respiro sotto il titolo */
+}
+
+/* Anche i paragrafi successivi potrebbero aver bisogno di un leggero spostamento per coerenza visiva */
+.sys-modal-ide .ide-content p {
+    margin-left: 2rem; /* Allineamento testo pulito, ma l'immagine sta nel gap dei 100px del titolo */
 }
 
