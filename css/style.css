@@ -1558,14 +1558,58 @@ body.modal-open {
     scroll-behavior: smooth; /* Per far scorrere morbidamente la pagina cliccando la sidebar */
 }
 
+/* --- CUSTOM BULLET POINTS CORRETTI PER I REPORT IDE --- */
+.ide-content ul {
+    list-style: none; /* Rimuoviamo stili base browser */
+    padding-left: 0;
+    margin-top: 1rem;
+}
+
+.ide-content li {
+    position: relative;
+    padding-left: 1.5rem; /* Spazio per il pallino */
+    margin-bottom: 1rem;
+}
+
+/* Costruiamo il pallino geometrico (Stato Base) */
+.ide-content li::before {
+    content: ""; /* Niente testo globale ereditato, solo forma */
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+    width: 6px;
+    height: 6px;
+    background-color: #444444; /* Grigio spento */
+    border-radius: 50%;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+/* =============================================================
+   Sostituisci interamente la vecchia regola HOVER con questa CORRETTA
+   ============================================================= */
+.ide-content li:hover::before {
+    /* FIX CRITICO BUG VISIVO: Forziamo math.max(content) a rimanere vuoto, 
+       impedendo l'apparizione del carattere ">_" ereditato. */
+    content: "" !important; 
+    
+    background-color: var(--accent-color, #00ffcc); /* Turchese LED */
+    
+    /* FIX ESTETICO AURA: Riduciamo drasticamente l'alone da 8px a 4px 
+       per un effetto molto più nitido e calibrato. */
+    box-shadow: 0 0 4px var(--accent-color, #00ffcc); 
+    
+    /* FIX ESTETICO: Riduciamo anche l'ingrandimento da 1.2 a 1.1 */
+    transform: scale(1.1); 
+}
+
 /* Scrollbar stile editor di codice per il pannello destro */
 .ide-content::-webkit-scrollbar { width: 10px; }
 .ide-content::-webkit-scrollbar-track { background: transparent; }
 .ide-content::-webkit-scrollbar-thumb { background-color: #222; border-radius: 5px; }
 .ide-content::-webkit-scrollbar-thumb:hover { background-color: #444; }
 
-.ide-section { margin-bottom: 4rem; }
-.ide-divider { margin: 4rem 0; opacity: 0.3; }
+.ide-section { margin-bottom: 3rem; }
+.ide-divider { margin: 4rem 0; opacity: 0.5; }
 
 /* Posizionamento chirurgico della X sopra il pannello di lettura */
 .sys-modal-ide .modal-close-btn {
@@ -1664,5 +1708,19 @@ body.modal-open {
 /* Anche i paragrafi successivi potrebbero aver bisogno di un leggero spostamento per coerenza visiva */
 .sys-modal-ide .ide-content p {
     margin-left: 2rem; /* Allineamento testo pulito, ma l'immagine sta nel gap dei 100px del titolo */
+}
+
+/* =========================================
+   SISTEMA DI BLOCCO SCROLL (Background Lock)
+   ========================================= */
+
+body.modal-open {
+    overflow: hidden !important; 
+    overscroll-behavior: none !important; 
+}
+
+/* Sicurezza extra per i browser moderni: Blocchiamo anche il tag HTML radice */
+html:has(body.modal-open) {
+    overflow: hidden !important;
 }
 
