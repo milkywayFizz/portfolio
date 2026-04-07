@@ -1739,3 +1739,102 @@ html:has(body.modal-open) {
     opacity: 0;
 }
 
+/* =========================================
+   THEME ENGINE (Light/Dark Mode - E-Ink Style)
+   ========================================= */
+
+/* Colori Tema Chiaro: Carta Antica e Inchiostro Espresso */
+body.light-theme {
+    --bg-color: #e5dfd3; /* Un beige "carta" molto più riposante per gli occhi */
+    --text-main: #2b2522; /* Marrone/Nero inchiostro */
+    --accent-color: #a34e26; /* Un color ruggine/mattone elegante */
+}
+
+/* FIX CRITICO: Forza tutti i testi "hardcodati" a diventare scuri! */
+body.light-theme h2,
+body.light-theme p,
+body.light-theme li,
+body.light-theme .slide-description,
+body.light-theme .menu-sys-info p,
+body.light-theme .social-term-link {
+    color: #4a413c; /* Un grigio-marrone perfetto per la lettura prolungata */
+}
+
+/* Sovrascritture per i blocchi strutturali scuri */
+body.light-theme .side-menu,
+body.light-theme .sys-modal {
+    background-color: var(--bg-color);
+}
+
+/* Le Card (Focus, Skills, Carosello) */
+body.light-theme #focus li, 
+body.light-theme #skills li, 
+body.light-theme #projects li,
+body.light-theme .carousel-container,
+body.light-theme .code-block-header {
+    background: #d8d0c1; /* Un tono appena più scuro della carta per fare stacco */
+    border-color: #c4baa6;
+}
+
+body.light-theme .code-block-wrapper {
+    background: #cfc6b5;
+    border-color: #c4baa6;
+}
+
+/* Modifichiamo le linee, le frecce e i bordi */
+body.light-theme hr {
+    background: linear-gradient(to right, transparent, #c4baa6, transparent);
+}
+
+body.light-theme a::after,
+body.light-theme .side-menu-links a::after {
+    background-color: #c4baa6;
+}
+
+body.light-theme h3 .section-link::after {
+    color: #9c9182; /* Freccia dei titoli visibile */
+}
+
+/* Icone e immagini */
+body.light-theme img {
+    border-color: #c4baa6;
+    /* Riduciamo un po' l'opacità dei loghi per adattarli al look vintage */
+    opacity: 0.8; 
+}
+body.light-theme img:hover {
+    opacity: 1;
+}
+
+/* Il cursore del terminale (>_) */
+body.light-theme li::before {
+    color: var(--accent-color);
+    filter: drop-shadow(0 0 1px rgba(163, 78, 38, 0.4));
+}
+
+/* =========================================
+   THEME CASCADE TRANSITION (View Transitions API)
+   ========================================= */
+
+/* Blocchiamo l'immagine vecchia sotto */
+::view-transition-old(root) {
+    animation: none;
+    z-index: 1;
+}
+
+/* Facciamo "cadere" il nuovo tema dall'alto */
+::view-transition-new(root) {
+    z-index: 2;
+    animation: cascade-down 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes cascade-down {
+    0% {
+        /* Il sipario è chiuso in alto (visibilità 0%) */
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    }
+    100% {
+        /* Il sipario è completamente sceso (visibilità 100%) */
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+}
+

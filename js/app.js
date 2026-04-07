@@ -68,6 +68,43 @@ document.querySelectorAll('.reveal').forEach(section => {
     revealObserver.observe(section);
 }); 
 
+
+/* =========================================
+   THEME SWITCHER ENGINE (View Transitions)
+   ========================================= */
+document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    
+    // 1. Controlla la memoria del browser all'avvio
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-theme');
+    }
+
+    // 2. La logica pura del cambio colore
+    function toggleThemeLogic() {
+        document.body.classList.toggle('light-theme');
+        if (document.body.classList.contains('light-theme')) {
+            localStorage.setItem('theme', 'light');
+        } else {
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    // 3. Azione al click (con supporto View Transitions)
+    themeToggle.addEventListener('click', () => {
+        // Se il browser è vecchio e non supporta l'API, fai il cambio normale
+        if (!document.startViewTransition) {
+            toggleThemeLogic();
+            return;
+        }
+
+        // Magia: il browser cattura i frame e applica la cascata CSS!
+        document.startViewTransition(() => {
+            toggleThemeLogic();
+        });
+    });
+});
+
 /* =========================================
    GESTIONE MENU LATERALE (Off-Canvas Push)
    ========================================= */
@@ -740,3 +777,4 @@ function setLanguage(lang) {
         });
     });
 });
+
