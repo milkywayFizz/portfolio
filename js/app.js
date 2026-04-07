@@ -74,31 +74,44 @@ document.querySelectorAll('.reveal').forEach(section => {
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
-    
-    // 1. Controlla la memoria del browser all'avvio
+    const root = document.documentElement; // Puntiamo dritto al tag <html> (:root)
+
+    // Sicurezza: se non c'è il bottone, fermati qui
+    if (!themeToggle) return;
+
+    // 1. Controlla la memoria del browser
     if (localStorage.getItem('theme') === 'light') {
-        document.body.classList.add('light-theme');
+        root.classList.add('light-theme');
     }
 
-    // 2. La logica pura del cambio colore
+    // 2. Logica di inversione classi e salvataggio
     function toggleThemeLogic() {
-        document.body.classList.toggle('light-theme');
-        if (document.body.classList.contains('light-theme')) {
+        root.classList.toggle('light-theme');
+        if (root.classList.contains('light-theme')) {
             localStorage.setItem('theme', 'light');
         } else {
             localStorage.setItem('theme', 'dark');
         }
     }
 
-    // 3. Azione al click (con supporto View Transitions)
+    // 3. Azione al click (con Cascata API e Spin)
     themeToggle.addEventListener('click', () => {
-        // Se il browser è vecchio e non supporta l'API, fai il cambio normale
+        
+        // 1. Facciamo partire lo spin dell'icona
+        themeToggle.classList.add('is-spinning');
+        
+        // 2. Rimuoviamo la classe dopo 800ms esatti (il tempo della cascata)
+        // in modo che sia pronta per girare di nuovo al prossimo click
+        setTimeout(() => {
+            themeToggle.classList.remove('is-spinning');
+        }, 800);
+
+        // 3. Eseguiamo il cambio colore e la cascata
         if (!document.startViewTransition) {
             toggleThemeLogic();
             return;
         }
 
-        // Magia: il browser cattura i frame e applica la cascata CSS!
         document.startViewTransition(() => {
             toggleThemeLogic();
         });

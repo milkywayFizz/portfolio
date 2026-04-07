@@ -397,6 +397,8 @@ li:hover::before {
     overflow: hidden;
     margin-top: 2rem;
     margin-bottom: 2rem;
+    /* FIX: Isolamento logico dal DOM principale */
+    contain: layout paint style;
 }
 
 .carousel-track {
@@ -1060,6 +1062,35 @@ li:hover::before {
     opacity: 0;
 }
 
+/* =========================================
+   SIDE MENU CASCADE ANIMATION
+   ========================================= */
+
+/* 1. Stato di base (Menu Chiuso): Elementi invisibili e spostati in alto di 20px */
+.side-menu-links li {
+    opacity: 0;
+    transform: translateY(-20px);
+    /* Transizione veloce quando si chiude il menu */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* 2. Stato Attivo (Menu Aperto): Tornano visibili e in posizione zero */
+/* Quando il JS mette 'menu-open' sul body, gli elementi <li> appaiono */
+body.menu-open .side-menu-links li {
+    opacity: 1;
+    transform: translateY(0);
+    /* Transizione più morbida (cubic-bezier) quando entrano */
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* 3. Il "Delay" a cascata: Ogni figlio parte con una frazione di secondo di ritardo */
+body.menu-open .side-menu-links li:nth-child(1) { transition-delay: 0.10s; }
+body.menu-open .side-menu-links li:nth-child(2) { transition-delay: 0.15s; }
+body.menu-open .side-menu-links li:nth-child(3) { transition-delay: 0.20s; }
+body.menu-open .side-menu-links li:nth-child(4) { transition-delay: 0.25s; }
+body.menu-open .side-menu-links li:nth-child(5) { transition-delay: 0.30s; }
+body.menu-open .side-menu-links li:nth-child(6) { transition-delay: 0.35s; } /* Nel caso aggiungessi un sesto link */
+
 @keyframes terminalGlitchBoot {
     0%   { opacity: 0; transform: translateX(-5px); }
     15%  { opacity: 1; transform: translateX(2px); }
@@ -1097,6 +1128,8 @@ body.menu-open.is-scrolled .ghost-brand {
     /* Stessa fisica del menu, niente glitch */
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+
+
 
 /* =========================================
    11. SPA MODAL ENGINE (Popups)
@@ -1743,98 +1776,169 @@ html:has(body.modal-open) {
    THEME ENGINE (Light/Dark Mode - E-Ink Style)
    ========================================= */
 
-/* Colori Tema Chiaro: Carta Antica e Inchiostro Espresso */
-body.light-theme {
-    --bg-color: #e5dfd3; /* Un beige "carta" molto più riposante per gli occhi */
-    --text-main: #2b2522; /* Marrone/Nero inchiostro */
-    --accent-color: #a34e26; /* Un color ruggine/mattone elegante */
+/* Colori Tema Chiaro applicati alla radice assoluta */
+:root.light-theme {
+    --bg-color: #e5dfd3;
+    --text-main: #2b2522;
+    --accent-color: #a34e26;
 }
 
-/* FIX CRITICO: Forza tutti i testi "hardcodati" a diventare scuri! */
-body.light-theme h2,
-body.light-theme p,
-body.light-theme li,
-body.light-theme .slide-description,
-body.light-theme .menu-sys-info p,
-body.light-theme .social-term-link {
-    color: #4a413c; /* Un grigio-marrone perfetto per la lettura prolungata */
+/* Forza i testi scuri (Incluso il Ghost Name) */
+:root.light-theme h2,
+:root.light-theme p,
+:root.light-theme li,
+:root.light-theme .slide-description,
+:root.light-theme .menu-sys-info p,
+:root.light-theme .social-term-link,
+:root.light-theme .ghost-name {
+    color: #4a413c;
 }
 
-/* Sovrascritture per i blocchi strutturali scuri */
-body.light-theme .side-menu,
-body.light-theme .sys-modal {
+/* Sovrascritture sfondi modali e menu */
+:root.light-theme .side-menu,
+:root.light-theme .sys-modal {
     background-color: var(--bg-color);
 }
 
 /* Le Card (Focus, Skills, Carosello) */
-body.light-theme #focus li, 
-body.light-theme #skills li, 
-body.light-theme #projects li,
-body.light-theme .carousel-container,
-body.light-theme .code-block-header {
-    background: #d8d0c1; /* Un tono appena più scuro della carta per fare stacco */
+:root.light-theme #focus li, 
+:root.light-theme #skills li, 
+:root.light-theme #projects li,
+:root.light-theme .carousel-container,
+:root.light-theme .code-block-header {
+    background: #d8d0c1;
     border-color: #c4baa6;
 }
 
-body.light-theme .code-block-wrapper {
+:root.light-theme .code-block-wrapper {
     background: #cfc6b5;
     border-color: #c4baa6;
 }
 
-/* Modifichiamo le linee, le frecce e i bordi */
-body.light-theme hr {
+/* Linee, frecce e bordi */
+:root.light-theme hr {
     background: linear-gradient(to right, transparent, #c4baa6, transparent);
 }
 
-body.light-theme a::after,
-body.light-theme .side-menu-links a::after {
+:root.light-theme a::after,
+:root.light-theme .side-menu-links a::after {
     background-color: #c4baa6;
 }
 
-body.light-theme h3 .section-link::after {
-    color: #9c9182; /* Freccia dei titoli visibile */
+:root.light-theme h3 .section-link::after {
+    color: #9c9182;
 }
 
-/* Icone e immagini */
-body.light-theme img {
+/* Immagini e terminale */
+:root.light-theme img {
     border-color: #c4baa6;
-    /* Riduciamo un po' l'opacità dei loghi per adattarli al look vintage */
     opacity: 0.8; 
 }
-body.light-theme img:hover {
+:root.light-theme img:hover {
     opacity: 1;
 }
 
-/* Il cursore del terminale (>_) */
-body.light-theme li::before {
+:root.light-theme li::before {
     color: var(--accent-color);
     filter: drop-shadow(0 0 1px rgba(163, 78, 38, 0.4));
 }
 
 /* =========================================
-   THEME CASCADE TRANSITION (View Transitions API)
+   THEME CASCADE TRANSITION
    ========================================= */
-
-/* Blocchiamo l'immagine vecchia sotto */
 ::view-transition-old(root) {
     animation: none;
     z-index: 1;
 }
 
-/* Facciamo "cadere" il nuovo tema dall'alto */
 ::view-transition-new(root) {
     z-index: 2;
     animation: cascade-down 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 @keyframes cascade-down {
-    0% {
-        /* Il sipario è chiuso in alto (visibilità 0%) */
-        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    0% { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); }
+    100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+
+/* =========================================
+   THEME CASCADE TRANSITION (Hardware Accelerated)
+   ========================================= */
+::view-transition-old(root) {
+    animation: none;
+    z-index: 1;
+}
+
+::view-transition-new(root) {
+    z-index: 2;
+    /* Curva di Bezier leggermente più reattiva (ease-out-expo) per evitare il lag sui sub-pixel finali */
+    animation: cascade-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    
+    /* FIX: Pre-alloca memoria VRAM dedicata al clipping */
+    will-change: clip-path; 
+}
+
+/* FIX: Inset è enormemente più leggero e matematicamente stabile di Polygon */
+@keyframes cascade-down {
+    0% { 
+        /* Taglia il 100% dell'immagine dal basso (invisibile) */
+        clip-path: inset(0 0 100% 0); 
     }
-    100% {
-        /* Il sipario è completamente sceso (visibilità 100%) */
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    100% { 
+        /* Rilascia tutto a 0 (visibile) */
+        clip-path: inset(0 0 0 0); 
     }
 }
 
+/* =========================================
+   THEME ICON SPIN ANIMATION
+   ========================================= */
+@keyframes spin-toggle {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); } 
+    /* Nota: Se preferisci che la mezza luna si inverta da destra a sinistra, cambia 360deg con 180deg! */
+}
+
+.theme-toggle.is-spinning {
+    /* La durata (0.8s) è identica a quella della cascata */
+    animation: spin-toggle 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* =========================================
+   FIX: IDE MODAL LIGHT THEME (E-Ink Polish)
+   ========================================= */
+
+/* 1. Menu Explorer (Sidebar) - Stesso colore della sezione comandi */
+:root.light-theme .ide-sidebar,
+:root.light-theme .modal-sidebar,
+:root.light-theme .explorer-panel {
+    background-color: #cfc6b5 !important; /* Il beige della sezione comandi */
+    border-right: 1px solid #c4baa6;
+    color: #4a413c !important;
+}
+
+/* Forza tutti i testi (cartelle, file, icone) dentro la sidebar a essere scuri */
+:root.light-theme .ide-sidebar span,
+:root.light-theme .ide-sidebar div,
+:root.light-theme .ide-sidebar li,
+:root.light-theme .modal-sidebar li {
+    color: #4a413c !important;
+}
+
+/* 2. Sezione Comandi (Codice) - Monocromatico Inchiostro */
+/* Usiamo !important per sovrascrivere qualsiasi stile inline (colori fluo) della sintassi */
+:root.light-theme .code-block-wrapper pre,
+:root.light-theme .code-block-wrapper code,
+:root.light-theme .code-block-wrapper span {
+    color: #2b2522 !important;
+    text-shadow: none !important;
+    font-weight: 500; /* Diamo un filo di spessore in più per la massima leggibilità */
+}
+
+/* 3. Header della finestra IDE (se presente) */
+:root.light-theme .code-block-header,
+:root.light-theme .ide-header {
+    background-color: #d8d0c1 !important;
+    border-bottom: 1px solid #c4baa6 !important;
+    color: #4a413c !important;
+}
