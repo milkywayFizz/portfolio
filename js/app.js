@@ -1,570 +1,11 @@
-/* =========================================
-   TEXT SPLITTING (Lego Effect / Staggered Text)
-   ========================================= */
-
-// Questa funzione prende un selettore, svuota il suo testo e lo ricostruisce parola per parola
-const splitTextIntoSpans = (selector) => {
-    // Cerchiamo tutti gli elementi che corrispondono (es. tutti i titoli delle slide)
-    document.querySelectorAll(selector).forEach(element => {
-        // Salviamo il testo originale
-        const text = element.innerText;
-        // Svuotiamo il contenitore HTML
-        element.innerHTML = ''; 
-        
-        // Dividiamo la frase in un array di parole (usando lo spazio come separatore)
-        const words = text.split(' ');
-        
-        // Cicliamo ogni parola...
-        // Cicliamo ogni parola...
-        words.forEach((word) => { // Rimuovi 'index' dalle parentesi, non ci serve più
-            const span = document.createElement('span');
-            span.classList.add('stagger-word');
-            span.innerHTML = word + '&nbsp;';
-            
-            // LA MAGIA RANDOMICA: Assegniamo un valore casuale da 0.0 a 1.0 a ogni singola parola
-            span.style.setProperty('--random-delay', Math.random());
-            
-            element.appendChild(span);
-        });
-    });
-};
-
-// Eseguiamo l'operazione sui titoli e sulle descrizioni del nostro carosello
-splitTextIntoSpans('.slide-title');
-splitTextIntoSpans('.slide-description');
-splitTextIntoSpans('.modal-animate-text');
-
-
-/* --- Architettura Scroll Reveal (Intersection Observer) --- */
-
-// 1. Definiamo le opzioni del nostro "osservatore"
-const revealOptions = {
-    root: null, // Il viewport (lo schermo dell'utente)
-    rootMargin: '0px', 
-    threshold: 0.15 // Trigger: scatta quando almeno il 15% dell'elemento è visibile
-};
-
-// 2. Creiamo la logica: cosa succede quando un elemento viene "osservato"?
-const revealCallback = (entries, observer) => {
-    entries.forEach(entry => {
-        // Se l'elemento sta intersecando (entrando) nello schermo
-        if (entry.isIntersecting) {
-            
-            // Aggiungiamo la classe CSS che fa partire l'animazione fisica
-            entry.target.classList.add('active');
-            
-            // Per ottimizzare al massimo: una volta svelato, smettiamo di osservarlo.
-            // (Evita che il browser continui a fare calcoli inutili se torni su).
-            observer.unobserve(entry.target);
-        }
-    });
-};
-
-// 3. Istanziamo l'Observer passando logica e opzioni
-const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
-
-// 4. Selezioniamo tutte le sezioni "dormienti" e diciamo all'Observer di monitorarle
-document.querySelectorAll('.reveal').forEach(section => {
-    revealObserver.observe(section);
-}); 
-
+/* ==========================================================================
+   FLAVIUS IT PORTFOLIO - CORE JAVASCRIPT
+   Architettura: Modulare / Single-Entry Point / GPU Accelerated
+   ========================================================================== */
 
 /* =========================================
-   THEME SWITCHER ENGINE (View Transitions)
+   I. DATI E CONFIGURAZIONI (i18n)
    ========================================= */
-document.addEventListener('DOMContentLoaded', () => {
-    const themeToggle = document.getElementById('theme-toggle');
-    const root = document.documentElement; // Puntiamo dritto al tag <html> (:root)
-
-    // Sicurezza: se non c'è il bottone, fermati qui
-    if (!themeToggle) return;
-
-    // 1. Controlla la memoria del browser
-    if (localStorage.getItem('theme') === 'light') {
-        root.classList.add('light-theme');
-    }
-
-    // 2. Logica di inversione classi e salvataggio
-    function toggleThemeLogic() {
-        root.classList.toggle('light-theme');
-        if (root.classList.contains('light-theme')) {
-            localStorage.setItem('theme', 'light');
-        } else {
-            localStorage.setItem('theme', 'dark');
-        }
-    }
-
-    // 3. Azione al click (con Cascata API e Spin)
-    themeToggle.addEventListener('click', () => {
-        
-        // 1. Facciamo partire lo spin dell'icona
-        themeToggle.classList.add('is-spinning');
-        
-        // 2. Rimuoviamo la classe dopo 800ms esatti (il tempo della cascata)
-        // in modo che sia pronta per girare di nuovo al prossimo click
-        setTimeout(() => {
-            themeToggle.classList.remove('is-spinning');
-        }, 800);
-
-        // 3. Eseguiamo il cambio colore e la cascata
-        if (!document.startViewTransition) {
-            toggleThemeLogic();
-            return;
-        }
-
-        document.startViewTransition(() => {
-            toggleThemeLogic();
-        });
-    });
-});
-
-/* =========================================
-   GESTIONE MENU LATERALE (Off-Canvas Push)
-   ========================================= */
-
-const menuBtn = document.getElementById('menu-btn');
-const sideMenu = document.getElementById('side-menu');
-const body = document.body;
-// Selezioniamo solo i link del menu che portano ad ancore interne (es. #projects)
-const anchorLinks = document.querySelectorAll('.anchor-link');
-
-// 1. Apri/Chiudi il menu cliccando il bottone
-menuBtn.addEventListener('click', () => {
-    body.classList.toggle('menu-open');
-});
-
-// 2. Chiudi il menu se clicchi un link che porta a una sezione della stessa pagina (es. Projects)
-anchorLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        body.classList.remove('menu-open');
-    });
-}); 
-
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Selezioniamo gli attori del carosello
-    const track = document.querySelector('.carousel-track');
-    if (!track) return; // Se non c'è il carosello, ferma lo script
-    
-    const slides = Array.from(track.querySelectorAll('.carousel-slide'));
-    const buttons = document.querySelectorAll('.carousel-button');
-    
-    // Assumiamo che il primo bottone sia Indietro e il secondo sia Avanti
-    const prevButton = buttons[0];
-    const nextButton = buttons[1];
-    
-    let currentSlideIndex = 0; // Partiamo dalla prima slide
-
-    // 2. La funzione che sposta letteralmente le classi
-    const updateCarousel = (newIndex) => {
-        // Spegne la slide vecchia
-        slides[currentSlideIndex].classList.remove('current-slide');
-        // Aggiorna l'indice
-        currentSlideIndex = newIndex;
-        // Accende la slide nuova
-        slides[currentSlideIndex].classList.add('current-slide');
-    };
-
-    // 3. Logica AVANTI (Loop: se supero l'ultima, torno a 0)
-    nextButton.addEventListener('click', () => {
-        const newIndex = (currentSlideIndex + 1) % slides.length;
-        updateCarousel(newIndex);
-    });
-
-    // 4. Logica INDIETRO (Loop: se vado sotto lo 0, vado all'ultima)
-    prevButton.addEventListener('click', () => {
-        const newIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
-        updateCarousel(newIndex);
-    });
-});
-
-/* =========================================
-   MOTORE FISICO: CAROSELLO LOGHI INTERATTIVO (V2 - Fluido & Bilanciato)
-   ========================================= */
-
-window.addEventListener('load', () => {
-    const track = document.querySelector('.logo-carousel-track');
-    if (!track) return;
-
-    let singleGroupWidth = track.querySelector('.logo-group').offsetWidth;
-    let currentX = 0;        
-    let velocity = 0;        
-    let isDragging = false;  
-    let startX = 0;          
-    let lastX = 0;           
-    
-// Parametri Fisici Calibrati (Alta Fluidità)
-    const autoScrollSpeed = -0.5; 
-    const dragSensitivity = 0.85; // Aumentato dal 35% all'85%. Il nastro ora segue quasi 1:1 il tuo mouse.
-    const maxVelocity = 18;       // Alzato da 12 a 18. Permette uno slancio iniziale più appagante, ma lo blocca prima che diventi invisibile.
-    const friction = 0.975;       // LA MAGIA: Ora perde solo il 2.5% di energia a frame. Scivolerà a luuuungo prima di fermarsi.
-    
-    let isAutoScrolling = true;
-    let resumeTimeout;
-    // --- RADAR LASER: Tracciamento Mouse ---
-    let mouseX = -1;
-    let mouseY = -1;
-
-    window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-
-    window.addEventListener('mouseleave', () => {
-        mouseX = -1;
-        mouseY = -1;
-    });      
-
-    window.addEventListener('resize', () => {
-        singleGroupWidth = track.querySelector('.logo-group').offsetWidth;
-    });
-
-    const startDrag = (e) => {
-        isDragging = true;
-        isAutoScrolling = false;
-        clearTimeout(resumeTimeout); 
-
-        track.classList.add('is-dragging');
-        
-        startX = e.pageX || e.touches[0].pageX;
-        lastX = startX;
-        velocity = 0; 
-    };
-
-    const onDrag = (e) => {
-        if (!isDragging) return;
-        
-        // 🚨 IL FAIL-SAFE (ANTI-STICKY DRAG) 🚨
-        // Controlliamo fisicamente a livello hardware se il tasto del mouse è premuto.
-        // e.buttons restituisce 0 se nessun tasto è premuto.
-        // Se ci stiamo muovendo col mouse e nessun tasto è giù, ma isDragging è true,
-        // significa che abbiamo perso il segnale. Sganciamo il carosello forzatamente!
-        if (e.type === 'mousemove' && e.buttons === 0) {
-            stopDrag();
-            return;
-        }
-
-        e.preventDefault(); 
-        
-        const currentPosition = e.pageX || e.touches[0].pageX;
-        
-        // 1. Calcoliamo lo spostamento grezzo
-        const rawDelta = currentPosition - lastX;
-        
-        // 2. Applichiamo lo smorzamento per renderlo meno schizofrenico
-        const smoothedDelta = rawDelta * dragSensitivity;
-        
-        currentX += smoothedDelta;
-        
-        // 3. CLAMP (Limite): Impediamo alla velocità di superare i +/- 12 pixel per frame
-        velocity = Math.max(-maxVelocity, Math.min(maxVelocity, smoothedDelta)); 
-        
-        lastX = currentPosition;
-    };
-
-    const stopDrag = () => {
-        if (!isDragging) return;
-        isDragging = false;
-
-        track.classList.remove('is-dragging');
-
-        resumeTimeout = setTimeout(() => {
-            isAutoScrolling = true;
-        }, 2000); // Abbassato a 2 secondi per una ripresa più reattiva
-    };
-
-    track.addEventListener('mousedown', startDrag);
-    // FIX NATIVE DRAG: Uccide l'evento di "drag & drop" nativo del sistema operativo
-    track.addEventListener('dragstart', (e) => e.preventDefault());
-    window.addEventListener('mousemove', onDrag);
-    window.addEventListener('mouseup', stopDrag);
-    window.addEventListener('mouseleave', stopDrag);
-
-    track.addEventListener('touchstart', startDrag, { passive: true });
-    window.addEventListener('touchmove', onDrag, { passive: false });
-    window.addEventListener('touchend', stopDrag);
-
-    let frameCounter = 0;
-    
-// CACHING: Salviamo in memoria la lista di tutti i loghi una volta sola
-    const allCarouselLogos = track.querySelectorAll('img');
-
-    const renderEngine = () => {
-        if (isAutoScrolling) {
-            velocity += (autoScrollSpeed - velocity) * 0.05;
-        } else if (!isDragging) {
-            // Frizione per rallentare dolcemente
-            velocity *= friction;
-        }
-
-        currentX += velocity;
-
-        // Teletrasporto matematico per il loop infinito
-        if (currentX <= -singleGroupWidth) {
-            currentX += singleGroupWidth; 
-        } else if (currentX >= 0) {
-            currentX -= singleGroupWidth; 
-        }
-
-        // LA MAGIA DELLA FLUIDITÀ: usiamo translate3d invece di translateX.
-        // Questo obbliga la Scheda Video (GPU) ad elaborare l'animazione, 
-        // annullando totalmente la "macchinosità" (jittering) della CPU.
-        track.style.transform = `translate3d(${currentX}px, 0, 0)`;
-
-        frameCounter++;
-
-       // LA MAGIA: Eseguiamo il raggio laser solo 1 volta ogni 5 frame!
-        // (Riduciamo il carico del processore dell'80%)
-        if (frameCounter % 5 === 0) {
-            if (!isDragging && mouseX !== -1) {
-                const elementUnderMouse = document.elementFromPoint(mouseX, mouseY);
-                // USA LA VARIABILE SALVATA (Più veloce del 1000%)
-                allCarouselLogos.forEach(img => img.classList.remove('is-hovered'));
-                
-                if (elementUnderMouse && elementUnderMouse.tagName === 'IMG' && elementUnderMouse.closest('.logo-group')) {
-                    elementUnderMouse.classList.add('is-hovered');
-                }
-            } else {
-                allCarouselLogos.forEach(img => img.classList.remove('is-hovered'));
-            }
-        }
-
-        requestAnimationFrame(renderEngine);
-    };
-
-    renderEngine();
-});
-
-/* =========================================
-   SPA MODAL ENGINE (Orchestrazione Eventi)
-   ========================================= */
-
-document.addEventListener('DOMContentLoaded', () => {
-    const modalOverlay = document.getElementById('sys-modal-overlay');
-    const modals = document.querySelectorAll('.sys-modal');
-    const closeBtns = document.querySelectorAll('.modal-close-btn');
-    const modalTriggers = document.querySelectorAll('[data-modal]');
-
-    // 1. INNESCO (Spatial-Aware Engine)
-    modalTriggers.forEach(trigger => {
-        trigger.addEventListener('click', (e) => {
-            e.preventDefault(); 
-
-            const targetModalId = trigger.getAttribute('data-modal');
-            const targetSectionId = trigger.getAttribute('href');
-            
-            const targetSection = document.querySelector(targetSectionId);
-            const targetModal = document.getElementById(targetModalId);
-
-            if (!targetModal || !targetSection) return;
-
-            // --- LA MAGIA: Calcolo Matematico della Distanza ---
-            const rect = targetSection.getBoundingClientRect();
-            // Troviamo il centro esatto della sezione bersaglio
-            const sectionCenter = rect.top + (rect.height / 2); 
-            // Troviamo il centro esatto del monitor dell'utente
-            const viewportCenter = window.innerHeight / 2; 
-            // Calcoliamo la distanza assoluta in pixel tra i due centri
-            const distanceFromCenter = Math.abs(sectionCenter - viewportCenter);
-
-            // Definiamo una "Tolleranza": se lo scarto è minore di 150px, lo consideriamo "già centrato"
-            const isAlreadyCentered = distanceFromCenter < 150; 
-
-            const isMenuOpen = document.body.classList.contains('menu-open');
-
-            if (isMenuOpen) {
-                // SCENARIO 1: L'utente ha cliccato dal Menu Laterale
-                document.body.classList.remove('menu-open');
-                targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
-                // Il menu scuro ci mette 0.6s fisici a chiudersi. 
-                // Se la sezione è già lì, aspettiamo solo il tempo che il menu si tolga di mezzo (600ms).
-                // Se la sezione è lontana, diamo il tempo del viaggio allo scroll (850ms).
-                const delay = isAlreadyCentered ? 600 : 850;
-                
-                setTimeout(() => {
-                    openModal(targetModal);
-                }, delay); 
-
-            } else {
-                // SCENARIO 2: L'utente ha cliccato da un link direttamente sulla pagina
-                if (isAlreadyCentered) {
-                    // ZERO LAG: Il bersaglio è sotto tiro, innesco immediato (Nessuno scroll, nessuna attesa)
-                    openModal(targetModal);
-                } else {
-                    // Bersaglio lontano: Inizia lo scroll e calcola il tempo di viaggio
-                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    setTimeout(() => {
-                        openModal(targetModal);
-                    }, 850);
-                }
-            }
-        });
-    });
-
-    // 2. FUNZIONE DI DEPLOY (Apertura)
-    const openModal = (modalNode) => {
-        // Blocchiamo fisicamente lo scroll della pagina in background
-        document.body.classList.add('modal-open'); 
-        
-        // Accendiamo lo strato oscuro
-        modalOverlay.classList.add('is-active');
-
-        // requestAnimationFrame forza il browser a dipingere l'overlay nero 
-        // PRIMA di sparare l'animazione di espansione (elimina scatti grafici)
-        requestAnimationFrame(() => {
-            modalNode.classList.add('is-open');
-        });
-    };
-
-    // 3. FUNZIONE DI TERMINAZIONE (Chiusura)
-    const closeModal = () => {
-        // Sblocchiamo la pagina
-        document.body.classList.remove('modal-open');
-        // Spegniamo lo strato oscuro
-        modalOverlay.classList.remove('is-active');
-        // Ripristiniamo la geometria di tutti i popup
-        modals.forEach(m => m.classList.remove('is-open'));
-    };
-
-    // 4. EVENTI DI CHIUSURA FAIL-SAFE
-    // Clic sulla 'X'
-    closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
-    
-    // Clic in un punto morto dello schermo (overlay nero)
-    modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) closeModal();
-    });
-
-    // Pressione del tasto ESC sulla tastiera (Accessibilità Terminale)
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && document.body.classList.contains('modal-open')) {
-            closeModal();
-        }
-    });
-}); 
-
-/* =========================================
-   IDE SCROLLSPY ENGINE (Active File Tracker)
-   ========================================= */
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Cerchiamo tutti i moduli IDE (così funzionerà anche per i progetti futuri)
-    const ideModals = document.querySelectorAll('.sys-modal-ide');
-    
-    ideModals.forEach(modal => {
-        const scrollContainer = modal.querySelector('.ide-content');
-        const sections = modal.querySelectorAll('.ide-section');
-        const links = modal.querySelectorAll('.ide-file');
-        
-        // Se manca uno degli elementi, fermiamo lo script per evitare errori
-        if (!scrollContainer || sections.length === 0 || links.length === 0) return;
-
-        // Configurazione del Radar: 
-        // Guarda dentro il pannello che scorre. Quando una sezione entra 
-        // nella metà superiore dello schermo, innesca il cambio.
-        const observerOptions = {
-            root: scrollContainer,
-            rootMargin: '-10% 0px -60% 0px', 
-            threshold: 0
-        };
-
-        const observerCallback = (entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // 1. Troviamo l'ID della sezione attualmente in lettura (es: "proj-arch")
-                    const currentId = entry.target.id;
-                    
-                    // 2. Spegniamo tutti i file nell'Explorer
-                    links.forEach(l => l.classList.remove('active'));
-                    
-                    // 3. Troviamo il file con l'href corrispondente e lo accendiamo
-                    const activeLink = modal.querySelector(`.ide-file[href="#${currentId}"]`);
-                    if (activeLink) {
-                        activeLink.classList.add('active');
-                    }
-                }
-            });
-        };
-
-        const observer = new IntersectionObserver(observerCallback, observerOptions);
-        
-        // Diciamo al radar di osservare ogni singola sezione del report
-        sections.forEach(sec => observer.observe(sec));
-        
-        // --- UX Iistantanea (Fallback) ---
-        // Se l'utente clicca, diamo un feedback visivo immediato senza aspettare lo scorrimento
-        links.forEach(link => {
-            link.addEventListener('click', function() {
-                links.forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-    });
-
-});
-
-/* =========================================
-   GHOST BRANDING SENSOR (Menu-Freeze Fix)
-   ========================================= */
-document.addEventListener('DOMContentLoaded', () => {
-    const body = document.body;
-    const scrollThreshold = 350; 
-
-    window.addEventListener('scroll', () => {
-        // IL FRENO A MANO: Se il menu è aperto, il radar si congela e ignora i falsi valori di scroll.
-        // SOSTITUISCI 'menu-open' con la classe reale che usa il tuo menu!
-        if (body.classList.contains('menu-open')) return;
-
-        window.requestAnimationFrame(() => {
-            if (window.scrollY > scrollThreshold) {
-                body.classList.add('is-scrolled');
-            } else {
-                body.classList.remove('is-scrolled');
-            }
-        });
-    }, { passive: true });
-});
-
-/* =========================================
-   IDE FOLDER TOGGLE ENGINE (Collapse/Expand)
-   ========================================= */
-document.addEventListener('DOMContentLoaded', () => {
-    // Selezioniamo tutte le cartelle cliccabili, escludendo la Root principale
-    const ideFolders = document.querySelectorAll('.ide-folder:not(.root-folder)');
-    
-    ideFolders.forEach(folder => {
-        folder.addEventListener('click', () => {
-            // Aggiunge o toglie la classe che fa scattare l'animazione CSS
-            folder.classList.toggle('is-collapsed');
-        });
-    });
-});
-
-/* =========================================
-   LANGUAGE SWITCHER
-   ========================================= */
-document.addEventListener('DOMContentLoaded', () => {
-    const langToggle = document.getElementById('lang-toggle');
-    const langSwitcher = langToggle.parentElement;
-
-    // Apre/Chiude il menu lingua
-    langToggle.addEventListener('click', (e) => {
-        e.stopPropagation(); // Evita che il click si propaghi al document
-        langSwitcher.classList.toggle('is-open');
-    });
-
-    // Chiude il menu se clicchi in qualsiasi altra parte del sito
-    document.addEventListener('click', (e) => {
-        if (!langSwitcher.contains(e.target)) {
-            langSwitcher.classList.remove('is-open');
-        }
-    });
-});
-
-/* =========================================
-   TRANSLATION ENGINE (i18n)
-   ========================================= */
-
 const translations = {
     en: {
         nav_home: "Home",
@@ -732,62 +173,421 @@ const translations = {
     }
 };
 
+
+/* =========================================
+   II. UTILITY CORE FUNCTIONS (Global)
+   ========================================= */
+
+/**
+ * TEXT SPLITTING (Lego Effect)
+ * Smonta e ricostruisce il testo per l'accelerazione GPU
+ * @param {string|HTMLElement} target - Selettore testuale o singolo Nodo DOM
+ */
+const splitTextIntoSpans = (target) => {
+    // Rendiamo la funzione intelligente: accetta sia stringhe ('.classe') che elementi DOM diretti
+    const elements = typeof target === 'string' ? document.querySelectorAll(target) : [target];
+    
+    elements.forEach(element => {
+        const text = element.innerText;
+        element.innerHTML = ''; 
+        
+        const words = text.split(' ');
+        
+        words.forEach((word) => {
+            const span = document.createElement('span');
+            span.classList.add('stagger-word');
+            span.innerHTML = word + '&nbsp;';
+            // LA MAGIA RANDOMICA: Assegniamo un ritardo asimmetrico per la GPU
+            span.style.setProperty('--random-delay', Math.random());
+            element.appendChild(span);
+        });
+    });
+};
+
+
+/* =========================================
+   III. MAIN INITIALIZATION ENGINE 
+   (Single Entry Point per azzerare i silos)
+   ========================================= */
+
 document.addEventListener('DOMContentLoaded', () => {
+    
+    const body = document.body;
+
+    /* ----------------------------------------------------
+       1. INIZIALIZZAZIONE "LEGO EFFECT" BASE
+       ---------------------------------------------------- */
+    splitTextIntoSpans('.slide-title');
+    splitTextIntoSpans('.slide-description');
+    splitTextIntoSpans('.modal-animate-text');
+
+    /* ----------------------------------------------------
+       2. SCROLL REVEAL (Intersection Observer)
+       ---------------------------------------------------- */
+    const revealOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+    
+    const revealCallback = (entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target); // Libera memoria RAM
+            }
+        });
+    };
+    const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
+    document.querySelectorAll('.reveal').forEach(section => revealObserver.observe(section)); 
+
+    /* ----------------------------------------------------
+       3. THEME SWITCHER ENGINE
+       ---------------------------------------------------- */
+    const themeToggle = document.getElementById('theme-toggle');
+    const root = document.documentElement; 
+
+    if (themeToggle) {
+        if (localStorage.getItem('theme') === 'light') {
+            root.classList.add('light-theme');
+        }
+
+        const toggleThemeLogic = () => {
+            root.classList.toggle('light-theme');
+            localStorage.setItem('theme', root.classList.contains('light-theme') ? 'light' : 'dark');
+        };
+
+        themeToggle.addEventListener('click', () => {
+            themeToggle.classList.add('is-spinning');
+            setTimeout(() => { themeToggle.classList.remove('is-spinning'); }, 800);
+
+            if (!document.startViewTransition) {
+                toggleThemeLogic();
+                return;
+            }
+            document.startViewTransition(() => { toggleThemeLogic(); });
+        });
+    }
+
+    /* ----------------------------------------------------
+       4. OFF-CANVAS MENU (Side Menu)
+       ---------------------------------------------------- */
+    const menuBtn = document.getElementById('menu-btn');
+    const anchorLinks = document.querySelectorAll('.anchor-link');
+
+    if (menuBtn) {
+        menuBtn.addEventListener('click', () => body.classList.toggle('menu-open'));
+        anchorLinks.forEach(link => {
+            link.addEventListener('click', () => body.classList.remove('menu-open'));
+        }); 
+    }
+
+    /* ----------------------------------------------------
+       5. CAROUSEL NEXT/PREV LOGIC
+       ---------------------------------------------------- */
+    const track = document.querySelector('.carousel-track');
+    if (track) {
+        const slides = Array.from(track.querySelectorAll('.carousel-slide'));
+        const buttons = document.querySelectorAll('.carousel-button');
+        
+        if (buttons.length >= 2) {
+            const prevButton = buttons[0];
+            const nextButton = buttons[1];
+            let currentSlideIndex = 0; 
+
+            const updateCarousel = (newIndex) => {
+                slides[currentSlideIndex].classList.remove('current-slide');
+                currentSlideIndex = newIndex;
+                slides[currentSlideIndex].classList.add('current-slide');
+            };
+
+            nextButton.addEventListener('click', () => {
+                updateCarousel((currentSlideIndex + 1) % slides.length);
+            });
+
+            prevButton.addEventListener('click', () => {
+                updateCarousel((currentSlideIndex - 1 + slides.length) % slides.length);
+            });
+        }
+    }
+
+    /* ----------------------------------------------------
+       6. SPA MODAL ENGINE (Orchestrazione)
+       ---------------------------------------------------- */
+    const modalOverlay = document.getElementById('sys-modal-overlay');
+    const modals = document.querySelectorAll('.sys-modal');
+    const closeBtns = document.querySelectorAll('.modal-close-btn');
+    const modalTriggers = document.querySelectorAll('[data-modal]');
+    
+    let modalTimeoutId = null; // Il Debouncer per evitare accavallamenti
+
+    if (modalOverlay) {
+        const openModal = (modalNode) => {
+            body.classList.add('modal-open'); 
+            modalOverlay.classList.add('is-active');
+            requestAnimationFrame(() => modalNode.classList.add('is-open'));
+        };
+
+        const closeModal = () => {
+            body.classList.remove('modal-open');
+            modalOverlay.classList.remove('is-active');
+            modals.forEach(m => m.classList.remove('is-open'));
+        };
+
+        modalTriggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                const targetModalId = trigger.getAttribute('data-modal');
+                const targetSectionId = trigger.getAttribute('href');
+                const targetSection = document.querySelector(targetSectionId);
+                const targetModal = document.getElementById(targetModalId);
+
+                if (!targetModal || !targetSection) return;
+
+                const rect = targetSection.getBoundingClientRect();
+                const distanceFromCenter = Math.abs((rect.top + (rect.height / 2)) - (window.innerHeight / 2));
+                const isAlreadyCentered = distanceFromCenter < 150; 
+                
+                let delay = 0;
+
+                if (body.classList.contains('menu-open')) {
+                    body.classList.remove('menu-open');
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    delay = isAlreadyCentered ? 600 : 850;
+                } else {
+                    if (!isAlreadyCentered) {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        delay = 850;
+                    }
+                }
+
+                // DEBOUNCING: Uccide qualsiasi altro timeout in corso prima di aprirne uno nuovo
+                if (modalTimeoutId) clearTimeout(modalTimeoutId);
+                
+                modalTimeoutId = setTimeout(() => { openModal(targetModal); }, delay);
+            });
+        });
+
+        closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
+        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && body.classList.contains('modal-open')) closeModal();
+        });
+    }
+
+    /* ----------------------------------------------------
+       7. IDE SCROLLSPY ENGINE
+       ---------------------------------------------------- */
+    const ideModals = document.querySelectorAll('.sys-modal-ide');
+    ideModals.forEach(modal => {
+        const scrollContainer = modal.querySelector('.ide-content');
+        const sections = modal.querySelectorAll('.ide-section');
+        const links = modal.querySelectorAll('.ide-file');
+        
+        if (!scrollContainer || sections.length === 0 || links.length === 0) return;
+
+        const observerOptions = { root: scrollContainer, rootMargin: '-10% 0px -60% 0px', threshold: 0 };
+        const observerCallback = (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const currentId = entry.target.id;
+                    links.forEach(l => l.classList.remove('active'));
+                    const activeLink = modal.querySelector(`.ide-file[href="#${currentId}"]`);
+                    if (activeLink) activeLink.classList.add('active');
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        sections.forEach(sec => observer.observe(sec));
+        
+        links.forEach(link => {
+            link.addEventListener('click', function() {
+                links.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    });
+
+    /* ----------------------------------------------------
+       8. GHOST BRANDING SENSOR
+       ---------------------------------------------------- */
+    const scrollThreshold = 350; 
+    window.addEventListener('scroll', () => {
+        if (body.classList.contains('menu-open')) return;
+        window.requestAnimationFrame(() => {
+            if (window.scrollY > scrollThreshold) body.classList.add('is-scrolled');
+            else body.classList.remove('is-scrolled');
+        });
+    }, { passive: true });
+
+    /* ----------------------------------------------------
+       9. IDE FOLDER TOGGLE ENGINE
+       ---------------------------------------------------- */
+    const ideFolders = document.querySelectorAll('.ide-folder:not(.root-folder)');
+    ideFolders.forEach(folder => {
+        folder.addEventListener('click', () => folder.classList.toggle('is-collapsed'));
+    });
+
+    /* ----------------------------------------------------
+       10. LANGUAGE SWITCHER & TRANSLATION ENGINE
+       ---------------------------------------------------- */
+    const langToggle = document.getElementById('lang-toggle');
     const elementsToTranslate = document.querySelectorAll('[data-i18n]');
     const langButtons = document.querySelectorAll('.lang-btn');
     const currentLangLabel = document.getElementById('current-lang');
-    const langSwitcher = document.getElementById('lang-toggle').parentElement;
 
-function setLanguage(lang) {
-        currentLangLabel.textContent = lang.toUpperCase();
+    if (langToggle) {
+        const langSwitcher = langToggle.parentElement;
 
-        // FASE 1: Dissolvenza in uscita
-        elementsToTranslate.forEach(el => {
-            el.classList.add('is-translating');
+        langToggle.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            langSwitcher.classList.toggle('is-open');
         });
 
-// FASE 2: Cambio testo e Re-innesco Motori
-        setTimeout(() => {
-            elementsToTranslate.forEach(el => {
-                const translationKey = el.getAttribute('data-i18n');
-                
-                if (translations[lang] && translations[lang][translationKey]) {
-                    // 1. Iniettiamo il testo grezzo tradotto
-                    el.innerHTML = translations[lang][translationKey];
+        document.addEventListener('click', (e) => {
+            if (!langSwitcher.contains(e.target)) langSwitcher.classList.remove('is-open');
+        });
+
+        const setLanguage = (lang) => {
+            currentLangLabel.textContent = lang.toUpperCase();
+
+            elementsToTranslate.forEach(el => el.classList.add('is-translating'));
+
+            setTimeout(() => {
+                elementsToTranslate.forEach(el => {
+                    const translationKey = el.getAttribute('data-i18n');
                     
-                    // 2. FIX LEGO EFFECT: Aggiunte le classi del carosello
-                    if (el.classList.contains('modal-animate-text') || 
-                        el.classList.contains('slide-title') || 
-                        el.classList.contains('slide-description')) {
+                    if (translations[lang] && translations[lang][translationKey]) {
+                        el.innerHTML = translations[lang][translationKey];
                         
-                        const words = el.innerText.split(' ');
-                        el.innerHTML = ''; 
-                        
-                        words.forEach(word => {
-                            const span = document.createElement('span');
-                            span.classList.add('stagger-word');
-                            span.innerHTML = word + '&nbsp;';
-                            span.style.setProperty('--random-delay', Math.random());
-                            el.appendChild(span);
-                        });
+                        // FIX DRY: Usiamo la funzione Utility globale creata in cima!
+                        if (el.classList.contains('modal-animate-text') || 
+                            el.classList.contains('slide-title') || 
+                            el.classList.contains('slide-description')) {
+                            splitTextIntoSpans(el); 
+                        }
                     }
-                }
-                
-                // FASE 3: Dissolvenza in entrata
-                el.classList.remove('is-translating');
+                    el.classList.remove('is-translating');
+                });
+            }, 300);
+        };
+
+        langButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                setLanguage(btn.getAttribute('data-lang')); 
+                langSwitcher.classList.remove('is-open'); 
             });
-        }, 300);
-    }
-
-    langButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            
-            const targetLang = btn.getAttribute('data-lang');
-            setLanguage(targetLang); 
-            
-            langSwitcher.classList.remove('is-open'); 
         });
-    });
-});
+    }
+}); 
 
+
+/* =========================================
+   IV. DEFERRED INITIALIZATION (GPU PHYSICS)
+   (Avviato solo quando l'HTML e le Immagini sono 100% carichi per misurazioni esatte)
+   ========================================= */
+
+window.addEventListener('load', () => {
+    const track = document.querySelector('.logo-carousel-track');
+    if (!track) return;
+
+    let singleGroupWidth = track.querySelector('.logo-group').offsetWidth;
+    let currentX = 0;        
+    let velocity = 0;        
+    let isDragging = false;  
+    let startX = 0;          
+    let lastX = 0;           
+    
+    // Parametri Fisici
+    const autoScrollSpeed = -0.5; 
+    const dragSensitivity = 0.85; 
+    const maxVelocity = 18;       
+    const friction = 0.975;       
+    
+    let isAutoScrolling = true;
+    let resumeTimeout;
+    
+    let mouseX = -1;
+    let mouseY = -1;
+
+    window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+    window.addEventListener('mouseleave', () => { mouseX = -1; mouseY = -1; });      
+    window.addEventListener('resize', () => { singleGroupWidth = track.querySelector('.logo-group').offsetWidth; });
+
+    const startDrag = (e) => {
+        isDragging = true;
+        isAutoScrolling = false;
+        clearTimeout(resumeTimeout); 
+        track.classList.add('is-dragging');
+        startX = e.pageX || e.touches[0].pageX;
+        lastX = startX;
+        velocity = 0; 
+    };
+
+    const onDrag = (e) => {
+        if (!isDragging) return;
+        
+        // Anti-Sticky Fail-Safe
+        if (e.type === 'mousemove' && e.buttons === 0) {
+            stopDrag();
+            return;
+        }
+
+        e.preventDefault(); 
+        const currentPosition = e.pageX || e.touches[0].pageX;
+        const smoothedDelta = (currentPosition - lastX) * dragSensitivity;
+        
+        currentX += smoothedDelta;
+        velocity = Math.max(-maxVelocity, Math.min(maxVelocity, smoothedDelta)); 
+        lastX = currentPosition;
+    };
+
+    const stopDrag = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        track.classList.remove('is-dragging');
+        resumeTimeout = setTimeout(() => { isAutoScrolling = true; }, 2000); 
+    };
+
+    track.addEventListener('mousedown', startDrag);
+    track.addEventListener('dragstart', (e) => e.preventDefault());
+    window.addEventListener('mousemove', onDrag);
+    window.addEventListener('mouseup', stopDrag);
+    window.addEventListener('mouseleave', stopDrag);
+
+    track.addEventListener('touchstart', startDrag, { passive: true });
+    window.addEventListener('touchmove', onDrag, { passive: false });
+    window.addEventListener('touchend', stopDrag);
+
+    let frameCounter = 0;
+    const allCarouselLogos = track.querySelectorAll('img');
+
+    const renderEngine = () => {
+        if (isAutoScrolling) velocity += (autoScrollSpeed - velocity) * 0.05;
+        else if (!isDragging) velocity *= friction;
+
+        currentX += velocity;
+
+        if (currentX <= -singleGroupWidth) currentX += singleGroupWidth; 
+        else if (currentX >= 0) currentX -= singleGroupWidth; 
+
+        track.style.transform = `translate3d(${currentX}px, 0, 0)`;
+
+        frameCounter++;
+
+        // Laser Radar - 1 execution every 5 frames
+        if (frameCounter % 5 === 0) {
+            if (!isDragging && mouseX !== -1) {
+                const elementUnderMouse = document.elementFromPoint(mouseX, mouseY);
+                allCarouselLogos.forEach(img => img.classList.remove('is-hovered'));
+                
+                if (elementUnderMouse && elementUnderMouse.tagName === 'IMG' && elementUnderMouse.closest('.logo-group')) {
+                    elementUnderMouse.classList.add('is-hovered');
+                }
+            } else {
+                allCarouselLogos.forEach(img => img.classList.remove('is-hovered'));
+            }
+        }
+        requestAnimationFrame(renderEngine);
+    };
+
+    renderEngine();
+});

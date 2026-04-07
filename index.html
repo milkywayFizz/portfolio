@@ -8,9 +8,9 @@
 </head>
 <body>
 
-     <div id="ghost-brand" class="ghost-brand">
-            <img src="img/avatar.png" alt="Flavius Profile" class="ghost-avatar" loading="lazy">
-            <span class="ghost-name">Flavius Chiriac</span>
+    <div id="ghost-brand" class="ghost-brand">
+        <img src="img/avatar.png" alt="Flavius Profile" class="ghost-avatar" loading="lazy">
+        <span class="ghost-name">Flavius Chiriac</span>
     </div>
 
     <div class="lang-switcher">
@@ -19,11 +19,11 @@
         </div>
 
         <div class="lang-toggle" id="lang-toggle" style="display: inline-flex;">
-            <span id="current-lang">ENG</span> <span class="lang-chevron">▼</span>
+            <span id="current-lang">EN</span> <span class="lang-chevron">▼</span>
         </div>
         <ul class="lang-dropdown">
-            <li><a href="#" class="lang-btn" data-lang="it">ITA</a></li>
-            <li><a href="#" class="lang-btn" data-lang="en">ENG</a></li>
+            <li><a href="#" class="lang-btn" data-lang="it">IT</a></li>
+            <li><a href="#" class="lang-btn" data-lang="en">EN</a></li>
         </ul>
     </div>
 
@@ -57,7 +57,7 @@
 
     <div class="site-wrapper">
 
-        <header>
+        <header id="header">
             <img src="img/avatar.png" alt="Flavius Profile Picture" width="150" loading="lazy">
             <h1>Flavius Chiriac</h1>
             <h2 data-i18n="header_subtitle">Computer Science Student @ UnivAQ | Privacy Advocate & System Hardening Enthusiast</h2>
@@ -84,7 +84,7 @@
                     <img src="img/CSS3.png" alt="CSS3">
                 </div>
 
-                 <div class="logo-group">
+                <div class="logo-group">
                     <img src="img/linux.png" alt="Linux">
                     <img src="img/Javascript_Logo.png" alt="JavaScript">
                     <img src="img/docker_logo.png" alt="Docker">
@@ -169,7 +169,7 @@
                                 <a href="#" class="slide-link" data-i18n="proj_wip">Work In Progress >_</a>
                             </div>
                             <div class="slide-image-container">
-                                <img src="img/docker_logo.png" loading="lazy" width="500" height="300">
+                                <img src="img/docker_logo.png" loading="lazy" width="500" height="300" alt="Docker Containerization">
                             </div>
                         </div>
 
@@ -188,7 +188,7 @@
             <hr>
             <h3 data-i18n="footer_title">Contact & Links</h3>
             <ul>
-                <li><a href="mailto:chiriacflavius20@gmail.com" data-i18n="footer_email">Email Me</a></li>
+                <li><a href="mailto:chiriacflavius20@gmail.com" target="_blank" rel="noopener noreferrer" data-i18n="footer_email">Email Me</a></li>
                 <li><a href="https://github.com/milkywayFizz" target="_blank" rel="noopener noreferrer" data-i18n="footer_github">GitHub Profile</a></li>
             </ul>
             <p><small data-i18n="footer_copy">© 2026 Flavius. Built locally with a strict focus on privacy.</small></p>
@@ -206,13 +206,13 @@
                 <h3><span class="modal-animate-text" data-i18n="modal_about_title">About Me</span></h3>
                 <div class="modal-content-grid">
                     <div class="modal-text-column">
-<p data-i18n="modal_about_p1">I am a second-year Computer Science student at the University of L'Aquila (UnivAQ), but my real education began much earlier. Growing up with the internet, I was driven by a practical need: I hated friction. I was looking for the ultimate "user-friendly" experience.</p>
-<hr class="ide-divider">
-<p data-i18n="modal_about_p2">It all started around the age of 14. My obsession wasn't writing code, but finding flaws in systems. I tinkered with adblockers and patched versions of everyday apps. I remember when I used to create chains of accounts to endlessly extend the 14-day PS Plus free trial, allowing my friends to play online for free. What seemed like just a trick to save money back then was actually my first approach to system manipulation.</p>
-<p data-i18n="modal_about_p3">Today, that instinct to bend the rules to my advantage has evolved into a rigorous pursuit of <strong>Digital Sovereignty</strong>. My playground is Operating Systems: I use AtlasOS to strip down the attack surface on Windows to the bare minimum and get a great gaming experience. I even managed to configure Arch Linux with Hyprland on a dreaded Intel+Nvidia combo (then I broke everything again, obviously). But that's my philosophy: I'm not afraid to destroy a system, because I know that by exploring the wreckage I'll learn how to rebuild it in a more solid and secure way.</p>
-<hr class="ide-divider">
-<p data-i18n="modal_about_p4">This approach is reflected in everything I love. Besides being a fan of JDM cars and video games, I live and breathe Japanese Fusion music like Masayoshi Takanaka and Casiopea.</p>
-</div>
+                        <p data-i18n="modal_about_p1">I am a second-year Computer Science student at the University of L'Aquila (UnivAQ), but my real education began much earlier. Growing up with the internet, I was driven by a practical need: I hated friction. I was looking for the ultimate "user-friendly" experience.</p>
+                        <hr class="ide-divider">
+                        <p data-i18n="modal_about_p2">It all started around the age of 14. My obsession wasn't writing code, but finding flaws in systems. I tinkered with adblockers and patched versions of everyday apps. I remember when I used to create chains of accounts to endlessly extend the 14-day PS Plus free trial, allowing my friends to play online for free. What seemed like just a trick to save money back then was actually my first approach to system manipulation.</p>
+                        <p data-i18n="modal_about_p3">Today, that instinct to bend the rules to my advantage has evolved into a rigorous pursuit of <strong>Digital Sovereignty</strong>. My playground is Operating Systems: I use AtlasOS to strip down the attack surface on Windows to the bare minimum and get a great gaming experience. I even managed to configure Arch Linux with Hyprland on a dreaded Intel+Nvidia combo (then I broke everything again, obviously). But that's my philosophy: I'm not afraid to destroy a system, because I know that by exploring the wreckage I'll learn how to rebuild it in a more solid and secure way.</p>
+                        <hr class="ide-divider">
+                        <p data-i18n="modal_about_p4">This approach is reflected in everything I love. Besides being a fan of JDM cars and video games, I live and breathe Japanese Fusion music like Masayoshi Takanaka and Casiopea.</p>
+                    </div>
                     <div class="modal-image-column">
                         <img src="img/fizzplaceholder.png" alt="Hardware o Codice" class="modal-side-img" loading="lazy">
                     </div>
@@ -224,9 +224,7 @@
             <button class="modal-close-btn" aria-label="Terminate Module">✕</button>
             <div class="modal-content">
                 <h3><span class="modal-animate-text" data-i18n="modal_focus_title">Core Focus & Career Goals</span></h3>
-                
                 <div class="modal-content-grid">
-                    
                     <div class="modal-text-column">
                         <p data-i18n="modal_focus_p1">I don't just want to write code or deploy servers; I want to understand exactly how they break. My current technical journey is driven by a profound curiosity for reverse engineering: taking existing, heavy, or vulnerable projects and 'dissecting' them to their core components.</p>
                         <p data-i18n="modal_focus_p2">I am in a phase of deep exploration. I spend my time stripping away telemetry, cutting out bloatware, and hardening systems to see how much I can secure a machine before it stops functioning. It’s an exercise in extreme minimalization and digital sovereignty.</p>
@@ -235,7 +233,7 @@
                     <div class="modal-image-column">
                         <img src="img/fizzplaceholder.png" alt="Network and Infrastructure Security" class="modal-side-img" loading="lazy">
                     </div>
-                    </div> 
+                </div> 
             </div>
         </div>
 
@@ -244,11 +242,9 @@
             <div class="modal-content">
                 <h3><span class="modal-animate-text" data-i18n="modal_skills_title">Technical Competencies</span></h3>
                 <div class="modal-content-grid">
-                   <div class="modal-text-column">
+                    <div class="modal-text-column">
                         <p data-i18n="modal_skills_p1">My approach to technology is strictly utilitarian and security-first. I don't use tools simply because they are industry standards; I use them because they offer transparency and absolute control over the system state. If a software acts like a black box, it's a liability.</p>
-                        
                         <p data-i18n="modal_skills_p2">My networking philosophy is based on "Zero Trust" and local sovereignty. I route my traffic through custom Wireguard tunnels and utilize Pi-hole for network-wide DNS sinkholing, blocking trackers and malicious domains before they even reach the end devices. Furthermore, everything I self-host is strictly containerized via Docker to prevent privilege escalation and ensure total isolation.</p>
-                        
                         <p data-i18n="modal_skills_p3">When it comes to software engineering, I apply the same "Hardening" principles. I prioritize Zero-Dependency architectures. Using Vanilla JS and raw CSS isn't just a stylistic choice; it's a deliberate security measure to avoid importing vulnerable third-party modules and to keep the codebase lightweight and fully auditable.</p>
                     </div>
                     <div class="modal-image-column">
@@ -258,12 +254,13 @@
             </div>
         </div>
 
-       <div id="modal-project-web" class="sys-modal sys-modal-ide">
+        <div id="modal-project-web" class="sys-modal sys-modal-ide">
             <button class="modal-close-btn" aria-label="Terminate Module">✕</button>
 
             <img src="img/Javascript_Logo.png" alt="Javascript Logo" class="ide-fixed-project-img">
             
             <div class="ide-container">
+                
                 <aside class="ide-sidebar">
                     <div class="ide-sidebar-top">
                         <span data-i18n="ide_explorer">EXPLORER</span>
@@ -324,14 +321,12 @@
                     </div>
                 </aside>
 
-<main class="ide-content">
+                <main class="ide-content">
                     
                     <section id="proj-overview" class="ide-section">
                         <h3><span class="modal-animate-text" data-i18n="ide_proj_overview_title">Web Portfolio (Static)</span></h3>
                         <p data-i18n="ide_proj_overview_p1">The goal of this project wasn't just to create a space to showcase my work, but to demonstrate a concept I strongly believe in: <strong>the integrity and security of a system start from the foundation.</strong></p>
-    
                         <p data-i18n="ide_proj_overview_p2">Today we are used to seeing constant data breaches or unnecessarily heavy websites, often caused by a certain architectural laziness. There's a tendency to import dozens of third-party external libraries without really knowing what they do under the hood. For this portfolio, I chose a different path: a strict <em>Zero-Dependencies</em> philosophy. No heavy frameworks, just semantic HTML, Vanilla JS, and pure CSS3.</p>
-
                         <p data-i18n="ide_proj_overview_p3">This approach not only eliminates trackers and drastically reduces the attack surface, but it also answers a personal principle of mine: things must simply <em>work well</em> for everyone. Whether you're browsing from a high-end workstation or a 400-euro laptop, this site will remain fluid, lightweight, and above all, will fully respect your privacy.</p>
                     </section>
 
@@ -340,50 +335,45 @@
                     <section id="proj-arch" class="ide-section">
                         <h4 class="modal-animate-text" data-i18n="ide_proj_arch_title">Architecture & Workflow</h4>
                         <p data-i18n="ide_proj_arch_p1">In life and in projects, I appreciate a very specific mindset: minimum effort, maximum gain. This doesn't mean working less, but working <em>better</em>, optimizing resources. For me, a digital product must simply work, and it must do so at peak performance regardless of the hardware.</p>
-    
                         <p data-i18n="ide_proj_arch_p2">To achieve this level of total control, I structured the development into very rigorous phases:</p>
-    
                         <ul>
-                          <li data-i18n="ide_proj_arch_li1"><strong>Bare-Metal Study:</strong> Before touching CSS or complex scripts, I started from the basics. I filled pages of notes studying the native behavior of HTML, the DOM structure, anchors, and space management.</li>
-                          <li data-i18n="ide_proj_arch_li2"><strong>AI-Assisted Development:</strong> Once the architecture was clear, I integrated Artificial Intelligence with a strict hierarchy: I provided the brains, the AI got its hands dirty. I used it as a true "Tactical Executor". I defined the engineering direction, the logical choices, and the security constraints, delegating the physical writing of the code to it.</li>
+                            <li data-i18n="ide_proj_arch_li1"><strong>Bare-Metal Study:</strong> Before touching CSS or complex scripts, I started from the basics. I filled pages of notes studying the native behavior of HTML, the DOM structure, anchors, and space management.</li>
+                            <li data-i18n="ide_proj_arch_li2"><strong>AI-Assisted Development:</strong> Once the architecture was clear, I integrated Artificial Intelligence with a strict hierarchy: I provided the brains, the AI got its hands dirty. I used it as a true "Tactical Executor". I defined the engineering direction, the logical choices, and the security constraints, delegating the physical writing of the code to it.</li>
                         </ul>
-
-                         <p data-i18n="ide_proj_arch_p3">Implementing, testing, and manually "dissecting" the generated code allowed me to avoid memorizing anything in a sterile way. On the contrary, it helped me internalize the intimate <em>inner workings</em> of the site. Thanks to this workflow, today I know every millimeter of this project and possess the know-how to expand and modify it with total autonomy.</p>
+                        <p data-i18n="ide_proj_arch_p3">Implementing, testing, and manually "dissecting" the generated code allowed me to avoid memorizing anything in a sterile way. On the contrary, it helped me internalize the intimate <em>inner workings</em> of the site. Thanks to this workflow, today I know every millimeter of this project and possess the know-how to expand and modify it with total autonomy.</p>
                     </section>
 
                     <hr class="ide-divider">
                     
                     <section id="proj-challenges" class="ide-section">
-                    <h4 class="modal-animate-text" data-i18n="ide_proj_chall_title">Engineering Challenges (UI/UX)</h4>
-                    <p data-i18n="ide_proj_chall_p1">Creating an interface that felt "alive" and responsive to the touch, while refusing to use conveniences like animation frameworks (e.g., GSAP), required a lot of creativity and a few headaches.</p>
-    
-                    <p data-i18n="ide_proj_chall_p2">The first major challenge was text animation. I didn't want the usual static block appearance; I wanted a natural, soft, and fluid <em>flow</em>, which I dubbed the <strong>"Lego Effect"</strong>. To achieve this, I engineered a script that destroys and rebuilds the text DOM in real-time:</p>
+                        <h4 class="modal-animate-text" data-i18n="ide_proj_chall_title">Engineering Challenges (UI/UX)</h4>
+                        <p data-i18n="ide_proj_chall_p1">Creating an interface that felt "alive" and responsive to the touch, while refusing to use conveniences like animation frameworks (e.g., GSAP), required a lot of creativity and a few headaches.</p>
+                        <p data-i18n="ide_proj_chall_p2">The first major challenge was text animation. I didn't want the usual static block appearance; I wanted a natural, soft, and fluid <em>flow</em>, which I dubbed the <strong>"Lego Effect"</strong>. To achieve this, I engineered a script that destroys and rebuilds the text DOM in real-time:</p>
 
-                    <div class="code-block-wrapper">
-                        <div class="code-block-header">
-                         <span class="code-lang">javascript</span>
-                         <button class="code-copy-btn">Copy code</button>
+                        <div class="code-block-wrapper">
+                            <div class="code-block-header">
+                                <span class="code-lang">javascript</span>
+                                <button class="code-copy-btn">Copy code</button>
+                            </div>
+<pre><code><span class="syntax-keyword">const</span> <span class="syntax-func">splitTextIntoSpans</span> = (selector) => {
+    document.<span class="syntax-func">querySelectorAll</span>(selector).<span class="syntax-func">forEach</span>(element => {
+        <span class="syntax-keyword">const</span> words = element.innerText.<span class="syntax-func">split</span>(<span class="syntax-string">' '</span>);
+        element.innerHTML = <span class="syntax-string">''</span>; 
+
+        words.<span class="syntax-func">forEach</span>(word => { 
+            <span class="syntax-keyword">const</span> span = document.<span class="syntax-func">createElement</span>(<span class="syntax-string">'span'</span>);
+            span.classList.<span class="syntax-func">add</span>(<span class="syntax-string">'stagger-word'</span>);
+            span.innerHTML = word + <span class="syntax-string">'&amp;nbsp;'</span>;
+
+            <span class="syntax-comment">// THE MAGIC: Injecting an asymmetrical delay into the CSS</span>
+            span.style.<span class="syntax-func">setProperty</span>(<span class="syntax-string">'--random-delay'</span>, Math.<span class="syntax-func">random</span>());
+            element.<span class="syntax-func">appendChild</span>(span);
+        });
+    });
+};</code></pre>
                         </div>
-                    <pre><code><span class="syntax-keyword">const</span> <span class="syntax-func">splitTextIntoSpans</span> = (selector) => {
-                    document.<span class="syntax-func">querySelectorAll</span>(selector).<span class="syntax-func">forEach</span>(element => {
-                    <span class="syntax-keyword">const</span> words = element.innerText.<span class="syntax-func">split</span>(<span class="syntax-string">' '</span>);
-                     element.innerHTML = <span class="syntax-string">''</span>; 
-        
-                    words.<span class="syntax-func">forEach</span>(word => { 
-                     <span class="syntax-keyword">const</span> span = document.<span class="syntax-func">createElement</span>(<span class="syntax-string">'span'</span>);
-                        span.classList.<span class="syntax-func">add</span>(<span class="syntax-string">'stagger-word'</span>);
-                        span.innerHTML = word + <span class="syntax-string">'&amp;nbsp;'</span>;
-            
-                        <span class="syntax-comment">// THE MAGIC: Injecting an asymmetrical delay into the CSS</span>
-                        span.style.<span class="syntax-func">setProperty</span>(<span class="syntax-string">'--random-delay'</span>, Math.<span class="syntax-func">random</span>());
-                        element.<span class="syntax-func">appendChild</span>(span);
-                        });
-                    });
-                    };</code></pre>
-                    </div>
 
-                    <p data-i18n="ide_proj_chall_p3">By injecting a random CSS variable (<code>--random-delay</code>) for every single word, the CSS hardware-accelerates an asymmetrical falling animation. The result is an incredibly organic rain of characters.</p>
-
+                        <p data-i18n="ide_proj_chall_p3">By injecting a random CSS variable (<code>--random-delay</code>) for every single word, the CSS hardware-accelerates an asymmetrical falling animation. The result is an incredibly organic rain of characters.</p>
                     </section>
 
                     <hr class="ide-divider">
@@ -397,7 +387,7 @@
                                 <span class="code-lang">javascript</span>
                                 <button class="code-copy-btn">Copy code</button>
                             </div>
-                            <pre><code><span class="syntax-keyword">const</span> <span class="syntax-func">onDrag</span> = (e) => {
+<pre><code><span class="syntax-keyword">const</span> <span class="syntax-func">onDrag</span> = (e) => {
     <span class="syntax-keyword">if</span> (!isDragging) <span class="syntax-keyword">return</span>;
     
     <span class="syntax-comment">// Hardware fail-safe: forced release if the click event is lost</span>

@@ -80,460 +80,6 @@ a:focus:not(:focus-visible) { outline: none; }
 header, main, footer {
     width: 100%;
     max-width: 768px;
-    margin: 1 auto;
-    padding: 2rem 1.5rem;
-}
-
-/* =========================================
-   GHOST BRANDING (Sticky Header)
-   ========================================= */
-.ghost-brand {
-    position: fixed;
-    top: 1.5rem;
-    left: 2.5rem; /* Posizionato a sinistra, bilancia l'hamburger a destra */
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    z-index: 800; /* Sotto i popup, ma sopra il sito */
-    
-    /* Stato Iniziale: Invisibile, rimpicciolito e spostato verso l'alto */
-    opacity: 0;
-    visibility: hidden;
-    transform: translate(-20px, -20px) scale(0.8);
-    pointer-events: none; /* Impedisce interazioni fantasma */
-    
-    /* Transizione morbidissima */
-    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.4s;
-    will-change: opacity, transform, visibility;
-}
-
-.ghost-avatar {
-    width: 45px; /* Molto più piccolo dell'originale */
-    height: 45px;
-    border-radius: 50%; /* Lo rende perfettamente circolare */
-    object-fit: cover;
-}
-
-.ghost-name {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.05em;
-}
-
-/* Quando il body riceve la classe 'is-scrolled', il Ghost Header entra in scena */
-body.is-scrolled .ghost-brand {
-    opacity: 1;
-    visibility: visible;
-    transform: translate(0, 0) scale(1);
-    pointer-events: auto;
-}
-
-/* =========================================
-   CAROSELLO DI LOGHI ANIMATO (Compatto & Infallibile)
-   ========================================= */
-
-.logo-carousel {
-    width: 100%;
-    max-width: 768px; 
-    margin: 3rem auto; 
-    overflow: hidden; 
-    background: transparent;
-    border: none;
-    padding: 0;
-    
-    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-
-    /* NUOVE RIGHE: Ingresso fluido sincronizzato col resto del sito */
-    opacity: 0; 
-    animation: fadeUpEnter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s forwards;
-}
-
-.logo-carousel-track {
-    display: flex;
-    width: max-content; 
-    /* ANIMAZIONE CSS RIMOSSA: Ora comanda JavaScript */
-    
-    /* Aggiungiamo un tocco visivo per indicare che è interagibile */
-    cursor: grab;
-    /* Evita che l'utente evidenzi per sbaglio i loghi trascinando */
-    user-select: none; 
-}
-
-/* Quando l'utente sta cliccando, il cursore si chiude a pugno */
-.logo-carousel-track:active {
-    cursor: grabbing;
-}
-
-/* Gestione dei singoli gruppi (Layout Compatto Originale) */
-.logo-group {
-    display: flex;
-    align-items: center;
-    gap: 4rem; 
-    padding-right: 4rem; 
-    flex-shrink: 0; 
-    
-    /* Cuscinetti anti-taglio per l'hover */
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    
-    /* Hardware acceleration */
-    backface-visibility: hidden;
-}
-
-.logo-group img {
-    height: 60px; 
-    width: auto;
-    object-fit: contain;
-    flex-shrink: 0; 
-    border-radius: 0; 
-    
-    -webkit-user-drag: none; 
-    user-select: none;
-    
-    /* FIX: Accelerazione hardware sulle singole immagini per migliorare l'Hit-Testing del mouse */
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    transform: translateZ(0); 
-    
-    filter: grayscale(100%) opacity(0.6); 
-    /* Velocizzata la transizione (da 0.3s a 0.2s) per un feedback più immediato */
-    transition: filter 0.2s ease, transform 0.2s ease;
-}
-
-/* Il logo reagisce sia al mouse nativo che al nostro radar JS */
-.logo-group img:hover,
-.logo-group img.is-hovered {
-    filter: grayscale(0%) opacity(1); 
-    transform: scale(1.1) translateZ(0); 
-}
-
-/* LA MAGIA ANTI-INCASTRO: Quando stiamo trascinando, i loghi diventano invisibili al mouse */
-.logo-carousel-track.is-dragging img {
-    pointer-events: none; 
-}
-
-section { padding: 2.5rem 0; }
-
-hr {
-    border: 0;
-    height: 1px;
-    background: linear-gradient(to right, transparent, #333333, transparent);
-    margin: 1.5rem 0; 
-}
-
-h1, h2, h3 { margin-top: 0; line-height: 1.2; }
-h1 { font-size: 2.5rem; letter-spacing: -0.05em; margin-bottom: 0.5rem; }
-h2 {
-    font-size: 1.1rem;
-    color: #b0b0b0; /* Un grigio più chiaro per una leggibilità ottimale */
-    font-weight: 400;
-    margin-bottom: 2rem;
-}
-p, li { line-height: 1.6; color: #b0b0b0; font-size: 1rem; }
-
-a {
-    color: var(--text-main);
-    text-decoration: none;
-    border-bottom: 1px solid #333333;
-    transition: color 0.3s ease, border-color 0.3s ease;
-}
-a:hover {
-    color: var(--accent-color);
-    border-color: var(--accent-color);
-}
-
-img {
-    border-radius: 50%;
-    filter: grayscale(100%);
-    transition: filter 0.4s ease, transform 0.4s ease;
-}
-img:hover {
-    filter: grayscale(0%);
-    transform: scale(1.02);
-}
-
-/* -----------------------------------------
-   4. HEADER E ANIMAZIONI GLOBALI
-   ----------------------------------------- */
-header {
-    text-align: center; 
-    padding-top: 6rem;
-    padding-bottom: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-}
-
-header img {
-    width: 130px;
-    height: 130px;
-    object-fit: cover;
-    margin-bottom: 1.5rem;
-}
-
-@keyframes fadeUpEnter {
-    0% { opacity: 0; transform: translateY(30px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
-header { animation: fadeUpEnter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-main { opacity: 0; animation: fadeUpEnter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
-footer { opacity: 0; animation: fadeUpEnter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards; }
-
-.reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.reveal.active { opacity: 1; transform: translateY(0); }
-
-/* -----------------------------------------
-   5. TITOLI INTERATTIVI E LISTE TERMINALE
-   ----------------------------------------- */
-h3 .section-link {
-    border-bottom: none; 
-    color: var(--text-main);
-    display: inline-flex;
-    align-items: center; 
-}
-/* LA MAGIA: Creiamo la freccia virtualmente nel CSS */
-h3 .section-link::after {
-    content: "→"; 
-    margin-left: 0.6rem;
-    
-    /* FIX VISIBILITÀ: Schiariamo leggermente il grigio per superare la soglia di contrasto minima */
-    color: #666666; 
-    
-    font-family: monospace; 
-    
-    /* FIX GRANDEZZA: Forziamo la freccia ad essere il 30% più grande del testo che la precede */
-    font-size: 1.3em; 
-    
-    /* Compensazione ottica per mantenerla perfettamente allineata al centro del testo dopo averla ingrandita */
-    vertical-align: middle; 
-    line-height: 0;
-    
-    /* Transizione fluida */
-    transition: color 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-h3 .section-link:hover { color: var(--text-main); border-bottom: none; }
-h3 .section-link:hover::after {
-    color: var(--accent-color); 
-    transform: translateX(6px); 
-}
-
-@keyframes cursorBlink {
-    0%, 100% { content: ">_"; }
-    50% { content: "> "; }
-}
-
-ul { list-style-type: none; padding-left: 0; }
-
-li {
-    margin-bottom: 0.8rem;
-    position: relative;
-    color: #b0b0b0; 
-    transition: color 0.15s ease-out; 
-}
-li:hover { color: var(--text-main); transition: color 0s; }
-
-li::before {
-    content: ">_"; 
-    color: var(--accent-color);
-    margin-right: 0.8rem;
-    font-family: 'Courier New', Courier, monospace; 
-    font-weight: bold;
-    display: inline-block; 
-    filter: drop-shadow(0 0 1px var(--accent-color));
-    transition: filter 0.15s ease-out; 
-}
-li:hover::before {
-    filter: drop-shadow(0 0 4px var(--accent-color));
-    transition: filter 0s;
-    animation: cursorBlink 1s infinite steps(1);
-}
-
-/* -----------------------------------------
-   6. CSS GRID CARDS (Focus, Skills)
-   ----------------------------------------- */
-#focus ul, #skills ul, #projects ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.2rem;
-}
-
-#focus li, #skills li, #projects li {
-    margin-bottom: 0; 
-    background: #111111; 
-    padding: 1.2rem;
-    border-radius: 8px;
-    border: 1px solid #1f1f1f;
-    transition: transform 0.3s ease, border-color 0.3s ease, background-color 0.3s ease, color 0.15s ease-out;
-}
-
-#focus li:hover, #skills li:hover, #projects li:hover {
-    transform: translateY(-3px); 
-    border-color: #333333; 
-    background: #141414;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
-}
-
-#focus li:last-child:nth-child(odd), 
-#skills li:last-child:nth-child(odd), 
-#projects li:last-child:nth-child(odd) { grid-column: 1 / -1; }
-
-/* -----------------------------------------
-   7. CAROUSEL ENGINE (Layout & Text Physics)
-   ----------------------------------------- */
-.carousel-container {
-    position: relative;
-    width: 100%;
-    min-height: 450px; 
-    background: #111111;
-    border: 1px solid #1f1f1f;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    /* FIX: Isolamento logico dal DOM principale */
-    contain: layout paint style;
-}
-
-.carousel-track {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    min-height: 450px; 
-}
-
-.carousel-slide {
-    position: absolute; 
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    opacity: 0; 
-    pointer-events: none; 
-    transition: opacity 0.5s ease-in-out; 
-    display: grid;
-    grid-template-columns: 55% 1fr; 
-    align-items: center; 
-    padding: 0; 
-}
-
-.carousel-slide.current-slide { opacity: 1; pointer-events: auto; z-index: 2; }
-
-.carousel-slide .slide-content {
-    display: block;
-    padding: 2.5rem 1rem 2.5rem 2.5rem; 
-}
-
-.slide-title { font-size: 1.5rem; margin-top: 0; margin-bottom: 0.5rem; color: var(--text-main); }
-.slide-description { font-size: 1rem; color: #888888; margin-bottom: 1.5rem; max-width: 85%; }
-
-@keyframes legoFallIn {
-    0% { opacity: 0; transform: translateY(calc(-10px - (var(--random-delay) * 15px))); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
-.stagger-word {
-    display: inline-block; 
-    transform: translateY(20px);
-    opacity: 0;
-    transition: transform 0.2s ease-in, opacity 0.2s ease-in;
-}
-
-.carousel-slide.current-slide .stagger-word {
-    transition: none; 
-    animation-name: legoFallIn;
-    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); 
-    animation-fill-mode: forwards;
-    animation-duration: calc(0.4s + (var(--random-delay) * 0.3s));
-    animation-delay: calc(var(--random-delay) * 0.15s + 0.05s);
-}
-
-/* ==========================================================================
-   FLAVIUS IT PORTFOLIO - CORE STYLESHEET
-   Architettura: Modulare / Premium Minimalist / GPU Accelerated
-   ========================================================================== */
-
-/* -----------------------------------------
-   1. RESET & VARIABILI GLOBALI
-   ----------------------------------------- */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
-:root {
-    --bg-color: #0a0a0a;
-    --text-main: #ededed;
-    --accent-color: #01d4d4;
-}
-
-/* Blocchiamo lo scroll orizzontale per prevenire jank nello slide del menu */
-html, body {
-    overflow-x: hidden; 
-    scroll-behavior: smooth;
-}
-
-body {
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    margin: 0;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-}
-
-/* -----------------------------------------
-   2. SCROLLBAR & SELECTION (UI di Sistema)
-   ----------------------------------------- */
-::selection {
-    background-color: var(--accent-color);
-    color: #000000; 
-}
-
-html {
-    background-color: var(--bg-color); 
-}
-
-/* Scrollbar "Bare-Metal": Più spessa, squadrata e impenetrabile */
-html::-webkit-scrollbar { 
-    width: 16px; /* Più spessa e solida per allontanare la zona di pericolo */
-}
-
-html::-webkit-scrollbar-track { 
-    background: #050505; /* Un nero ancora più profondo del body per farla staccare */
-    border-left: 1px solid #1f1f1f; /* Taglio laterale nettissimo, come i bordi del carosello */
-}
-
-html::-webkit-scrollbar-thumb { 
-    background-color: #333333; 
-    /* LA MAGIA CASERECCIA: Zero border-radius. 
-       Un blocco squadrato annulla i calcoli di trasparenza sui bordi. */
-    border-radius: 0; 
-}
-
-html::-webkit-scrollbar-thumb:hover,
-html::-webkit-scrollbar-thumb:active { 
-    background-color: var(--accent-color); 
-}
-
-:focus-visible {
-    outline: 1px solid var(--accent-color);
-    outline-offset: 5px;
-}
-a:focus:not(:focus-visible) { outline: none; }
-
-/* -----------------------------------------
-   3. LAYOUT GLOBALE E TIPOGRAFIA + CAROSELLO AUTOMATICO
-   ----------------------------------------- */
-header, main, footer {
-    width: 100%;
-    max-width: 768px;
     margin: 0 auto;
     padding: 2rem 1.5rem;
 }
@@ -697,6 +243,51 @@ footer { opacity: 0; animation: fadeUpEnter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 
     transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .reveal.active { opacity: 1; transform: translateY(0); }
+
+/* =========================================
+   GHOST BRANDING (Sticky Header)
+   ========================================= */
+.ghost-brand {
+    position: fixed;
+    top: 1.5rem;
+    left: 2.5rem; /* Posizionato a sinistra, bilancia l'hamburger a destra */
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 800; /* Sotto i popup, ma sopra il sito */
+    
+    /* Stato Iniziale: Invisibile, rimpicciolito e spostato verso l'alto */
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-20px, -20px) scale(0.8);
+    pointer-events: none; /* Impedisce interazioni fantasma */
+    
+    /* Transizione morbidissima */
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.4s;
+    will-change: opacity, transform, visibility;
+}
+
+.ghost-avatar {
+    width: 45px; /* Molto più piccolo dell'originale */
+    height: 45px;
+    border-radius: 50%; /* Lo rende perfettamente circolare */
+    object-fit: cover;
+}
+
+.ghost-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.05em;
+}
+
+/* Quando il body riceve la classe 'is-scrolled', il Ghost Header entra in scena */
+body.is-scrolled .ghost-brand {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, 0) scale(1);
+    pointer-events: auto;
+}
 
 /* -----------------------------------------
    5. TITOLI INTERATTIVI E LISTE TERMINALE
@@ -931,7 +522,7 @@ li:hover::before {
 }
 
 /* -----------------------------------------
-   10. OFF-CANVAS PUSH MENU & HAMBURGER
+   10. OFF-CANVAS PUSH MENU & HAMBURGER (144Hz GPU Accelerated)
    ----------------------------------------- */
 .site-wrapper {
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -942,6 +533,30 @@ li:hover::before {
     clip-path: inset(0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    /* FIX 144Hz: Layer Hardware Dedicato */
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+}
+
+/* =========================================
+   FIX: SHADOW BLEEDING MENU LATERALE
+   ========================================= */
+
+/* 1. Spegniamo l'ombra di base quando il menu è chiuso */
+.side-menu {
+    box-shadow: none !important;
+    /* Assicuriamoci che l'ombra abbia una transizione fluida quando appare/scompare */
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+}
+
+/* 2. Accendiamo l'ombra standard (Tema Scuro) SOLO quando il menu è aperto */
+body.menu-open .side-menu {
+    box-shadow: -5px 0 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 3. Tocco Premium: Ombra più morbida e calda appositamente per il Tema Chiaro */
+:root.light-theme body.menu-open .side-menu {
+    box-shadow: -10px 0 40px rgba(74, 65, 60, 0.15) !important;
 }
 
 .menu-btn {
@@ -955,7 +570,9 @@ li:hover::before {
 
 .hamburger-line {
     height: 2px; background: var(--text-main);
+    /* Ottimizziamo anche le linee per non faticare sui sub-pixel */
     transition: transform 0.4s ease, opacity 0.4s ease, background-color 0.3s ease, width 0.3s ease;
+    will-change: transform, opacity;
 }
 
 .hamburger-line:nth-child(1) { width: 35px; }
@@ -968,12 +585,19 @@ li:hover::before {
     position: fixed;
     top: 0; right: 0; width: 350px; height: 100vh;
     background: var(--bg-color); border-left: 1px solid #1f1f1f; 
-    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.9); 
+    
+    /* SHADOW BLEEDING FIX: Ombra disattivata di base */
+    box-shadow: none !important; 
+    
     z-index: 90; padding: 8rem 3rem; 
-    transform: translateX(100%); 
-    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    
+    /* FIX 144Hz: GPU Acceleration */
+    transform: translate3d(100%, 0, 0); 
+    will-change: transform;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s ease;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    perspective: 1000px;
 }
 
 .side-menu-links { 
@@ -989,14 +613,13 @@ li:hover::before {
 
 /* --- MOTORE LINK MENU A SCOMPARSA --- */
 .side-menu-links a {
-    position: relative; /* CRITICO: Serve per ancorare la linea finta sotto il testo */
+    position: relative; 
     font-size: 1.2rem; 
     font-weight: 500; 
     letter-spacing: 0.05em; 
     text-decoration: none;
     display: inline-block;
     
-    /* Il gradiente del testo (Effetto riempimento) */
     background-image: linear-gradient(to top, var(--accent-color) 50%, var(--text-main) 50%);
     background-size: 100% 200%; 
     background-position: top; 
@@ -1005,33 +628,31 @@ li:hover::before {
     -webkit-text-fill-color: transparent; 
     color: transparent;
     
-    /* Uccidiamo il bordo nativo difettoso del browser */
     border-bottom: none !important; 
     
-    /* La transizione completa: colore, scorrimento e la nostra famosa opacità */
+    /* Aggiunto will-change per l'hover super fluido */
+    will-change: transform, background-position;
     transition: background-position 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease-in-out;
 }
 
-/* Creiamo la linea dal nulla (Il nostro finto bordo) */
 .side-menu-links a::after {
     content: "";
     position: absolute;
     left: 0;
-    bottom: -2px; /* Distanza dal testo */
+    bottom: -2px; 
     width: 100%;
-    height: 1px; /* Spessore linea */
-    background-color: #333333; /* Grigio scuro di base */
+    height: 1px; 
+    background-color: #333333; 
     transition: background-color 0.3s ease;
 }
 
-/* Hover e Stato Attivo: Il testo si sposta e si colora */
+/* Hover 3D Accelerato */
 .side-menu-links a:hover, 
 .side-menu-links a.active {
     background-position: bottom; 
-    transform: translateX(8px);  
+    transform: translate3d(8px, 0, 0);  
 }
 
-/* Hover e Stato Attivo: La linea diventa turchese */
 .side-menu-links a:hover::after,
 .side-menu-links a.active::after {
     background-color: var(--accent-color);
@@ -1060,58 +681,60 @@ li:hover::before {
     text-decoration: none; border-bottom: none !important; 
     transition: color 0.15s ease, transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
     opacity: 0;
+    will-change: transform, opacity;
 }
 
 /* =========================================
    SIDE MENU CASCADE ANIMATION
    ========================================= */
 
-/* 1. Stato di base (Menu Chiuso): Elementi invisibili e spostati in alto di 20px */
 .side-menu-links li {
     opacity: 0;
-    transform: translateY(-20px);
-    /* Transizione veloce quando si chiude il menu */
+    transform: translate3d(0, -20px, 0);
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* 2. Stato Attivo (Menu Aperto): Tornano visibili e in posizione zero */
-/* Quando il JS mette 'menu-open' sul body, gli elementi <li> appaiono */
 body.menu-open .side-menu-links li {
     opacity: 1;
-    transform: translateY(0);
-    /* Transizione più morbida (cubic-bezier) quando entrano */
+    transform: translate3d(0, 0, 0);
     transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* 3. Il "Delay" a cascata: Ogni figlio parte con una frazione di secondo di ritardo */
 body.menu-open .side-menu-links li:nth-child(1) { transition-delay: 0.10s; }
 body.menu-open .side-menu-links li:nth-child(2) { transition-delay: 0.15s; }
 body.menu-open .side-menu-links li:nth-child(3) { transition-delay: 0.20s; }
 body.menu-open .side-menu-links li:nth-child(4) { transition-delay: 0.25s; }
 body.menu-open .side-menu-links li:nth-child(5) { transition-delay: 0.30s; }
-body.menu-open .side-menu-links li:nth-child(6) { transition-delay: 0.35s; } /* Nel caso aggiungessi un sesto link */
+body.menu-open .side-menu-links li:nth-child(6) { transition-delay: 0.35s; } 
 
+/* Glitch 3D Accelerato */
 @keyframes terminalGlitchBoot {
-    0%   { opacity: 0; transform: translateX(-5px); }
-    15%  { opacity: 1; transform: translateX(2px); }
-    30%  { opacity: 0; transform: translateX(-2px); }
-    45%  { opacity: 1; transform: translateX(0); }
+    0%   { opacity: 0; transform: translate3d(-5px, 0, 0); }
+    15%  { opacity: 1; transform: translate3d(2px, 0, 0); }
+    30%  { opacity: 0; transform: translate3d(-2px, 0, 0); }
+    45%  { opacity: 1; transform: translate3d(0, 0, 0); }
     60%  { opacity: 0.4; }
     80%  { opacity: 1; }
-    100% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 .social-term-link::after { display: none !important; }
 .social-term-link span { color: #333333; margin-right: 0.4rem; transition: color 0.15s ease; }
-.social-term-link:hover { color: var(--text-main); transform: translateX(4px); }
+.social-term-link:hover { color: var(--text-main); transform: translate3d(4px, 0, 0); }
 .social-term-link:hover span { color: var(--accent-color); }
 
-/* --- LOGICA STATO APERTO --- */
-body.menu-open .site-wrapper { transform: translateX(-350px); }
-body.menu-open .side-menu { transform: translateX(0); }
-body.menu-open .hamburger-line:nth-child(1) { transform: translateY(10px) rotate(45deg); background: var(--text-main); width: 35px; }
+/* --- LOGICA STATO APERTO (Hardware Sync) --- */
+body.menu-open .site-wrapper { transform: translate3d(-350px, 0, 0); }
+body.menu-open .side-menu { 
+    transform: translate3d(0, 0, 0); 
+    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.9) !important; /* L'ombra si accende solo qui */
+}
+
+/* Animazione Hamburger in 3D */
+body.menu-open .hamburger-line:nth-child(1) { transform: translate3d(0, 10px, 0) rotate(45deg); background: var(--text-main); width: 35px; }
 body.menu-open .hamburger-line:nth-child(2) { opacity: 0; }
-body.menu-open .hamburger-line:nth-child(3) { transform: translateY(-10px) rotate(-45deg); background: var(--text-main); width: 35px; }
+body.menu-open .hamburger-line:nth-child(3) { transform: translate3d(0, -10px, 0) rotate(-45deg); background: var(--text-main); width: 35px; }
+
 body.menu-open .menu-btn:hover .hamburger-line:nth-child(1),
 body.menu-open .menu-btn:hover .hamburger-line:nth-child(3) { background: var(--accent-color); }
 body.menu-open .social-term-link { animation: terminalGlitchBoot 0.35s forwards; }
@@ -1119,13 +742,10 @@ body.menu-open .social-term-link:nth-child(1) { animation-delay: 0.45s; }
 body.menu-open .social-term-link:nth-child(2) { animation-delay: 0.55s; }
 body.menu-open .social-term-link:nth-child(3) { animation-delay: 0.65s; }
 
-/* --- GHOST BRANDING MENU OVERRIDE --- */
-/* Selettore combinato: Applica lo spostamento SOLO se il menu è aperto E se sei scrollato verso il basso */
+/* --- GHOST BRANDING MENU OVERRIDE (3D Sync) --- */
 body.menu-open.is-scrolled .ghost-brand {
-    /* Si muove di 350px a sinistra in totale armonia col .site-wrapper */
-    transform: translateX(-350px) scale(1); 
-    
-    /* Stessa fisica del menu, niente glitch */
+    transform: translate3d(-350px, 0, 0) scale(1); 
+    will-change: transform;
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -1820,6 +1440,12 @@ html:has(body.modal-open) {
     background: linear-gradient(to right, transparent, #c4baa6, transparent);
 }
 
+/* L'hover per i titoli e la freccia nel tema chiaro */
+:root.light-theme h3 .section-link:hover,
+:root.light-theme h3 .section-link:hover::after {
+    color: var(--accent-color) !important;
+}
+
 :root.light-theme a::after,
 :root.light-theme .side-menu-links a::after {
     background-color: #c4baa6;
@@ -1841,24 +1467,6 @@ html:has(body.modal-open) {
 :root.light-theme li::before {
     color: var(--accent-color);
     filter: drop-shadow(0 0 1px rgba(163, 78, 38, 0.4));
-}
-
-/* =========================================
-   THEME CASCADE TRANSITION
-   ========================================= */
-::view-transition-old(root) {
-    animation: none;
-    z-index: 1;
-}
-
-::view-transition-new(root) {
-    z-index: 2;
-    animation: cascade-down 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
-@keyframes cascade-down {
-    0% { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); }
-    100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
 }
 
 /* =========================================
@@ -1941,4 +1549,26 @@ html:has(body.modal-open) {
     background-color: #d8d0c1 !important;
     border-bottom: 1px solid #c4baa6 !important;
     color: #4a413c !important;
+}
+
+/* --- FIX: Colori Hover e Active per i file IDE nel Tema Chiaro --- */
+
+/* 1. L'Hover: Un leggerissimo alone marrone/grigio al passaggio del mouse */
+:root.light-theme .ide-sidebar .ide-file:hover {
+    background-color: rgba(74, 65, 60, 0.08) !important;
+    color: #2b2522 !important;
+}
+
+/* 2. File Attivo: Sfondo panna chiaro in rilievo e testo color Ruggine */
+:root.light-theme .ide-sidebar .ide-file.active {
+    background-color: var(--bg-color) !important; /* Usa il panna chiaro del body */
+    border: 1px solid #c4baa6 !important; /* Bordo delicato */
+    border-right: none !important; /* Apre visivamente la connessione con la pagina a destra */
+}
+
+/* 3. Forza il testo e l'icona del file attivo a prendere il colore d'accento */
+:root.light-theme .ide-sidebar .ide-file.active .file-name,
+:root.light-theme .ide-sidebar .ide-file.active .file-icon {
+    color: var(--accent-color) !important;
+    font-weight: 700;
 }
