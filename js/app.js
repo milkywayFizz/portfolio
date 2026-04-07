@@ -87,7 +87,14 @@ const translations = {
         ide_proj_code_p2: "Why is this code block solid from an engineering standpoint?",
         ide_proj_code_li1: "<strong>Anti-Sticky Bug:</strong> By brute-force reading the hardware state of the mouse (<code>e.buttons === 0</code>), we avoid the annoying glitch where the carousel stays glued to the cursor if the user exits the window while clicking.",
         ide_proj_code_li2: "<strong>Rev Limiter:</strong> The use of <code>Math.max/min</code> acts as a \"disc brake\", preventing overly sudden movements from launching the images at impossible-to-render speeds.",
-        ide_proj_code_li3: "<strong>Zero CPU Bottleneck:</strong> This script limits itself to calculating the math of the <code>currentX</code> variable. The actual movement on the screen is delegated to an isolated <code>requestAnimationFrame</code> that uses <code>translate3d</code>, forcing the Graphics Card (GPU) to do the heavy lifting. No lag, a solid 60 frames per second."
+        ide_proj_code_li3: "<strong>Zero CPU Bottleneck:</strong> This script limits itself to calculating the math of the <code>currentX</code> variable. The actual movement on the screen is delegated to an isolated <code>requestAnimationFrame</code> that uses <code>translate3d</code>, forcing the Graphics Card (GPU) to do the heavy lifting. No lag, a solid 60 frames per second.",
+
+        ide_proj_rend_title: "Advanced Rendering (View Transitions)",
+        ide_proj_rend_p1: "A premium UI needs seamless state transitions, but typical Light/Dark mode toggles are harsh and jarring. Instead of using bloated animation libraries, I implemented the browser-native View Transitions API.",
+        ide_proj_rend_p2: "To achieve 144Hz fluidity during the theme \"cascade\" effect, I bypassed standard vector polygons and engineered a pure hardware-accelerated clipping path:",
+        ide_proj_rend_li1: "<strong>clip-path: inset:</strong> Mathematically lighter than traditional polygons, preventing CPU sub-pixel stuttering during the final frames of the animation.",
+        ide_proj_rend_li2: "<strong>will-change: clip-path:</strong> Pre-allocates VRAM on the graphics card before the user even completes the click, ensuring zero input lag.",
+
     },
     it: {
         nav_home: "Home",
@@ -169,7 +176,13 @@ const translations = {
         ide_proj_code_p2: "Perché questo blocco di codice è solido dal punto di vista ingegneristico?",
         ide_proj_code_li1: "<strong>Anti-Sticky Bug:</strong> Leggendo brutalmente lo stato hardware del mouse (<code>e.buttons === 0</code>), evitiamo il glitch in cui il carosello rimane incollato al cursore se l'utente esce dalla finestra mentre clicca.",
         ide_proj_code_li2: "<strong>Limitatore di Giri:</strong> L'uso di <code>Math.max/min</code> funge da 'freno a disco', impedendo a movimenti troppo bruschi di lanciare le immagini a velocità impossibili da renderizzare.",
-        ide_proj_code_li3: "<strong>Zero CPU Bottleneck:</strong> Questo script si limita a calcolare la matematica della variabile <code>currentX</code>. Il movimento effettivo su schermo è delegato a un <code>requestAnimationFrame</code> isolato che usa <code>translate3d</code>, forzando la GPU a fare il grosso del lavoro. Nessun lag, 60 frame al secondo fissi."
+        ide_proj_code_li3: "<strong>Zero CPU Bottleneck:</strong> Questo script si limita a calcolare la matematica della variabile <code>currentX</code>. Il movimento effettivo su schermo è delegato a un <code>requestAnimationFrame</code> isolato che usa <code>translate3d</code>, forzando la GPU a fare il grosso del lavoro. Nessun lag, 60 frame al secondo fissi.",
+
+        ide_proj_rend_title: "Rendering Avanzato (View Transitions)",
+        ide_proj_rend_p1: "Una UI premium richiede transizioni di stato fluide, ma i classici interruttori Light/Dark mode sono bruschi. Invece di usare pesanti librerie di animazione, ho implementato nativamente la View Transitions API del browser.",
+        ide_proj_rend_p2: "Per ottenere una fluidità a 144Hz durante l'effetto \"a cascata\", ho scartato i classici poligoni vettoriali e ingegnerizzato un clipping accelerato puramente via hardware:",
+        ide_proj_rend_li1: "<strong>clip-path: inset:</strong> Matematicamente più leggero dei poligoni tradizionali, previene i microscatti della CPU nel calcolo dei sub-pixel finali dell'animazione.",
+        ide_proj_rend_li2: "<strong>will-change: clip-path:</strong> Pre-alloca memoria VRAM sulla scheda video prima ancora che l'utente rilasci il click, garantendo zero input lag."
     }
 };
 

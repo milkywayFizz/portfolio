@@ -315,6 +315,12 @@
                                             <span class="file-name">04_snippets.sh</span>
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="#proj-rendering" class="ide-file">
+                                            <span class="file-icon" style="color: #42a5f5;">#</span>
+                                            <span class="file-name">05_rendering.css</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -416,6 +422,38 @@
                             <li data-i18n="ide_proj_code_li1"><strong>Anti-Sticky Bug:</strong> By brute-force reading the hardware state of the mouse (<code>e.buttons === 0</code>), we avoid the annoying glitch where the carousel stays glued to the cursor if the user exits the window while clicking.</li>
                             <li data-i18n="ide_proj_code_li2"><strong>Rev Limiter:</strong> The use of <code>Math.max/min</code> acts as a "disc brake", preventing overly sudden movements from launching the images at impossible-to-render speeds.</li>
                             <li data-i18n="ide_proj_code_li3"><strong>Zero CPU Bottleneck:</strong> This script limits itself to calculating the math of the <code>currentX</code> variable. The actual movement on the screen is delegated to an isolated <code>requestAnimationFrame</code> that uses <code>translate3d</code>, forcing the Graphics Card (GPU) to do the heavy lifting. No lag, a solid 60 frames per second.</li>
+                        </ul>
+                    </section>
+
+                    <hr class="ide-divider">
+
+                    <section id="proj-rendering" class="ide-section">
+                        <h4 class="modal-animate-text" data-i18n="ide_proj_rend_title">Advanced Rendering (View Transitions)</h4>
+                        <p data-i18n="ide_proj_rend_p1">A premium UI needs seamless state transitions, but typical Light/Dark mode toggles are harsh and jarring. Instead of using bloated animation libraries, I implemented the browser-native View Transitions API.</p>
+                        
+                        <div class="code-block-wrapper">
+                            <div class="code-block-header">
+                                <span class="code-lang">css</span>
+                                <button class="code-copy-btn">Copy code</button>
+                            </div>
+<pre><code><span class="syntax-func">::view-transition-new</span>(root) {
+    <span class="syntax-keyword">z-index</span>: <span class="syntax-number">2</span>;
+    <span class="syntax-keyword">animation</span>: cascade-down <span class="syntax-number">0.8s</span> <span class="syntax-func">cubic-bezier</span>(0.16, 1, 0.3, 1) forwards;
+    
+    <span class="syntax-comment">/* Hardware pre-allocation */</span>
+    <span class="syntax-keyword">will-change</span>: clip-path; 
+}
+
+<span class="syntax-keyword">@keyframes</span> cascade-down {
+    <span class="syntax-number">0%</span> { <span class="syntax-keyword">clip-path</span>: <span class="syntax-func">inset</span>(0 0 100% 0); }
+    <span class="syntax-number">100%</span> { <span class="syntax-keyword">clip-path</span>: <span class="syntax-func">inset</span>(0 0 0 0); }
+}</code></pre>
+                        </div>
+
+                        <p data-i18n="ide_proj_rend_p2">To achieve 144Hz fluidity during the theme "cascade" effect, I bypassed standard vector polygons and engineered a pure hardware-accelerated clipping path:</p>
+                        <ul>
+                            <li data-i18n="ide_proj_rend_li1"><strong>clip-path: inset:</strong> Mathematically lighter than traditional polygons, preventing CPU sub-pixel stuttering during the final frames of the animation.</li>
+                            <li data-i18n="ide_proj_rend_li2"><strong>will-change: clip-path:</strong> Pre-allocates VRAM on the graphics card before the user even completes the click, ensuring zero input lag.</li>
                         </ul>
                     </section>
 
