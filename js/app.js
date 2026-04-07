@@ -3,6 +3,16 @@
    Architettura: Modulare / Single-Entry Point / GPU Accelerated
    ========================================================================== */
 
+   /* =========================================
+   FORZA LO SCROLL ALL'INIZIO (Scroll Restoration)
+   ========================================= */
+// Diciamo al browser di non ricordare la posizione precedente
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+// E lo riportiamo fisicamente a coordinate X:0, Y:0
+window.scrollTo(0, 0);
+
 /* =========================================
    I. DATI E CONFIGURAZIONI (i18n)
    ========================================= */
@@ -138,10 +148,10 @@ const translations = {
         footer_copy: "© 2026 Flavius. Sviluppato localmente con un focus rigoroso sulla privacy.",
         
         modal_about_title: "Chi Sono",
-        modal_about_p1: "Sono uno studente al secondo anno di Informatica all'Università dell'Aquila (UnivAQ), ma la mia vera educazione è iniziata molto prima, spinta da una necessità pratica: odiavo gli attriti. Cercavo l'esperienza \"user-friendly\" definitiva.",
+        modal_about_p1: "Sono uno studente al secondo anno di Informatica all'Università dell'Aquila (UnivAQ), ma la mia vera formazione è iniziata molto prima, spinta da una necessità pratica: odiavo gli attriti. Cercavo l'esperienza \"user-friendly\" definitiva.",
         modal_about_p2: "Tutto è partito intorno ai 14 anni. La mia ossessione non era scrivere codice, ma trovare le falle nei sistemi. Smanettavo con adblocker e versioni patchate delle app di uso quotidiano. Ricordo quando creavo catene di account principali per estendere all'infinito i 14 giorni gratuiti di PS Plus, permettendo ai miei amici di giocare a costo zero. Quello che allora sembrava solo un trucco per risparmiare, era in realtà il mio primo approccio alla manipolazione dei sistemi.",
         modal_about_p3: "Oggi, quell'istinto di piegare le regole dell'hardware a mio vantaggio si è evoluto in una rigorosa ricerca della <strong>Sovranità Digitale</strong>. Il mio terreno di gioco sono i Sistemi Operativi: uso AtlasOS per ridurre all'osso l'attacco di superficie su Windows e non ho il minimo timore di sporcarmi le mani. Sono persino riuscito a configurare Arch Linux con Hyprland su una tremenda accoppiata Intel+Nvidia. Poi ho rotto tutto di nuovo, ovviamente. Ma è questa la mia filosofia: non ho paura di distruggere un sistema, perché so che esplorando i cocci imparerò a ricostruirlo in modo più solido e sicuro.",
-        modal_about_p4: "Questo approccio si riflette in tutto ciò che amo. Oltre a essere un appassionato di motori JDM e di videogiochi (da <em>Persona 5</em> a <em>Catherine</em>), vivo di musica Fusion giapponese come Masayoshi Takanaka o i Casiopea.",
+        modal_about_p4: "Questo approccio si riflette in tutto ciò che amo. Oltre a essere un appassionato di motori JDM e di videogiochi, vivo di musica Fusion giapponese come Masayoshi Takanaka o i Casiopea.",
         
         modal_focus_title: "Focus Principale & Obiettivi",
         modal_focus_p1: "Non voglio limitarmi a scrivere codice o configurare server; voglio capire esattamente come si rompono. Il mio attuale percorso tecnico è guidato da una profonda curiosità per il reverse engineering: prendere progetti esistenti, pesanti o vulnerabili, e 'disossarli' fino alle loro componenti fondamentali.",
