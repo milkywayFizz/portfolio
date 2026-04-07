@@ -11,7 +11,17 @@
      <div id="ghost-brand" class="ghost-brand">
             <img src="img/avatar.png" alt="Flavius Profile" class="ghost-avatar" loading="lazy">
             <span class="ghost-name">Flavius Chiriac</span>
+    </div>
+
+    <div class="lang-switcher">
+        <div class="lang-toggle" id="lang-toggle">
+            <span id="current-lang">ENG</span> <span class="lang-chevron">▼</span>
         </div>
+        <ul class="lang-dropdown">
+            <li><a href="#" class="lang-btn" data-lang="it">ITA</a></li>
+            <li><a href="#" class="lang-btn" data-lang="en">ENG</a></li>
+        </ul>
+    </div>
 
     <button id="menu-btn" class="menu-btn" aria-label="Toggle Navigation">
         <span class="hamburger-line"></span>
@@ -21,11 +31,11 @@
 
     <nav id="side-menu" class="side-menu">
         <ul class="side-menu-links">
-            <li><a href="#header" class="active">Home</a></li>
-            <li><a href="#about" data-modal="modal-about">About Me</a></li>
-            <li><a href="#focus" data-modal="modal-focus">Core Focus</a></li>
-            <li><a href="#skills" data-modal="modal-skills">Skills</a></li>
-            <li><a href="#projects" class="anchor-link">Projects</a></li> 
+            <li><a href="#header" class="active" data-i18n="nav_home">Home</a></li>
+            <li><a href="#about" data-modal="modal-about" data-i18n="nav_about">About Me</a></li>
+            <li><a href="#focus" data-modal="modal-focus" data-i18n="nav_focus">Core Focus</a></li>
+            <li><a href="#skills" data-modal="modal-skills" data-i18n="nav_skills">Skills</a></li>
+            <li><a href="#projects" class="anchor-link" data-i18n="nav_projects">Projects</a></li> 
         </ul>
 
         <div class="menu-social-terminal">
@@ -43,15 +53,10 @@
 
     <div class="site-wrapper">
 
-        <div id="ghost-brand" class="ghost-brand">
-            <img src="img/avatar.png" alt="Flavius Profile" class="ghost-avatar" loading="lazy">
-            <span class="ghost-name">Flavius Chiriac</span>
-        </div>
-
         <header>
             <img src="img/avatar.png" alt="Flavius Profile Picture" width="150" loading="lazy">
             <h1>Flavius Chiriac</h1>
-            <h2>Computer Science Student @ UnivAQ | Privacy Advocate & System Hardening Enthusiast</h2>
+            <h2 data-i18n="header_subtitle">Computer Science Student @ UnivAQ | Privacy Advocate & System Hardening Enthusiast</h2>
         </header>
 
         <div class="logo-carousel">
@@ -89,52 +94,53 @@
 
         <main>
             <section id="about" class="reveal">
-                <h3><a href="#about" class="section-link" data-modal="modal-about">About Me</a></h3>
-                <p>I am a second-year Computer Science student at the <a href="https://www.univaq.it" target="_blank" rel="noopener noreferrer">University of L'Aquila (UnivAQ)</a>.</p>
-                <p>My journey in Information Technology began with a fundamental goal: achieving <strong>Digital Sovereignty</strong>. What started as a practical effort to optimize personal devices and mitigate corporate telemetry has evolved into a rigorous academic and professional pursuit. I am deeply interested in system architecture, data privacy, and building secure infrastructures from the ground up.</p>
+                <h3><a href="#about" class="section-link" data-modal="modal-about" data-i18n="about_title">About Me</a></h3>
+                <p data-i18n="about_p1">I am a second-year Computer Science student at the <a href="https://www.univaq.it" target="_blank" rel="noopener noreferrer">University of L'Aquila (UnivAQ)</a>.</p>
+                <p data-i18n="about_p2">My journey in Information Technology began with a fundamental goal: achieving <strong>Digital Sovereignty</strong>. What started as a practical effort to optimize personal devices and mitigate corporate telemetry has evolved into a rigorous academic and professional pursuit. I am deeply interested in system architecture, data privacy, and building secure infrastructures from the ground up.</p>
             </section>
 
             <hr>
 
             <section id="focus" class="reveal">
-                <h3><a href="#focus" class="section-link" data-modal="modal-focus">Core Focus & Career Goals</a></h3>
-                <p>My objective is to specialize in areas where system performance and proactive security intersect:</p>
+                <h3><a href="#focus" class="section-link" data-modal="modal-focus" data-i18n="focus_title">Core Focus & Career Goals</a></h3>
+                <p data-i18n="focus_p1">My current research sits at the intersection of system deconstruction and secure architecture. Before building impenetrable systems, I believe in tearing existing ones apart to understand their fundamental flaws:</p>
                 <ul>
-                    <li><strong>Blue Teaming & Network Defense:</strong> Traffic analysis and infrastructure monitoring.</li>
-                    <li><strong>Device Optimization & Hardening:</strong> Attack surface reduction and bare-metal OS tuning.</li>
-                    <li><strong>DevSecOps & Cloud Security:</strong> Designing sovereign and automated cloud environments.</li>
+                    <li data-i18n="focus_li1"><strong>System Deconstruction & Hardening:</strong> Stripping OS and networks down to the bone to reduce attack surfaces.</li>
+                    <li data-i18n="focus_li2"><strong>Blue Teaming Fundamentals:</strong> Analyzing how environments are compromised to better defend them.</li>
+                    <li data-i18n="focus_li3"><strong>Infrastructure Architecture:</strong> Learning to design environments that are secure and private by design.</li>
                 </ul>
             </section>
 
             <hr>
 
             <section id="skills" class="reveal">
-                <h3><a href="#skills" class="section-link" data-modal="modal-skills">Technical Competencies</a></h3>
-                <p class="section-context">
+                <h3><a href="#skills" class="section-link" data-modal="modal-skills" data-i18n="skills_title">Technical Competencies</a></h3>
+                <p class="section-context" data-i18n="skills_context">
                     Driven by a need for <strong>digital autonomy</strong>, I have built this technical stack through rigorous self-directed study and hands-on experimentation. I view these tools not as static endpoints, but as a foundation for a constantly evolving horizon in systems security and architecture.
                 </p>
                 
                 <ul>
-                    <li><strong>Operating Systems:</strong> Linux (Arch), Windows (AtlasOS), Android System Hardening</li>
-                    <li><strong>Networking:</strong> TCP/IP, Wireguard, DNS Filtering</li>
-                    <li><strong>Tools & Workflow:</strong> Git, Docker, Markdown, Obsidian</li>
+                    <li data-i18n="skills_li1"><strong>Bare-Metal & OS Hardening:</strong> Arch Linux, Windows (AtlasOS), Android custom environments. Focus on telemetry stripping and attack surface reduction.</li>
+                    <li data-i18n="skills_li2"><strong>Network Defense & Routing:</strong> TCP/IP, Wireguard VPNs, Pi-hole. Designing zero-trust local environments and DNS-level traffic filtering.</li>
+                    <li data-i18n="skills_li3"><strong>Infrastructure & DevSecOps:</strong> Docker containerization for strict service isolation, Git version control, and Markdown/Obsidian for technical documentation.</li>
+                    <li data-i18n="skills_li4"><strong>Software & Web Engineering:</strong> Vanilla JS, CSS3, Python. Building lightweight, "Zero-Dependency" and hardware-accelerated architectures.</li>
                 </ul>
             </section>
 
             <hr>
 
             <section id="projects" class="reveal">
-                <h3>Projects & Portfolio</h3>
-                <p>This space will be regularly updated with technical write-ups and code repositories as my projects reach completion. I am currently focusing on:</p>
+                <h3 data-i18n="projects_title">Projects & Portfolio</h3>
+                <p data-i18n="projects_desc">This space will be regularly updated with technical write-ups and code repositories as my projects reach completion. I am currently focusing on:</p>
                 
                 <div class="carousel-container">
                     <div class="carousel-track">
                         
                         <div class="carousel-slide current-slide">
                             <div class="slide-content">
-                                <h4 class="slide-title">Web Portfolio (Static)</h4>
-                                <p class="slide-description">Developing a privacy-respecting static personal website. Built locally, zero external trackers, semantic HTML & Vanilla JS.</p>
-                                <a href="#projects" class="slide-link" data-modal="modal-project-web">View Architecture & More >_</a>
+                                <h4 class="slide-title" data-i18n="proj1_title">Web Portfolio (Static)</h4>
+                                <p class="slide-description" data-i18n="proj1_desc">Developing a privacy-respecting static personal website. Built locally, zero external trackers, semantic HTML & Vanilla JS.</p>
+                                <a href="#projects" class="slide-link" data-modal="modal-project-web" data-i18n="proj1_link">View Architecture & More >_</a>
                             </div>
                             <div class="slide-image-container">
                                 <img src="img/Javascript_Logo.png" alt="Screenshot mockup of the Web Portfolio project" loading="lazy" width="500" height="300">
@@ -143,9 +149,9 @@
 
                         <div class="carousel-slide">
                             <div class="slide-content">
-                                <h4 class="slide-title">Home Server Infrastructure</h4>
-                                <p class="slide-description">Designing a bare-metal local server (Raspberry Pi). Focused on network-wide DNS filtering (Pi-hole) and private VPN routing.</p>
-                                <a href="#" class="slide-link">Work In Progress >_</a>
+                                <h4 class="slide-title" data-i18n="proj2_title">Home Server Infrastructure</h4>
+                                <p class="slide-description" data-i18n="proj2_desc">Designing a bare-metal local server (Raspberry Pi). Focused on network-wide DNS filtering (Pi-hole) and private VPN routing.</p>
+                                <a href="#" class="slide-link" data-i18n="proj_wip">Work In Progress >_</a>
                             </div>
                             <div class="slide-image-container">
                                 <img src="img/Raspberry-Pi-Logo.png" alt="Diagram mockup of the Home Server network setup" loading="lazy" width="500" height="300">
@@ -154,9 +160,9 @@
                         
                         <div class="carousel-slide">
                             <div class="slide-content">
-                                <h4 class="slide-title">Docker Containerization</h4>
-                                <p class="slide-description">Microservices architecture blueprint. Isolating local services to maintain the host OS clean, secure, and fully portable.</p>
-                                <a href="#" class="slide-link">Work In Progress >_</a>
+                                <h4 class="slide-title" data-i18n="proj3_title">Docker Containerization</h4>
+                                <p class="slide-description" data-i18n="proj3_desc">Microservices architecture blueprint. Isolating local services to maintain the host OS clean, secure, and fully portable.</p>
+                                <a href="#" class="slide-link" data-i18n="proj_wip">Work In Progress >_</a>
                             </div>
                             <div class="slide-image-container">
                                 <img src="img/docker_logo.png" loading="lazy" width="500" height="300">
@@ -176,30 +182,32 @@
 
         <footer>
             <hr>
-            <h3>Contact & Links</h3>
+            <h3 data-i18n="footer_title">Contact & Links</h3>
             <ul>
-                <li><a href="mailto:chiriacflavius20@gmail.com">Email Me</a></li>
-                <li><a href="https://github.com/milkywayFizz" target="_blank" rel="noopener noreferrer">GitHub Profile</a></li>
+                <li><a href="mailto:chiriacflavius20@gmail.com" data-i18n="footer_email">Email Me</a></li>
+                <li><a href="https://github.com/milkywayFizz" target="_blank" rel="noopener noreferrer" data-i18n="footer_github">GitHub Profile</a></li>
             </ul>
-            <p><small>© 2026 Flavius. Built locally with a strict focus on privacy.</small></p>
+            <p><small data-i18n="footer_copy">© 2026 Flavius. Built locally with a strict focus on privacy.</small></p>
         </footer>
 
-    </div> <script src="js/app.js" defer></script>
+    </div> 
+
+    <script src="js/app.js" defer></script>
 
     <div id="sys-modal-overlay" class="modal-overlay">
 
         <div id="modal-about" class="sys-modal">
             <button class="modal-close-btn" aria-label="Terminate Module">✕</button>
             <div class="modal-content">
-                <h3><span class="modal-animate-text">About Me</span></h3>
+                <h3><span class="modal-animate-text" data-i18n="modal_about_title">About Me</span></h3>
                 <div class="modal-content-grid">
                     <div class="modal-text-column">
-    <p>Sono uno studente al secondo anno di Informatica all'Università dell'Aquila (UnivAQ), ma la mia vera educazione è iniziata molto prima. Cresciuto con l'internet, ero spinto da una necessità pratica: odiavo gli attriti. Cercavo l'esperienza "user-friendly" definitiva.</p>
-    <hr class="ide-divider">
-    <p>Tutto è partito intorno ai 14 anni. La mia ossessione non era scrivere codice, ma trovare falle nei sistemi. Smanettavo con adblocker e versioni patchate delle app di uso quotidiano. Ricordo quando creavo catene di account per estendere all'infinito i 14 giorni gratuiti di PS Plus, permettendo ai miei amici di giocare online a costo zero. Quello che allora sembrava solo un trucco per risparmiare, era in realtà il mio primo approccio alla manipolazione dei sistemi.</p>
-    <p>Oggi, quell'istinto di piegare le regole a mio vantaggio si è evoluto in una rigorosa ricerca della <strong>Sovranità Digitale</strong>. Il mio terreno di gioco sono i Sistemi Operativi: uso AtlasOS per ridurre all'osso la superficie d'attacco su Windows e avere un'ottima esperienza di gioco, <em>socio</em>. Sono persino riuscito a configurare Arch Linux con Hyprland su una tremenda accoppiata Intel+Nvidia (poi ho rotto tutto di nuovo, ovviamente). Ma è questa la mia filosofia: non ho paura di distruggere un sistema, perché so che esplorando i cocci imparerò a ricostruirlo in modo più solido e sicuro.</p>
-    <hr class="ide-divider">
-    <p>Questo approccio si riflette in tutto ciò che amo. Oltre a essere un appassionato di motori JDM e di videogiochi, vivo di musica Fusion giapponese come Masayoshi Takanaka e i Casiopea.</p>
+<p data-i18n="modal_about_p1">I am a second-year Computer Science student at the University of L'Aquila (UnivAQ), but my real education began much earlier. Growing up with the internet, I was driven by a practical need: I hated friction. I was looking for the ultimate "user-friendly" experience.</p>
+<hr class="ide-divider">
+<p data-i18n="modal_about_p2">It all started around the age of 14. My obsession wasn't writing code, but finding flaws in systems. I tinkered with adblockers and patched versions of everyday apps. I remember when I used to create chains of accounts to endlessly extend the 14-day PS Plus free trial, allowing my friends to play online for free. What seemed like just a trick to save money back then was actually my first approach to system manipulation.</p>
+<p data-i18n="modal_about_p3">Today, that instinct to bend the rules to my advantage has evolved into a rigorous pursuit of <strong>Digital Sovereignty</strong>. My playground is Operating Systems: I use AtlasOS to strip down the attack surface on Windows to the bare minimum and get a great gaming experience. I even managed to configure Arch Linux with Hyprland on a dreaded Intel+Nvidia combo (then I broke everything again, obviously). But that's my philosophy: I'm not afraid to destroy a system, because I know that by exploring the wreckage I'll learn how to rebuild it in a more solid and secure way.</p>
+<hr class="ide-divider">
+<p data-i18n="modal_about_p4">This approach is reflected in everything I love. Besides being a fan of JDM cars and video games, I live and breathe Japanese Fusion music like Masayoshi Takanaka and Casiopea.</p>
 </div>
                     <div class="modal-image-column">
                         <img src="img/fizzplaceholder.png" alt="Hardware o Codice" class="modal-side-img" loading="lazy">
@@ -211,29 +219,33 @@
         <div id="modal-focus" class="sys-modal">
             <button class="modal-close-btn" aria-label="Terminate Module">✕</button>
             <div class="modal-content">
-                <h3><span class="modal-animate-text">Core Focus & Career Goals</span></h3>
+                <h3><span class="modal-animate-text" data-i18n="modal_focus_title">Core Focus & Career Goals</span></h3>
+                
                 <div class="modal-content-grid">
+                    
                     <div class="modal-text-column">
-                        <p>My primary objective is to specialize in the exact intersection between extreme system performance and proactive cyber defense.</p>
-                        <p>I am currently dedicating my academic and personal research to Blue Teaming and Network Defense. I analyze traffic patterns, monitor infrastructure anomalies, and build resilient systems that anticipate attack vectors rather than just reacting to them.</p>
-                        <p>Furthermore, my focus extends to Device Optimization and DevSecOps. I believe in attack surface reduction at the bare-metal level and in designing sovereign, automated cloud environments where privacy is integrated by design, not as an afterthought.</p>
+                        <p data-i18n="modal_focus_p1">I don't just want to write code or deploy servers; I want to understand exactly how they break. My current technical journey is driven by a profound curiosity for reverse engineering: taking existing, heavy, or vulnerable projects and 'dissecting' them to their core components.</p>
+                        <p data-i18n="modal_focus_p2">I am in a phase of deep exploration. I spend my time stripping away telemetry, cutting out bloatware, and hardening systems to see how much I can secure a machine before it stops functioning. It’s an exercise in extreme minimalization and digital sovereignty.</p>
+                        <p data-i18n="modal_focus_p3">As for my long-term career, I am equally fascinated by two paths: the analytical thrill of Blue Teaming (hunting active threats and analyzing traffic) and the architectural elegance of DevSecOps (building automated, secure-by-design cloud infrastructures). Regardless of the exact title I will hold, my ultimate goal remains the same: mastering the bare-metal logic of systems to build environments that answer to no one but their owner.</p>
                     </div>
                     <div class="modal-image-column">
                         <img src="img/fizzplaceholder.png" alt="Network and Infrastructure Security" class="modal-side-img" loading="lazy">
                     </div>
-                </div> 
+                    </div> 
             </div>
         </div>
 
         <div id="modal-skills" class="sys-modal">
             <button class="modal-close-btn" aria-label="Terminate Module">✕</button>
             <div class="modal-content">
-                <h3><span class="modal-animate-text">Technical Competencies</span></h3>
+                <h3><span class="modal-animate-text" data-i18n="modal_skills_title">Technical Competencies</span></h3>
                 <div class="modal-content-grid">
-                    <div class="modal-text-column">
-                        <p>Driven by a need for digital autonomy, I have built this technical stack through rigorous self-directed study and hands-on experimentation. I view these tools not as static endpoints, but as a foundation for a constantly evolving horizon in systems security.</p>
-                        <p>My primary operating environments include Arch Linux for bare-metal control, AtlasOS for Windows attack-surface reduction, and custom Android system hardening.</p>
-                        <p>On the networking side, I focus on TCP/IP protocol manipulation, Wireguard VPN tunneling, and network-wide DNS filtering via Pi-hole.</p>
+                   <div class="modal-text-column">
+                        <p data-i18n="modal_skills_p1">My approach to technology is strictly utilitarian and security-first. I don't use tools simply because they are industry standards; I use them because they offer transparency and absolute control over the system state. If a software acts like a black box, it's a liability.</p>
+                        
+                        <p data-i18n="modal_skills_p2">My networking philosophy is based on "Zero Trust" and local sovereignty. I route my traffic through custom Wireguard tunnels and utilize Pi-hole for network-wide DNS sinkholing, blocking trackers and malicious domains before they even reach the end devices. Furthermore, everything I self-host is strictly containerized via Docker to prevent privilege escalation and ensure total isolation.</p>
+                        
+                        <p data-i18n="modal_skills_p3">When it comes to software engineering, I apply the same "Hardening" principles. I prioritize Zero-Dependency architectures. Using Vanilla JS and raw CSS isn't just a stylistic choice; it's a deliberate security measure to avoid importing vulnerable third-party modules and to keep the codebase lightweight and fully auditable.</p>
                     </div>
                     <div class="modal-image-column">
                         <img src="img/fizzplaceholder.png" alt="Docker Containerization" class="modal-side-img" loading="lazy">
@@ -250,7 +262,7 @@
             <div class="ide-container">
                 <aside class="ide-sidebar">
                     <div class="ide-sidebar-top">
-                        <span>EXPLORER</span>
+                        <span data-i18n="ide_explorer">EXPLORER</span>
                         <span class="ide-dots">•••</span>
                     </div>
                     
@@ -308,40 +320,40 @@
                     </div>
                 </aside>
 
-                <main class="ide-content">
+<main class="ide-content">
                     
                     <section id="proj-overview" class="ide-section">
-                        <h3><span class="modal-animate-text">Web Portfolio (Static)</span></h3>
-                        <p>L'obiettivo di questo progetto non era solo creare uno spazio per esporre i miei lavori, ma dimostrare un concetto in cui credo molto: <strong>l'integrità e la sicurezza di un sistema partono dalle basi.</strong></p>
+                        <h3><span class="modal-animate-text" data-i18n="ide_proj_overview_title">Web Portfolio (Static)</span></h3>
+                        <p data-i18n="ide_proj_overview_p1">The goal of this project wasn't just to create a space to showcase my work, but to demonstrate a concept I strongly believe in: <strong>the integrity and security of a system start from the foundation.</strong></p>
     
-                        <p>Oggi siamo abituati a vedere continue violazioni di dati o siti inutilmente pesanti, spesso causati da una certa pigrizia architetturale. Si tende a importare decine di librerie esterne di terze parti senza sapere davvero cosa facciano sotto il cofano. Per questo portfolio ho scelto una strada diversa: una rigorosa filosofia <em>Zero-Dependencies</em>. Niente framework pesanti, solo HTML semantico, Vanilla JS e CSS3 puro.</p>
+                        <p data-i18n="ide_proj_overview_p2">Today we are used to seeing constant data breaches or unnecessarily heavy websites, often caused by a certain architectural laziness. There's a tendency to import dozens of third-party external libraries without really knowing what they do under the hood. For this portfolio, I chose a different path: a strict <em>Zero-Dependencies</em> philosophy. No heavy frameworks, just semantic HTML, Vanilla JS, and pure CSS3.</p>
 
-                        <p>Questo approccio non solo azzera i traccianti e riduce drasticamente la superficie d'attacco, ma risponde a un mio principio personale: le cose devono semplicemente <em>funzionare bene</em> per tutti. Che tu stia navigando da una workstation di fascia alta o da un portatile da 400 euro, questo sito rimarrà fluido, leggero e, soprattutto, rispetterà totalmente la tua privacy.</p>
+                        <p data-i18n="ide_proj_overview_p3">This approach not only eliminates trackers and drastically reduces the attack surface, but it also answers a personal principle of mine: things must simply <em>work well</em> for everyone. Whether you're browsing from a high-end workstation or a 400-euro laptop, this site will remain fluid, lightweight, and above all, will fully respect your privacy.</p>
                     </section>
 
                     <hr class="ide-divider">
 
                     <section id="proj-arch" class="ide-section">
-                        <h4 class="modal-animate-text">Architettura & Workflow</h4>
-                        <p>Nella vita e nei progetti apprezzo una forma mentis ben precisa: minimo sforzo, massimo guadagno. Questo non significa lavorare meno, ma lavorare <em>meglio</em>, ottimizzando le risorse. Per me un prodotto digitale deve semplicemente funzionare, e deve farlo al massimo delle prestazioni a prescindere dall'hardware.</p>
+                        <h4 class="modal-animate-text" data-i18n="ide_proj_arch_title">Architecture & Workflow</h4>
+                        <p data-i18n="ide_proj_arch_p1">In life and in projects, I appreciate a very specific mindset: minimum effort, maximum gain. This doesn't mean working less, but working <em>better</em>, optimizing resources. For me, a digital product must simply work, and it must do so at peak performance regardless of the hardware.</p>
     
-                        <p>Per avere questo livello di controllo totale, ho strutturato lo sviluppo in fasi molto rigorose:</p>
+                        <p data-i18n="ide_proj_arch_p2">To achieve this level of total control, I structured the development into very rigorous phases:</p>
     
                         <ul>
-                          <li><strong>Studio Bare-Metal:</strong> Prima di toccare CSS o script complessi, sono partito dalle basi. Ho riempito appunti studiando il comportamento nativo dell'HTML, la struttura del DOM, le ancore e la gestione degli spazi.</li>
-                          <li><strong>Sviluppo AI-Assisted:</strong> Una volta chiara l'architettura, ho integrato l'Intelligenza Artificiale con una gerarchia netta: io ci mettevo il cervello, l'IA si sporcava le mani. L'ho utilizzata come un vero e proprio "Tactical Executor". Io definivo la direzione ingegneristica, le scelte logiche e i vincoli di sicurezza, delegando a lei la stesura materiale del codice.</li>
+                          <li data-i18n="ide_proj_arch_li1"><strong>Bare-Metal Study:</strong> Before touching CSS or complex scripts, I started from the basics. I filled pages of notes studying the native behavior of HTML, the DOM structure, anchors, and space management.</li>
+                          <li data-i18n="ide_proj_arch_li2"><strong>AI-Assisted Development:</strong> Once the architecture was clear, I integrated Artificial Intelligence with a strict hierarchy: I provided the brains, the AI got its hands dirty. I used it as a true "Tactical Executor". I defined the engineering direction, the logical choices, and the security constraints, delegating the physical writing of the code to it.</li>
                         </ul>
 
-                         <p>Implementare, testare e "sezionare" manualmente il codice generato mi ha permesso di non dover imparare nulla a memoria in modo sterile. Al contrario, mi ha aiutato a interiorizzare il <em>funzionamento</em> intimo del sito. Grazie a questo workflow, oggi conosco ogni millimetro di questo progetto e possiedo il know-how per espanderlo e modificarlo in totale autonomia.</p>
+                         <p data-i18n="ide_proj_arch_p3">Implementing, testing, and manually "dissecting" the generated code allowed me to avoid memorizing anything in a sterile way. On the contrary, it helped me internalize the intimate <em>inner workings</em> of the site. Thanks to this workflow, today I know every millimeter of this project and possess the know-how to expand and modify it with total autonomy.</p>
                     </section>
 
                     <hr class="ide-divider">
                     
                     <section id="proj-challenges" class="ide-section">
-                    <h4 class="modal-animate-text">Sfide Ingegneristiche (UI/UX)</h4>
-                    <p>Creare un'interfaccia che sembrasse "viva" e reattiva al tocco, pur rifiutando di usare comodità come i framework di animazione (es. GSAP), ha richiesto molta creatività e qualche mal di testa.</p>
+                    <h4 class="modal-animate-text" data-i18n="ide_proj_chall_title">Engineering Challenges (UI/UX)</h4>
+                    <p data-i18n="ide_proj_chall_p1">Creating an interface that felt "alive" and responsive to the touch, while refusing to use conveniences like animation frameworks (e.g., GSAP), required a lot of creativity and a few headaches.</p>
     
-                    <p>La prima grande sfida è stata l'animazione dei testi. Non volevo la solita comparsa statica a blocchi, volevo un <em>flow</em> naturale, morbido e fluido, che ho ribattezzato <strong>"Lego Effect"</strong>. Per ottenerlo, ho ingegnerizzato uno script che distrugge e ricostruisce il DOM testuale in tempo reale:</p>
+                    <p data-i18n="ide_proj_chall_p2">The first major challenge was text animation. I didn't want the usual static block appearance; I wanted a natural, soft, and fluid <em>flow</em>, which I dubbed the <strong>"Lego Effect"</strong>. To achieve this, I engineered a script that destroys and rebuilds the text DOM in real-time:</p>
 
                     <div class="code-block-wrapper">
                         <div class="code-block-header">
@@ -358,7 +370,7 @@
                         span.classList.<span class="syntax-func">add</span>(<span class="syntax-string">'stagger-word'</span>);
                         span.innerHTML = word + <span class="syntax-string">'&amp;nbsp;'</span>;
             
-                        <span class="syntax-comment">// LA MAGIA: Iniettiamo un ritardo asimmetrico nel CSS</span>
+                        <span class="syntax-comment">// THE MAGIC: Injecting an asymmetrical delay into the CSS</span>
                         span.style.<span class="syntax-func">setProperty</span>(<span class="syntax-string">'--random-delay'</span>, Math.<span class="syntax-func">random</span>());
                         element.<span class="syntax-func">appendChild</span>(span);
                         });
@@ -366,17 +378,15 @@
                     };</code></pre>
                     </div>
 
-                    <p>Iniettando una variabile CSS casuale (<code>--random-delay</code>) per ogni singola parola, il CSS accelera via hardware un'animazione di caduta asimmetrica. Il risultato è una pioggia di caratteri incredibilmente organica.</p>
-
-                    </section>
+                    <p data-i18n="ide_proj_chall_p3">By injecting a random CSS variable (<code>--random-delay</code>) for every single word, the CSS hardware-accelerates an asymmetrical falling animation. The result is an incredibly organic rain of characters.</p>
 
                     </section>
 
                     <hr class="ide-divider">
 
                     <section id="proj-code" class="ide-section">
-                        <h4 class="modal-animate-text">Core Snippets: Il Motore Fisico del Carosello</h4>
-                        <p>Il <strong>carosello dei loghi interattivo</strong> mi ha aiutato a comprendere i concetti fondamentali dell'ottimizzazione hardware. Invece di usare slider pre-confezionati (come Swiper o Slick) che avrebbero aggiunto decine di Kilobyte inutili di zavorra, ho scritto un motore fisico da zero, basato sul tracciamento vettoriale del mouse.</p>
+                        <h4 class="modal-animate-text" data-i18n="ide_proj_code_title">Core Snippets: The Carousel Physics Engine</h4>
+                        <p data-i18n="ide_proj_code_p1">The <strong>interactive logo carousel</strong> helped me understand the fundamental concepts of hardware optimization. Instead of using pre-packaged sliders (like Swiper or Slick) that would have added dozens of useless Kilobytes of dead weight, I wrote a physics engine from scratch, based on vector mouse tracking.</p>
                         
                         <div class="code-block-wrapper">
                             <div class="code-block-header">
@@ -386,7 +396,7 @@
                             <pre><code><span class="syntax-keyword">const</span> <span class="syntax-func">onDrag</span> = (e) => {
     <span class="syntax-keyword">if</span> (!isDragging) <span class="syntax-keyword">return</span>;
     
-    <span class="syntax-comment">// Fail-safe hardware: sgancio forzato se si perde l'evento click</span>
+    <span class="syntax-comment">// Hardware fail-safe: forced release if the click event is lost</span>
     <span class="syntax-keyword">if</span> (e.type === <span class="syntax-string">'mousemove'</span> && e.buttons === <span class="syntax-number">0</span>) {
         <span class="syntax-func">stopDrag</span>();
         <span class="syntax-keyword">return</span>;
@@ -396,22 +406,22 @@
     <span class="syntax-keyword">const</span> currentPosition = e.pageX || e.touches[<span class="syntax-number">0</span>].pageX;
     <span class="syntax-keyword">const</span> rawDelta = currentPosition - lastX;
     
-    <span class="syntax-comment">// Smorzamento della sensibilità e calcolo del vettore</span>
+    <span class="syntax-comment">// Sensitivity dampening and vector calculation</span>
     <span class="syntax-keyword">const</span> smoothedDelta = rawDelta * dragSensitivity;
     currentX += smoothedDelta;
     
-    <span class="syntax-comment">// Clamp della velocità per prevenire instabilità visiva</span>
+    <span class="syntax-comment">// Velocity clamping to prevent visual instability</span>
     velocity = Math.<span class="syntax-func">max</span>(-maxVelocity, Math.<span class="syntax-func">min</span>(maxVelocity, smoothedDelta)); 
     
     lastX = currentPosition;
 };</code></pre>
                         </div>
 
-                        <p>Perché questo blocco di codice è ingegneristicamente solido?</p>
+                        <p data-i18n="ide_proj_code_p2">Why is this code block solid from an engineering standpoint?</p>
                         <ul>
-                            <li><strong>Anti-Sticky Bug:</strong> Leggendo brutalmente lo stato hardware del mouse (<code>e.buttons === 0</code>), evitiamo il fastidioso glitch in cui il carosello rimane incollato al cursore se l'utente esce dalla finestra mentre clicca.</li>
-                            <li><strong>Limitatore di Giri:</strong> L'uso di <code>Math.max/min</code> funge da "freno a disco", impedendo che movimenti troppo bruschi lancino le immagini a velocità impossibili da renderizzare.</li>
-                            <li><strong>Zero CPU Bottleneck:</strong> Questo script si limita a calcolare la matematica della variabile <code>currentX</code>. Lo spostamento reale a schermo è delegato a un <code>requestAnimationFrame</code> isolato che utilizza <code>translate3d</code>, forzando la Scheda Video (GPU) a svolgere il lavoro pesante. Niente lag, 60 frame al secondo piantati.</li>
+                            <li data-i18n="ide_proj_code_li1"><strong>Anti-Sticky Bug:</strong> By brute-force reading the hardware state of the mouse (<code>e.buttons === 0</code>), we avoid the annoying glitch where the carousel stays glued to the cursor if the user exits the window while clicking.</li>
+                            <li data-i18n="ide_proj_code_li2"><strong>Rev Limiter:</strong> The use of <code>Math.max/min</code> acts as a "disc brake", preventing overly sudden movements from launching the images at impossible-to-render speeds.</li>
+                            <li data-i18n="ide_proj_code_li3"><strong>Zero CPU Bottleneck:</strong> This script limits itself to calculating the math of the <code>currentX</code> variable. The actual movement on the screen is delegated to an isolated <code>requestAnimationFrame</code> that uses <code>translate3d</code>, forcing the Graphics Card (GPU) to do the heavy lifting. No lag, a solid 60 frames per second.</li>
                         </ul>
                     </section>
 
@@ -419,5 +429,6 @@
             </div>
         </div>
 
-    </div> </body>
+    </div> 
+</body>
 </html>

@@ -80,7 +80,7 @@ a:focus:not(:focus-visible) { outline: none; }
 header, main, footer {
     width: 100%;
     max-width: 768px;
-    margin: 0 auto;
+    margin: 1 auto;
     padding: 2rem 1.5rem;
 }
 
@@ -985,14 +985,16 @@ li:hover::before {
 .side-menu-links li::before { content: none !important; display: none !important; }
 .side-menu-links li { margin-bottom: 0; }
 
+/* --- MOTORE LINK MENU A SCOMPARSA --- */
 .side-menu-links a {
+    position: relative; /* CRITICO: Serve per ancorare la linea finta sotto il testo */
     font-size: 1.2rem; 
     font-weight: 500; 
     letter-spacing: 0.05em; 
     text-decoration: none;
     display: inline-block;
     
-    /* Il gradiente per il testo che si riempie dal basso */
+    /* Il gradiente del testo (Effetto riempimento) */
     background-image: linear-gradient(to top, var(--accent-color) 50%, var(--text-main) 50%);
     background-size: 100% 200%; 
     background-position: top; 
@@ -1001,20 +1003,36 @@ li:hover::before {
     -webkit-text-fill-color: transparent; 
     color: transparent;
     
-    /* FIX: Aggiungiamo esplicitamente il bordo grigio scuro */
-    border-bottom: 1px solid #333333; 
+    /* Uccidiamo il bordo nativo difettoso del browser */
+    border-bottom: none !important; 
     
-    /* FIX: Aggiungiamo border-color alla transizione */
-    transition: background-position 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease;
+    /* La transizione completa: colore, scorrimento e la nostra famosa opacità */
+    transition: background-position 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease-in-out;
 }
 
+/* Creiamo la linea dal nulla (Il nostro finto bordo) */
+.side-menu-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px; /* Distanza dal testo */
+    width: 100%;
+    height: 1px; /* Spessore linea */
+    background-color: #333333; /* Grigio scuro di base */
+    transition: background-color 0.3s ease;
+}
+
+/* Hover e Stato Attivo: Il testo si sposta e si colora */
 .side-menu-links a:hover, 
 .side-menu-links a.active {
     background-position: bottom; 
-    transform: translateX(8px); 
-    
-    /* FIX: Facciamo diventare il bordo turchese allo stato attivo/hover */
-    border-bottom-color: var(--accent-color); 
+    transform: translateX(8px);  
+}
+
+/* Hover e Stato Attivo: La linea diventa turchese */
+.side-menu-links a:hover::after,
+.side-menu-links a.active::after {
+    background-color: var(--accent-color);
 }
 
 /* --- TELEMETRIA E SOCIAL TERMINAL --- */
@@ -1619,5 +1637,105 @@ body.modal-open {
 /* Sicurezza extra per i browser moderni: Blocchiamo anche il tag HTML radice */
 html:has(body.modal-open) {
     overflow: hidden !important;
+}
+
+/* =========================================
+   LANGUAGE SWITCHER
+   ========================================= */
+.lang-switcher {
+    position: fixed;
+    top: 2.3rem; /* Allineato otticamente all'hamburger menu */
+    right: 6.5rem; /* Spostato a sinistra per non accavallarsi col menu */
+    z-index: 100;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #888888;
+    user-select: none;
+}
+
+.lang-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.lang-toggle:hover {
+    color: var(--text-main);
+}
+
+.lang-chevron {
+    font-size: 0.6rem;
+    transform: scaleY(0.6) rotate(0deg);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Quando riceve la classe is-open, la freccia ruota in alto */
+.lang-switcher.is-open .lang-chevron {
+    transform: scaleY(0.6) rotate(180deg);
+}
+
+.lang-dropdown {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0 0;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    
+    /* FIX 1: Diamo un po' di larghezza extra alla scatola per non stare stretti */
+    min-width: 65px; 
+    
+    /* Il Motore a Cascata */
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+}
+
+/* In Apertura */
+.lang-switcher.is-open .lang-dropdown {
+    max-height: 50px; 
+    opacity: 1;
+}
+
+/* Quarantena Ereditarietà: blocchiamo i cursori e i bordi globali */
+.lang-dropdown li { margin-bottom: 0 !important; }
+.lang-dropdown li::before { display: none !important; }
+
+.lang-dropdown a {
+    color: #666666;
+    text-decoration: none;
+    border-bottom: none !important;
+    display: block; 
+    text-align: right;
+    
+    /* FIX 2: Prepariamo il cuscinetto interno e togliamo il transform */
+    padding-right: 0;
+    transition: color 0.2s ease, padding-right 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.lang-dropdown a:hover {
+    color: var(--accent-color);
+    
+    /* FIX 3: Invece di spostare il blocco fuori dalla scatola, 
+       spingiamo il testo a sinistra gonfiando il padding destro */
+    padding-right: 6px; 
+    /* (Assicurati di aver cancellato la vecchia riga transform: translateX!) */
+}
+
+/* =========================================
+   TRANSLATION FADE ENGINE
+   ========================================= */
+[data-i18n] {
+    /* Diciamo a tutti i testi di animare l'opacità in 0.3 secondi */
+    transition: opacity 0.3s ease-in-out;
+    will-change: opacity; /* Ottimizzazione GPU */
+}
+
+/* Quando il JS applica questa classe, il testo scompare morbidamente */
+[data-i18n].is-translating {
+    opacity: 0;
 }
 
