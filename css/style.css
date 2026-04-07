@@ -1572,3 +1572,23 @@ html:has(body.modal-open) {
     color: var(--accent-color) !important;
     font-weight: 700;
 }
+
+/* --- FIX: Colore Hover per le CARTELLE IDE nel Tema Chiaro --- */
+
+/* 1. L'Hover sulle cartelle: leggero alone come per i file */
+:root.light-theme .ide-sidebar .ide-folder:hover {
+    background-color: rgba(74, 65, 60, 0.08) !important;
+    color: #2b2522 !important;
+}
+
+/* 2. Forza il colore scuro per il nome cartella e il chevron (la freccetta) */
+:root.light-theme .ide-sidebar .ide-folder:hover .ide-folder-name,
+:root.light-theme .ide-sidebar .ide-folder:hover .ide-chevron {
+    color: #2b2522 !important;
+}
+
+/* 3. La cartella Root (WEB_PORTFOLIO) deve restare sempre leggibile */
+:root.light-theme .ide-sidebar .root-folder {
+    color: #2b2522 !important;
+    border-bottom: 1px solid rgba(74, 65, 60, 0.1);
+}
