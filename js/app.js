@@ -3,16 +3,6 @@
    Architettura: Modulare / Single-Entry Point / GPU Accelerated
    ========================================================================== */
 
-   /* =========================================
-   FORZA LO SCROLL ALL'INIZIO (Scroll Restoration)
-   ========================================= */
-// Diciamo al browser di non ricordare la posizione precedente
-if ('scrollRestoration' in history) {
-    history.scrollRestoration = 'manual';
-}
-// E lo riportiamo fisicamente a coordinate X:0, Y:0
-window.scrollTo(0, 0);
-
 /* =========================================
    I. DATI E CONFIGURAZIONI (i18n)
    ========================================= */
