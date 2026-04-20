@@ -6,6 +6,34 @@
 /* -----------------------------------------
    1. RESET & VARIABILI GLOBALI
    ----------------------------------------- */
+
+   /* =========================================
+   APP-LIKE USER SELECT (IDE Style)
+   ========================================= */
+
+/* 1. Blocchiamo la selezione globale su tutto lo scheletro del sito */
+html, body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* 2. Sblocchiamo la selezione in modo chirurgico SOLO sui contenuti leggibili */
+p, h1, h2, h3, li, code, pre {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+/* 3. Ri-blocchiamo le parti di testo che servono come bottoni o UI */
+a, button, .ide-sidebar, .ide-folder, .theme-toggle, .lang-switcher, .ghost-brand {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
 *,
 *::before,
 *::after {
@@ -967,8 +995,6 @@ body.modal-open {
     letter-spacing: 0.05em;
 }
 
-.ide-dots { font-weight: bold; letter-spacing: 2px; cursor: pointer; }
-
 /* Contenitore Albero */
 .ide-tree-container { padding: 0.5rem 0; }
 
@@ -1001,15 +1027,21 @@ body.modal-open {
 
 /* La Freccia */
 .ide-chevron {
-    font-size: 0.7rem;
+    font-size: 0.8rem; /* Leggermente ingrandita per compensare la rimozione dello scale */
     margin-right: 0.5rem;
-    transform: scaleY(0.6) rotate(0deg); 
+    
+    /* FIX: Rimosso scaleY(0.6) per evitare distorsioni durante la rotazione */
+    transform: rotate(0deg); 
     display: inline-block;
     transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    
+    /* Centratura perfetta sul suo asse */
+    transform-origin: center center;
 }
 
 .ide-folder.is-collapsed .ide-chevron {
-    transform: scaleY(0.6) rotate(-90deg);
+    /* Ora la freccia ruota a 90 gradi mantenendo il 100% del suo spessore naturale */
+    transform: rotate(-90deg);
 }
 
 /* 1. IL CONTENITORE (La scatola che si apre/chiude) */
@@ -1513,6 +1545,23 @@ html:has(body.modal-open) {
 }
 
 /* =========================================
+   THEME SWITCH LOCK (Global Interaction Disable)
+   ========================================= */
+body.is-theme-locked {
+    /* Blocca fisicamente ogni click, hover o scroll su tutta la pagina */
+    pointer-events: none !important; 
+    
+    /* Impedisce la selezione del testo da qualsiasi dispositivo */
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+/* Sicurezza extra per spegnere l'evidenziatore del browser */
+body.is-theme-locked *::selection {
+    background: transparent !important;
+}
+
+/* =========================================
    FIX: IDE MODAL LIGHT THEME (E-Ink Polish)
    ========================================= */
 
@@ -1591,4 +1640,76 @@ html:has(body.modal-open) {
 :root.light-theme .ide-sidebar .root-folder {
     color: #2b2522 !important;
     border-bottom: 1px solid rgba(74, 65, 60, 0.1);
+}
+
+/* ==========================================================================
+   EASTER EGG: X-RAY BARE-METAL MODE (Sophisticated Blueprint)
+   ========================================================================== */
+
+/* 1. Sfondo e Griglia (Blueprint Ingegneristico) */
+body.xray-mode {
+    background-color: #02050a !important;
+    background-image: 
+        linear-gradient(rgba(1, 212, 212, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(1, 212, 212, 0.05) 1px, transparent 1px) !important;
+    background-size: 20px 20px !important;
+}
+
+/* 2. Reset Colori (Trasparenza e Leggibilità) */
+body.xray-mode * {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    color: rgba(1, 212, 212, 0.8) !important; /* Ciano spento per la massima leggibilità */
+    
+    /* FIX CAROSELLO: Non usiamo "all", ma transizioniamo solo i colori e i bordi. 
+       In questo modo il "transform" di JS è libero di girare a 60fps senza lag. */
+    transition: background-color 0.4s ease, color 0.4s ease, outline 0.4s ease, opacity 0.4s ease !important;
+}
+
+/* FIX ASSOLUTO CAROSELLO: Impediamo che qualsiasi transizione residua disturbi la track */
+body.xray-mode .logo-carousel-track {
+    transition: none !important;
+}
+
+/* 3. Architettura (Outlines Sottili e Cliniche) */
+/* Ciano per i contenitori strutturali macro */
+body.xray-mode header, 
+body.xray-mode main, 
+body.xray-mode footer, 
+body.xray-mode section, 
+body.xray-mode .sys-modal {
+    outline: 1px solid rgba(1, 212, 212, 0.4) !important; /* Tratto molto più leggero e raffinato */
+    outline-offset: -1px;
+}
+
+/* Viola pastello per i blocchi interni (div, liste, articoli) */
+body.xray-mode div, 
+body.xray-mode ul, 
+body.xray-mode li, 
+body.xray-mode article {
+    outline: 1px dashed rgba(210, 168, 255, 0.3) !important;
+    outline-offset: -1px;
+}
+
+/* 4. Immagini (Eleganza Scheletrica) */
+/* Rimosso il negativo/glitch. L'immagine diventa solo semi-trasparente e monocromatica */
+body.xray-mode img {
+    filter: grayscale(100%) opacity(0.5) !important;
+    outline: 1px solid rgba(255, 123, 114, 0.5) !important; /* Rosso tenue per indicare i media */
+}
+
+/* 5. Interattività (Evidenziamo Ancore e bottoni) */
+body.xray-mode a, 
+body.xray-mode button {
+    outline: 1px solid rgba(74, 246, 38, 0.6) !important; /* Verde Hacker */
+    color: rgba(74, 246, 38, 0.9) !important;
+}
+
+/* Disabilita i decori standard dei link per non creare rumore */
+body.xray-mode a::after,
+body.xray-mode .side-menu-links a::after {
+    display: none !important; 
+
+
 }

@@ -250,8 +250,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
     document.querySelectorAll('.reveal').forEach(section => revealObserver.observe(section)); 
 
-    /* ----------------------------------------------------
-       3. THEME SWITCHER ENGINE
+/* ----------------------------------------------------
+       3. THEME SWITCHER ENGINE (Global Lock Logic)
        ---------------------------------------------------- */
     const themeToggle = document.getElementById('theme-toggle');
     const root = document.documentElement; 
@@ -266,10 +266,27 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('theme', root.classList.contains('light-theme') ? 'light' : 'dark');
         };
 
-        themeToggle.addEventListener('click', () => {
-            themeToggle.classList.add('is-spinning');
-            setTimeout(() => { themeToggle.classList.remove('is-spinning'); }, 800);
+        let isThemeAnimating = false;
 
+        themeToggle.addEventListener('click', () => {
+            if (isThemeAnimating) return; 
+            isThemeAnimating = true;
+
+            // 1. Rimuove eventuali selezioni accidentali al momento del click
+            window.getSelection().removeAllRanges();
+
+            // 2. APPLICA IL LOCK GLOBALE A TUTTO IL SITO
+            document.body.classList.add('is-theme-locked');
+            themeToggle.classList.add('is-spinning');
+
+            // 3. RIMUOVE IL LOCK DOPO 850ms
+            setTimeout(() => { 
+                themeToggle.classList.remove('is-spinning'); 
+                document.body.classList.remove('is-theme-locked');
+                isThemeAnimating = false;
+            }, 850); 
+
+            // Esegue la View Transition
             if (!document.startViewTransition) {
                 toggleThemeLogic();
                 return;
@@ -438,6 +455,8 @@ document.addEventListener('DOMContentLoaded', () => {
         folder.addEventListener('click', () => folder.classList.toggle('is-collapsed'));
     });
 
+    
+
     /* ----------------------------------------------------
        10. LANGUAGE SWITCHER & TRANSLATION ENGINE
        ---------------------------------------------------- */
@@ -490,6 +509,95 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+/* ----------------------------------------------------
+       11. CODE BLOCK COPY ENGINE (Native & Anti-Spam)
+       ---------------------------------------------------- */
+    const copyButtons = document.querySelectorAll('.code-copy-btn');
+
+    copyButtons.forEach(button => {
+        // Salviamo il testo originale una sola volta all'inizio, fuori dall'evento click
+        const originalText = button.textContent;
+
+        button.addEventListener('click', async () => {
+            const codeWrapper = button.closest('.code-block-wrapper');
+            if (!codeWrapper) return;
+
+            const codeElement = codeWrapper.querySelector('code');
+            if (!codeElement) return;
+
+            const textToCopy = codeElement.textContent;
+
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+
+                // Feedback visivo immediato
+                button.textContent = 'Copied!';
+                button.style.color = 'var(--accent-color)';
+
+                // --- FIX ANTI-SPAM ---
+                // Se esiste già un timer su questo bottone, lo distruggiamo
+                if (button.copyTimeoutId) {
+                    clearTimeout(button.copyTimeoutId);
+                }
+
+                // Creiamo un nuovo timer e salviamo la sua "targa" (ID) direttamente dentro l'oggetto del bottone
+                button.copyTimeoutId = setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.color = ''; // Torna al CSS di default
+                    button.copyTimeoutId = null; // Pulizia della memoria
+                }, 2000);
+
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                button.textContent = 'Failed';
+                button.style.color = '#ff7b72'; // Rosso errore
+                
+                // Anti-spam anche in caso di errore
+                if (button.copyTimeoutId) clearTimeout(button.copyTimeoutId);
+                
+                button.copyTimeoutId = setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.color = '';
+                    button.copyTimeoutId = null;
+                }, 2000);
+            }
+        });
+    });
+
+    /* ----------------------------------------------------
+       12. BARE-METAL X-RAY EASTER EGG (Konami Code Style)
+       ---------------------------------------------------- */
+    let xrayBuffer = '';
+    const secretCode = 'xray';
+
+    window.addEventListener('keydown', (e) => {
+        // Ignoriamo i tasti speciali per non sporcare il buffer
+        if (e.key.length > 1) return; 
+
+        // Aggiungiamo la lettera digitata al buffer
+        xrayBuffer += e.key.toLowerCase();
+
+        // Manteniamo il buffer lungo esattamente quanto la parola segreta (4 lettere)
+        if (xrayBuffer.length > secretCode.length) {
+            xrayBuffer = xrayBuffer.substring(1);
+        }
+
+        // Se il buffer coincide con "xray", sganciamo la bomba
+        if (xrayBuffer === secretCode) {
+            document.body.classList.toggle('xray-mode');
+            
+            // Svuotiamo il buffer per permettere di digitarlo di nuovo per spegnerlo
+            xrayBuffer = ''; 
+            
+            // Console log per gli "addetti ai lavori" che tengono F12 aperto
+            if (document.body.classList.contains('xray-mode')) {
+                console.log('%c[SYS] X-Ray Mode Activated: DOM Architecture Exposed.', 'color: #01d4d4; font-weight: bold; font-size: 14px;');
+            } else {
+                console.log('%c[SYS] X-Ray Mode Deactivated: Returning to GUI.', 'color: #ff7b72; font-weight: bold; font-size: 14px;');
+            }
+        }
+    });
 }); 
 
 
@@ -604,3 +712,4 @@ window.addEventListener('load', () => {
 
     renderEngine();
 });
+
